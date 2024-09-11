@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Search</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <header>
+        <h1><a href="FinanceAppUI.html" class="logo-link">
+            <img src="ApexLogo.png" alt="Apex Finance Logo" class="logo">
+        </a></h1>
+        <nav>
+            <ul>
+                <nav>
+                    <ul>
+                        <li><a href="search.html">Search</a></li>
+                    </ul>
+                </nav>
+                <nav>
+                    <ul>
+                        <li><a href="settings.html">Settings</a></li>
+                    </ul>
+                </nav>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Stock Search</h1>
+        <div>
+            <input type="text" id="stockSymbol" placeholder="Enter Stock Symbol" />
+            <button onclick="searchStock()">Search</button>
+        </div>
+
+        <div id="quoteResult" class="buy-sell-options"></div>
+
+        <div class="buy-sell-options">
+            <button onclick="buyStock()">Buy</button>
+            <button onclick="sellStock()">Sell</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
