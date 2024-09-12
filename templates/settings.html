@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Apex Finance</title>
-    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="/static/css/settings.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <img src="ApexLogo.png" alt="Apex Finance Logo" class="logo">
-        <h1 class="title"><a href="FinanceAppUI.html" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <img src="/static/images/ApexLogo.png" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="FinanceAppUI" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
         <nav>
             <ul>
                 <!-- Search form updated to redirect to search.html -->
                 <li>
-                    <form id="searchForm" action="search.html" method="get" onsubmit="return handleSearchSubmit()">
+                    <form id="searchForm" action="{{ url_for('search') }}" method="get">
                         <input type="text" id="stockSymbol" name="stockSymbol" placeholder="Search for stock" required>
                         <button type="submit">Search</button>
-                    </form>
+                    </form>   
                 </li>
                 <!-- Other navigation items -->
-                <li><a href="FinanceAppUI.html">Dashboard</a></li>
-                <li><a href="welcome.html">Intro</a></li>
+                <li><a href="FinanceAppUI">Dashboard</a></li>
+                <li><a href="welcome">Intro</a></li>
             </ul>
         </nav>
     </header>
@@ -69,6 +69,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/static/js/script.js"></script>
 </body>
 </html>
