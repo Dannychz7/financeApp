@@ -13,12 +13,12 @@
         <h1 class="title"><a href="FinanceAppUI" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
         <nav>
             <ul>
-                <!-- Search form updated to redirect to search.html -->
+                <!-- Updated form to connect to search.js -->
                 <li>
-                    <form id="searchForm" action="{{ url_for('search') }}" method="get">
-                        <input type="text" id="stockSymbol" name="stockSymbol" placeholder="Search for stock" required>
+                    <form id="searchForm" onsubmit="return site.SubmitForm();">
+                        <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
                         <button type="submit">Search</button>
-                    </form>                    
+                    </form>
                 </li>
                 <!-- Other navigation items -->
                 <li><a href="settings">Settings</a></li>
@@ -42,16 +42,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/static/js/script.js"></script>
+    <script src="/static/js/search.js"></script>
     <script>
-        function handleSearchSubmit() {
-            const stockSymbol = document.getElementById('stockSymbol').value;
-            const searchUrl = `search.html?stockSymbol=${encodeURIComponent(stockSymbol)}`;
-            window.location.href = searchUrl;
-            return false; // Prevent default form submission
-        }
+        // Initialize the site when the document is ready
+        $(document).ready(function() {
+            site.Init();
+        });
     </script>
 </body>
 </html>
+
 
 

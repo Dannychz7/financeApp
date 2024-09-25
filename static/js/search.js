@@ -37,7 +37,12 @@ Site.prototype.GetQuote = function(){
 
 Site.prototype.SubmitForm = function(){
 	this.symbol = $("#symbol").val();
-	this.GetQuote();
+    // Redirect to search.html with the stock symbol as a URL parameter
+    const searchUrl = `search.html?stockSymbol=${encodeURIComponent(this.symbol)}`;
+    window.location.href = searchUrl; // Redirect to the search.html page
+    this.GetQuote();
+    //return false; // Prevent default form submission
+	
 }
 
 Site.prototype.LoadChart = function(quote){
