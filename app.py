@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
-
 #Hello World, This is Daniel
-=======
 # Yo
 # These are the changes i am making
->>>>>>> Stashed changes
 from flask import Flask, render_template, request, jsonify
 
 import yfinance as yf
