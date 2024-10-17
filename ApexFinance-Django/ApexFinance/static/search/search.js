@@ -35,17 +35,22 @@ Site.prototype.GetQuote = function() {
         method: "GET",
         cache: false
     }).done(function(data) {
+
         // set up a data context for just what we need.
         var context = {};
         context.shortName = data.shortName;
         context.symbol = data.symbol;
-        context.price = data.ask;
+        context.Price = data.currentPrice || data.ask || data.regularMarketPrice || 0;
 
-        if (data.quoteType === "MUTUALFUND") {
-            context.price = data.previousClose;
+		// console.log('API response data:', data); // used for debugging
+		// console.log('Price:', context.Price); // used for debugging
+
+        if (data.quoteType === "MUTUALFUND" || data.quoteType === "ETF") {
+            context.Price = data.previousClose;
         }
 
         // call the request to load the chart and pass the data context with it.
+		// console.log(context) // used for debugging
         that.LoadChart(context);
     });
 };
@@ -76,7 +81,9 @@ Site.prototype.RenderChart = function(data, quote) {
     var priceData = [];
     var dates = [];
 
-    var title = quote.shortName + " (" + quote.symbol + ") - " + numeral(quote.price).format('$0,0.00');
+	// console.log(quote.Price);  // Log the whole quote object
+	// console.log(quote) // used for debugging
+    var title = quote.shortName + " (" + quote.symbol + ") - " + numeral(quote.Price).format('$0,0.00');
 
     for (var i in data.Close) {
         var dt = i.slice(0, i.length - 3);
