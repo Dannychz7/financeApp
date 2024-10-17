@@ -1,0 +1,76 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Apex Finance</title>
+    <link rel="stylesheet" href="{% static 'settings/settings.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="{% static 'settings/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <nav>
+            <ul>
+                <!-- Search form updated to redirect to search.html -->
+                <li>
+                    <form id="searchForm" onsubmit="return site.SubmitForm();">
+                        <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
+                        <button type="submit">Search</button>
+                    </form> 
+                </li>
+                <!-- Other navigation items -->
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'home' %}">Intro</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+<div class="container">
+    <h1>Settings</h1>
+
+    <!-- Account Info and Password Change -->
+    <div class="settings-section">
+        <h2>Account Info</h2>
+        <p><strong>Username:</strong> User123</p>
+        <p><strong>Email:</strong> user@example.com</p>
+
+        <h2>Change Password</h2>
+        <input type="password" id="currentPassword" placeholder="Current Password" />
+        <input type="password" id="newPassword" placeholder="New Password" />
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" />
+        <button onclick="changePassword()">Change Password</button>
+    </div>
+
+    <!-- General Settings -->
+    <div class="settings-section">
+        <h2>General Settings</h2>
+            <form>
+                <div class="setting-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="User123">
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="user@example.com">
+                </div>
+
+                <div class="setting-group">
+                    <h2>Notifications</h2>
+                    <label for="email-notifications">Email Notifications:</label>
+                    <input type="checkbox" id="email-notifications" name="email-notifications">
+
+                    <label for="push-notifications">Push Notifications:</label>
+                    <input type="checkbox" id="push-notifications" name="push-notifications">
+                </div>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
