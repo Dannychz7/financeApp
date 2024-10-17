@@ -7,7 +7,15 @@ import yfinance as yf
 
 # Create your views here.
 def search(request):
-    return render(request, 'search/search.html', {})
+        query = request.GET.get('q', default="AAPL")  # Get search query from the form, default to AAPL if none
+
+        if query:
+            # Fetch stock data using yfinance
+            quote = yf.Ticker(query)
+            stock_info = quote.info
+            return render(request, 'search/search.html', {'stock_info': stock_info, 'query': query})
+        else:
+            return render(request, 'search/search.html', {'error': 'No stock symbol provided.'})
 
 class StockQuoteView(View):
     def get(self, request):

@@ -17,7 +17,7 @@
             <ul>
                 <!-- Updated form to connect to search.js -->
                 <li>
-                    <form id="searchForm" onsubmit="return site.SubmitForm();">
+                    <form id="searchForm" onsubmit="{% url 'search' %}">
                         <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
                         <button type="submit">Search</button>
                     </form>
@@ -44,7 +44,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/static/js/search.js"></script>
+    <script src="{% static 'search/search.js' %}"></script>
     <script>
         // Initialize the site when the document is ready
         $(document).ready(function() {
