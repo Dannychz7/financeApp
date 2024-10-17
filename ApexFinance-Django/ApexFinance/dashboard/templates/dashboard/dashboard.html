@@ -17,7 +17,7 @@
             <ul>
                 <!-- Updated form to connect to search.js -->
                 <li>
-                    <form id="searchForm" onsubmit="{% url 'search' %}">
+                    <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
                         <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
                         <button type="submit">Search</button>
                     </form>

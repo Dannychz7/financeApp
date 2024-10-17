@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import StockQuoteView, StockHistoryView
+from .views import StockQuoteView, StockHistoryView, search
 
 from . import views
 
