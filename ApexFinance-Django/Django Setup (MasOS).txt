@@ -1,0 +1,36 @@
+Running Django Project:
+(Make sure python3 or python installed and virtualenv venv is installed as well)
+1. Create or navigate to the directory
+	- cd path/to/your/project
+2. Enter into a Virtual environment (MacOS)
+	-  virtualenv venv
+	- source venv/bin/activate
+2.1. If the second step did not work, then do:
+	- python3 -m virtualenv venv
+	- source venv/bin/activate
+3. Install Django into the virtual environment
+	- pip install django
+4. Verify Django version
+	- python3 -m django --version
+5. Create a Django Directory
+	- django-admin startproject yourprojectname
+6. Navigate to Directory
+	- cd yourprojectname
+7. RUn the Development Server
+	- python3 manage.py runserver
+
+Django Commands for doing stuff:
+To create a new app:
+1. Make sure you are in the venv environment
+	- virtualenv venv
+	-   source venv/bin/activate
+2. Create a new app:
+	- django-admin startapp new_name
+
+
+
+
+
+
+
+
