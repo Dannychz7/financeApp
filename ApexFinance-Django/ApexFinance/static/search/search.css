@@ -192,3 +192,12 @@ button {
 button:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: #f0f0f0;
+  margin-top: 20px;
+}

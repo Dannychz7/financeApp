@@ -1,6 +1,6 @@
 var Site = function() {
     this.symbol = "MSFT"; // Default symbol
-    this.period = "1mo";  // Default period (1 month)
+    this.period = "1d";  // Default period (1 month)
 };
 
 Site.prototype.Init = function() {
@@ -117,10 +117,6 @@ Site.prototype.RenderChart = function(data, quote) {
     // console.log("Data received:", data);
 	// console.log("Here is the intervalFormat", intervalFormat);
 
-	// Calculate min and max for Y-axis scaling
-	var yMin = Math.min(...priceData) * 0.95; // 5% below the minimum price
-	var yMax = Math.max(...priceData) * 1.05; // 5% above the maximum price
-
     for (var i in data.Close) {
         var dt = i.slice(0, i.length - 3);  // Timestamp the before 
         var dateString = moment.unix(dt).format(intervalFormat); // Use the correct format
@@ -131,6 +127,10 @@ Site.prototype.RenderChart = function(data, quote) {
         }
     }
 
+	// Calculate min and max for Y-axis scaling
+	var yMin = Math.min(...priceData);
+	var yMax = Math.max(...priceData);
+
     Highcharts.chart('chart_container', {
         title: {
             text: title
@@ -138,6 +138,13 @@ Site.prototype.RenderChart = function(data, quote) {
         yAxis: {
             title: {
                 text: ''
+            },
+			min: yMin, // Set minimum value for Y-axis
+            max: yMax, // Set maximum value for Y-axis
+            labels: {
+                formatter: function () {
+                    return this.value.toFixed(2); // Format labels to 2 decimal places
+                }
             }
         },
         xAxis: {
@@ -158,7 +165,7 @@ Site.prototype.RenderChart = function(data, quote) {
         },
         series: [{
             type: 'area',
-            color: '#85bb65',
+            color: '#FF0000',
             name: 'Price',
             data: priceData
         }],
