@@ -12,6 +12,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  padding-bottom: 80px; /* Space for the footer */
 }
 
 /* Header styling */
@@ -49,6 +50,22 @@ header {
 .title a {
   color: #D43F33; /* Red color */
   text-decoration: none; /* Remove underline */
+}
+
+/* Dropdown menu styling */
+.form-control#period {
+  background-color: #D43F33; /* Red background */
+  color: #fff; /* White text */
+  border: 1px solid #B03028; /* Darker red border */
+}
+
+.form-control#period option {
+  background-color: #D43F33; /* Red background for options */
+  color: #fff; /* White text for options */
+}
+
+.form-control#period:hover {
+  background-color: #B03028; /* Darker red on hover */
 }
 
 /* Navigation menu */
@@ -193,11 +210,16 @@ button:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
 
+
 /* Footer */
 footer {
   text-align: center;
   padding: 20px;
   background-color: #333;
   color: #f0f0f0;
-  margin-top: 20px;
+  position: relative; /* Make the footer fixed at the bottom */
+  bottom: 0; /* Position it at the bottom */
+  left: 0; /* Align to the left */
+  width: 100%; /* Full width */
+  margin-top: 100px;
 }
