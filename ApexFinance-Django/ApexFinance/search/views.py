@@ -33,7 +33,8 @@ class StockHistoryView(View):
         # get the query string parameters
         symbol = request.GET.get('symbol', default="AAPL")
         period = request.GET.get('period', default="1y")
-        interval = request.GET.get('interval', default="1mo")
+        # Determine the interval based on the selected period
+        interval = self.get_interval(period)
         
         # pull the quote
         quote = yf.Ticker(symbol)
@@ -46,3 +47,22 @@ class StockHistoryView(View):
         
         # return the JSON in the HTTP response
         return JsonResponse(data, safe=False)  # Use safe=False for non-dict objects
+    
+    def get_interval(self, period):
+            """Determine the interval based on the selected period."""
+            if period == '1d':
+                return '1m'  # 1 min intervals for 1 day
+            elif period == '5d':
+                return '30m'  # 20 min intervals for 5 days
+            elif period in ['1mo', '3mo']:
+                return '1d'  # Daily intervals for 1 month and 3 months
+            elif period == '1y':
+                return '5d'  # 5 day intervals for 1 year
+            elif period == 'ytd':
+                return '5d' # 5 day intervals for ytd
+            elif period == '2y':
+                return '5d'  # 5 day intervals for 2 year
+            elif period in ['5y', 'max']:
+                return '1mo' # Monthly intervals for 5 year and beyond
+            else:
+                return '1mo'  # Default for any unknown period
