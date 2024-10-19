@@ -32,10 +32,20 @@
     <div class="container">
         <main>
             <section class="stock-info">
-                <h2>Stock Trading</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <p>NASDAQ: 123456</p>
-                <p>+2.50%</p>
+                <h2>Your Stocks</h2>
+                <p><strong>Available Cash:</strong> ${{ available_cash }}</p>
+
+                {% if user_stocks %}
+                    <ul>
+                        {% for stock in user_stocks %}
+                            <li>
+                                <strong>{{ stock.company_name }}</strong>: {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You have no stocks owned.</p>
+                {% endif %}
             </section>
             <section class="chart">
                 <canvas id="myChart"></canvas>
