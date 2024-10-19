@@ -1,6 +1,6 @@
 TO DO LIST:
-1. Implement signin option
-2. Create user model (How much money they have available to buys stocks, stocks purchased, etc.)
+1. Buy and Sell Stocks
+2. 
 
 How to access admin panel that shows "everything" in the database:
     - run the server

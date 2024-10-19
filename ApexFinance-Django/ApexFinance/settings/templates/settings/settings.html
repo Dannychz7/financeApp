@@ -17,10 +17,10 @@
             <ul>
                 <!-- Search form updated to redirect to search.html -->
                 <li>
-                    <form id="searchForm" onsubmit="return site.SubmitForm();">
+                    <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
                         <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
                         <button type="submit">Search</button>
-                    </form> 
+                    </form>
                 </li>
                 <!-- Other navigation items -->
                 <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
