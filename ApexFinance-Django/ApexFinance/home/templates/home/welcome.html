@@ -14,7 +14,7 @@
         <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
         <h1 class="title"><a href="{% url 'dashboard' %}">APEX FINANCE</a></h1>
         <div class="login-signup">
-            <button class="login-button">Login</button>
+            <a class="login-button" href="{% url 'login' %}">Login</a>
             <button class="signup-button">Signup</button>
         </div>
     </header>
@@ -43,7 +43,7 @@
                 <p>Whether you're a seasoned investor or just starting your financial journey, Apex Finance is here to support you every step of the way. Sign up now and unlock a world of financial opportunities.</p>
 
                 <div class="cta-buttons">
-                    <button class="login-button">Login</button>
+                    <a class="login-button" href="{% url 'login' %}">Login</a>
                     <button class="signup-button">Signup</button>
                 </div>
             </section>

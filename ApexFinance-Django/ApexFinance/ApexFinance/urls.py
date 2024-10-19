@@ -28,4 +28,6 @@ urlpatterns = [
     path('', include("dashboard.urls")),
     path('', include("settings.urls")),
     path('', include("search.urls")),
+    path('users/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
 ]

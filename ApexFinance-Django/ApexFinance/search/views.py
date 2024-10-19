@@ -5,6 +5,12 @@ from django.http import JsonResponse
 from django.views import View
 import yfinance as yf
 
+# User authorization
+from django.contrib.auth.decorators import login_required
+
+# Require users to be logged into an account to search
+@login_required(login_url='/users/login_user')
+
 # Create your views here.
 def search(request):
         query = request.GET.get('q', default="AAPL")  # Get search query from the form, default to AAPL if none
