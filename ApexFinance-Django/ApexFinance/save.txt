@@ -1,3 +1,4 @@
+BELOW IS CODE THAT WORKS IF WE JUST WANT A BUY AND SELL PAGE:
 
 {% load static %}
 
