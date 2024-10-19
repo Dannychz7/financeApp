@@ -35,42 +35,50 @@
     <!-- Account Info and Password Change -->
     <div class="settings-section">
         <h2>Account Info</h2>
-        <p><strong>Username:</strong> User123</p>
-        <p><strong>Email:</strong> user@example.com</p>
+        <p><strong>Username:</strong> {{ user.username }}</p>  <!-- Display username dynamically -->
+        <p><strong>Email:</strong> {{ user.email }}</p> <!-- Display email dynamically -->
 
         <h2>Change Password</h2>
-        <input type="password" id="currentPassword" placeholder="Current Password" />
-        <input type="password" id="newPassword" placeholder="New Password" />
-        <input type="password" id="confirmPassword" placeholder="Confirm New Password" />
-        <button onclick="changePassword()">Change Password</button>
+        <!-- Link to change password (Django built-in view) -->
+        <p><a href="{% url 'password_change' %}">Change Password</a></p>
     </div>
 
     <!-- General Settings -->
     <div class="settings-section">
         <h2>General Settings</h2>
-            <form>
-                <div class="setting-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" value="User123">
+        <form method="post" action="{% url 'settings' %}">
+            {% csrf_token %}
+            <div class="setting-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" readonly> <!-- Display username -->
 
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="user@example.com">
-                </div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" readonly> <!-- Display email -->
+            </div>
 
-                <div class="setting-group">
-                    <h2>Notifications</h2>
-                    <label for="email-notifications">Email Notifications:</label>
-                    <input type="checkbox" id="email-notifications" name="email-notifications">
+            <div class="setting-group">
+                <h2>Notifications</h2>
+                <label for="email-notifications">Email Notifications:</label>
+                <input type="checkbox" id="email-notifications" name="email-notifications">
 
-                    <label for="push-notifications">Push Notifications:</label>
-                    <input type="checkbox" id="push-notifications" name="push-notifications">
-                </div>
+                <label for="push-notifications">Push Notifications:</label>
+                <input type="checkbox" id="push-notifications" name="push-notifications">
+            </div>
 
-                <button type="submit">Save Changes</button>
-            </form>
-        </div>
+            <button type="submit">Save Changes</button>
+        </form>
     </div>
+    
+    <!-- Logout Button -->
+    <div class="settings-section">
+        <h2>Logout</h2>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+    </div>
+</div>
 
-    <script src="/static/js/script.js"></script>
+<script src="/static/js/script.js"></script>
 </body>
 </html>

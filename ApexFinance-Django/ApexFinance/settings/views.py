@@ -9,5 +9,10 @@ from django.contrib.auth.decorators import login_required
 # Require users to be logged into an account to see their settings
 @login_required(login_url='/users/login_user')
 def settings(request):
-    print("Current directory:", os.getcwd())  # Debugging line
-    return render(request, 'settings/settings.html', {})
+    # Get the currently logged-in user
+    user = request.user
+    
+    # Pass the user object to the template
+    return render(request, 'settings/settings.html', {
+        'user': user,  # Pass user data to the template
+    })
