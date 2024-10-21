@@ -143,6 +143,14 @@
                 } else {
                     console.log('Market is closed. Stopping updates.');
                     clearInterval(updateInterval);  // Stop updating if the market is closed
+                    
+                    fetch("{% url 'live_update' %}")  // URL for live_update
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                        document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                    })
+                    .catch(error => console.error('Error fetching portfolio update:', error));
                 }
             }
 
