@@ -31,8 +31,8 @@
         <main role="main">
             <section class="stock-info">
                 <h2>Your Stocks</h2>
-                <p><strong>Available Cash:</strong> ${{ available_cash }}</p>
-
+                <p><strong>Available Cash:</strong> $<span id="availableCash">{{ available_cash }}</span></p>
+                <p><strong>Total Portfolio Value:</strong> $<span id="totalPortfolioValue">{{ total_value }}</span></p>
                 {% if user_stocks %}
                     <ul>
                         {% for stock in user_stocks %}
@@ -118,7 +118,40 @@
                     }
                 }
             });
+
+            // Function to check if the stock market is open (9:30 AM to 4:00 PM)
+            function isMarketOpen() {
+                const now = new Date();
+                const currentTime = now.getHours() * 100 + now.getMinutes();
+                const marketOpenTime = 930;  // 9:30 AM
+                const marketCloseTime = 1600; // 4:00 PM
+
+                // Monday (1) to Friday (5) and within market hours
+                return now.getDay() >= 1 && now.getDay() <= 5 && currentTime >= marketOpenTime && currentTime <= marketCloseTime;
+            }
+
+            // Function to fetch updated cash and portfolio data from the server
+            function updatePortfolio() {
+                if (isMarketOpen()) {
+                    fetch("{% url 'live_update' %}")  // URL for live_update
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                            document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                        })
+                        .catch(error => console.error('Error fetching portfolio update:', error));
+                } else {
+                    console.log('Market is closed. Stopping updates.');
+                    clearInterval(updateInterval);  // Stop updating if the market is closed
+                }
+            }
+
+            // Set an interval to update the portfolio every 10 seconds
+            const updateInterval = setInterval(updatePortfolio, 10000);  // 10,000 ms = 10 seconds
+            // Initial call to update portfolio immediately when the page loads
+            updatePortfolio();
         });
+
     </script>
 
 </body>
