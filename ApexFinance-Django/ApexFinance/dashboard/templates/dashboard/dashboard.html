@@ -15,14 +15,12 @@
         <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
         <nav>
             <ul>
-                <!-- Updated form to connect to search.js -->
                 <li>
                     <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
                         <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
                         <button type="submit">Search</button>
                     </form>
                 </li>
-                <!-- Other navigation items -->
                 <li><a href="{% url 'settings' %}">Settings</a></li>
                 <li><a href="{% url 'home' %}">Intro</a></li>
             </ul>
@@ -30,7 +28,7 @@
     </header>
 
     <div class="container">
-        <main>
+        <main role="main">
             <section class="stock-info">
                 <h2>Your Stocks</h2>
                 <p><strong>Available Cash:</strong> ${{ available_cash }}</p>
@@ -48,18 +46,80 @@
                 {% endif %}
             </section>
             <section class="chart">
-                <canvas id="myChart"></canvas>
+                <h2>Your Stock Performance</h2>
+                <div id="chart_container"></div>
             </section>
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static 'search/search.js' %}"></script>
+    <!-- Include Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
     <script>
-        // Initialize the site when the document is ready
-        $(document).ready(function() {
-            site.Init();
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sample data - replace with your own data
+            const stockData = [
+                { name: 'Stock A', data: [1, 2, 3, 4, 5] },
+                { name: 'Stock B', data: [2, 3, 5, 1, 4] },
+                { name: 'Stock C', data: [5, 3, 4, 2, 1] },
+            ];
+
+            // Create the chart
+            Highcharts.chart('chart_container', {
+                chart: {
+                    type: 'line',
+                    backgroundColor: 'red', // Set background color to red
+                    borderColor: 'white', // Border color
+                    borderWidth: 2,
+                },
+                title: {
+                    text: 'Stock Price Over Time',
+                    style: {
+                        color: 'white', // Title color
+                    }
+                },
+                xAxis: {
+                    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+                    labels: {
+                        style: {
+                            color: 'white', // X-axis labels color
+                        }
+                    },
+                    gridLineColor: 'white', // Grid lines color
+                },
+                yAxis: {
+                    title: {
+                        text: 'Stock Price',
+                        style: {
+                            color: 'white', // Y-axis title color
+                        }
+                    },
+                    labels: {
+                        style: {
+                            color: 'white', // Y-axis labels color
+                        }
+                    },
+                    gridLineColor: 'white', // Grid lines color
+                },
+                series: stockData.map(stock => ({
+                    ...stock,
+                    color: 'white', // Set series line color to white
+                })),
+                plotOptions: {
+                    series: {
+                        marker: {
+                            enabled: true,
+                            radius: 4,
+                            fillColor: 'white' // Marker color
+                        },
+                    }
+                }
+            });
         });
     </script>
+
 </body>
 </html>
