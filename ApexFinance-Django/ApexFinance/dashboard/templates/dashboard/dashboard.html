@@ -1,0 +1,158 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard/settings.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <nav>
+            <ul>
+                <li>
+                    <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                        <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" required>
+                        <button type="submit">Search</button>
+                    </form>
+                </li>
+                <li><a href="{% url 'settings' %}">Settings</a></li>
+                <li><a href="{% url 'home' %}">Intro</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            <section class="stock-info">
+                <h2>Your Stocks</h2>
+                <p><strong>Available Cash:</strong> $<span id="availableCash">{{ available_cash }}</span></p>
+                <p><strong>Total Portfolio Value:</strong> $<span id="totalPortfolioValue">{{ total_value }}</span></p>
+                {% if user_stocks %}
+                    <ul>
+                        {% for stock in user_stocks %}
+                            <li>
+                                <strong>{{ stock.company_name }}</strong>: {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You have no stocks owned.</p>
+                {% endif %}
+            </section>
+            <section class="chart">
+                <h2>Your Stock Performance</h2>
+                <div id="chart_container"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Include Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sample data - replace with your own data
+            const stockData = [
+                { name: 'Stock A', data: [1, 2, 3, 4, 5] },
+                { name: 'Stock B', data: [2, 3, 5, 1, 4] },
+                { name: 'Stock C', data: [5, 3, 4, 2, 1] },
+            ];
+
+            // Create the chart
+            Highcharts.chart('chart_container', {
+                chart: {
+                    type: 'line',
+                    backgroundColor: 'red', // Set background color to red
+                    borderColor: 'white', // Border color
+                    borderWidth: 2,
+                },
+                title: {
+                    text: 'Stock Price Over Time',
+                    style: {
+                        color: 'white', // Title color
+                    }
+                },
+                xAxis: {
+                    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+                    labels: {
+                        style: {
+                            color: 'white', // X-axis labels color
+                        }
+                    },
+                    gridLineColor: 'white', // Grid lines color
+                },
+                yAxis: {
+                    title: {
+                        text: 'Stock Price',
+                        style: {
+                            color: 'white', // Y-axis title color
+                        }
+                    },
+                    labels: {
+                        style: {
+                            color: 'white', // Y-axis labels color
+                        }
+                    },
+                    gridLineColor: 'white', // Grid lines color
+                },
+                series: stockData.map(stock => ({
+                    ...stock,
+                    color: 'white', // Set series line color to white
+                })),
+                plotOptions: {
+                    series: {
+                        marker: {
+                            enabled: true,
+                            radius: 4,
+                            fillColor: 'white' // Marker color
+                        },
+                    }
+                }
+            });
+
+            // Function to check if the stock market is open (9:30 AM to 4:00 PM)
+            function isMarketOpen() {
+                const now = new Date();
+                const currentTime = now.getHours() * 100 + now.getMinutes();
+                const marketOpenTime = 930;  // 9:30 AM
+                const marketCloseTime = 1600; // 4:00 PM
+
+                // Monday (1) to Friday (5) and within market hours
+                return now.getDay() >= 1 && now.getDay() <= 5 && currentTime >= marketOpenTime && currentTime <= marketCloseTime;
+            }
+
+            // Function to fetch updated cash and portfolio data from the server
+            function updatePortfolio() {
+                if (isMarketOpen()) {
+                    fetch("{% url 'live_update' %}")  // URL for live_update
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                            document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                        })
+                        .catch(error => console.error('Error fetching portfolio update:', error));
+                } else {
+                    console.log('Market is closed. Stopping updates.');
+                    clearInterval(updateInterval);  // Stop updating if the market is closed
+                }
+            }
+
+            // Set an interval to update the portfolio every 10 seconds
+            const updateInterval = setInterval(updatePortfolio, 10000);  // 10,000 ms = 10 seconds
+            // Initial call to update portfolio immediately when the page loads
+            updatePortfolio();
+        });
+
+    </script>
+
+</body>
+</html>

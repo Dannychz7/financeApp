@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="{% static 'users/login.css' %}"> <!-- Assuming you have this in your static files -->
+    </head>
+<body>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+    <a href="{% url 'login' %}">Already have an account? Log in</a>
+</body>
+</html>
