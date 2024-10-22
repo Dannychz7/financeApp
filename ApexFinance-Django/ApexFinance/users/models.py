@@ -21,5 +21,21 @@ class UserStock(models.Model):
     def __str__(self):
         return f"{self.company_name} owns {self.stock_quantity} shares of {self.company_name}" 
     
+class StockTransaction(models.Model):
+    TRANSACTION_TYPE_CHOICES = [
+        ('buy', 'Buy'),
+        ('sell', 'Sell'),
+    ]
+    
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='transactions')
+    company_name = models.CharField(max_length=255)
+    stock_quantity = models.PositiveIntegerField()
+    stock_price = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_type = models.CharField(max_length=4, choices=TRANSACTION_TYPE_CHOICES)
+    transaction_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.transaction_type.capitalize()} {self.stock_quantity} shares of {self.company_name} on {self.transaction_date.strftime('%Y-%m-%d %H:%M:%S')}"
+    
     
     

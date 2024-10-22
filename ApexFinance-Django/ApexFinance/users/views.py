@@ -2,7 +2,7 @@ import yfinance as yf
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Profile, UserStock  # Make sure to import Profile
+from .models import Profile, UserStock, StockTransaction  # Make sure to import Profile
 from .forms import UserRegistrationForm, BuyStockForm, SellStockForm
 from decimal import Decimal
 from django.utils import timezone
@@ -85,6 +85,15 @@ def buy_stock(request):
                 user_stock.stock_quantity += stock_quantity
                 user_stock.stock_purchase_date = timezone.now()  # Update the purchase date to the current date
                 user_stock.save()
+                
+                # Log the transaction
+                StockTransaction.objects.create(
+                    profile=profile,
+                    company_name=company_name,
+                    stock_quantity=stock_quantity,
+                    stock_price=stock_price,
+                    transaction_type='buy'
+                )
 
                 messages.success(request, f"Successfully bought {stock_quantity} shares of {company_name}.")
                 return redirect('search')
@@ -130,6 +139,15 @@ def sell_stock(request):
                 # Update available cash
                 profile.available_cash += stock_quantity * stock_price
                 profile.save()
+                
+                # Log the transaction
+                StockTransaction.objects.create(
+                    profile=profile,
+                    company_name=company_name,
+                    stock_quantity=stock_quantity,
+                    stock_price=stock_price,
+                    transaction_type='sell'
+                )
 
                 messages.success(request, f"Successfully sold {stock_quantity} shares of {company_name}.")
                 return redirect('search')
