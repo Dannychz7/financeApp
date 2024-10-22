@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,7 @@
     <title>Stock Trading Dashboard</title>
     <link rel="stylesheet" href="{% static 'dashboard/settings.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+ 
 </head>
 <body>
     <header>
@@ -29,94 +29,85 @@
 
     <div class="container">
         <main role="main">
-            <section class="stock-info">
-                <h2>Your Stocks</h2>
-                <p><strong>Available Cash:</strong> $<span id="availableCash">{{ available_cash }}</span></p>
-                <p><strong>Total Portfolio Value:</strong> $<span id="totalPortfolioValue">{{ total_value }}</span></p>
-                {% if user_stocks %}
-                    <ul>
-                        {% for stock in user_stocks %}
-                            <li>
-                                <strong>{{ stock.company_name }}</strong>: {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>You have no stocks owned.</p>
-                {% endif %}
-            </section>
-        <section class="chart">
-            <h2>Your Stock Performance</h2>
-            <div id="chart_container"></div>
-        </section>
-        
-        <!-- Include Highcharts -->
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://code.highcharts.com/modules/exporting.js"></script>
-        <script src="https://code.highcharts.com/modules/export-data.js"></script>
-        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Parse stock data passed from the Django view
-                const stockData = JSON.parse('{{ stock_data|escapejs }}');
-        
-                // Prepare series data for Highcharts (price per stock)
-                const seriesData = stockData.map(stock => ({
-                    name: stock.name,
-                    data: Array(stock.quantity).fill(stock.price)  // Example: use quantity to repeat the price
-                }));
-        
-                // Create the chart
-                Highcharts.chart('chart_container', {
-                    chart: {
-                        type: 'line',
-                        backgroundColor: 'red', // Set background color to red
-                        borderColor: 'white', // Border color
-                        borderWidth: 2,
-                    },
-                    title: {
-                        text: 'Stock Price Over Time',
-                        style: {
-                            color: 'white', // Title color
-                        }
-                    },
-                    xAxis: {
-                        categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-                        labels: {
-                            style: {
-                                color: 'white', // X-axis labels color
-                            }
-                        },
-                        gridLineColor: 'white', // Grid lines color
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Stock Price',
-                            style: {
-                                color: 'white', // Y-axis title color
-                            }
-                        },
-                        labels: {
-                            style: {
-                                color: 'white', // Y-axis labels color
-                            }
-                        },
-                        gridLineColor: 'white', // Grid lines color
-                    },
-                    series: seriesData,
-                    plotOptions: {
-                        series: {
-                            marker: {
-                                enabled: true,
-                                radius: 4,
-                                fillColor: 'white' // Marker color
-                            },
-                        }
-                    }
-                });
+            <div class="dashboard-content">
+                <!-- Stock Info Section -->
+                <section class="stock-info">
+                    <h2>Your Stocks</h2>
+                    <p><strong>Available Cash:</strong> $<span id="availableCash">{{ available_cash }}</span></p>
+                    <p><strong>Total Portfolio Value:</strong> $<span id="totalPortfolioValue">{{ total_value }}</span></p>
+                    {% if user_stocks %}
+                        <ul>
+                            {% for stock in user_stocks %}
+                                <li>
+                                    <strong>{{ stock.company_name }}</strong>: {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>You have no stocks owned.</p>
+                    {% endif %}
+                </section>
 
-                
+                <!-- Chart Section -->
+                <section class="chart">
+                    <h2>Your Stock Performance</h2>
+                    <div id="chart_container"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Parse stock data passed from the Django view
+            const stockData = JSON.parse('{{ stock_data|escapejs }}');
+            
+            // Prepare series data for Highcharts (use name and quantity for pie chart)
+            const seriesData = stockData.map(stock => ({
+                name: stock.name,
+                y: stock.quantity * stock.price  // Example: Total value of the stock (quantity * price)
+            }));
+
+            // Create the pie chart
+            Highcharts.chart('chart_container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: 'transparent', // Set background color to red
+                    borderColor: 'transparent', // Border color
+                    borderWidth: 2,
+                },
+                title: {
+                    text: 'Stock Allocation',
+                    style: {
+                        color: 'white', // Title color
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: $ {point.percentage:.1f} %',
+                            style: {
+                                color: 'white'
+                            }
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Cash Value',
+                    colorByPoint: true,
+                    data: seriesData
+                }]
+            });
 
             // Function to check if the stock market is open (9:30 AM to 4:00 PM)
             function isMarketOpen() {
@@ -142,14 +133,6 @@
                 } else {
                     console.log('Market is closed. Stopping updates.');
                     clearInterval(updateInterval);  // Stop updating if the market is closed
-                    
-                    fetch("{% url 'live_update' %}")  // URL for live_update
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
-                        document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
-                    })
-                    .catch(error => console.error('Error fetching portfolio update:', error));
                 }
             }
 
@@ -158,7 +141,6 @@
             // Initial call to update portfolio immediately when the page loads
             updatePortfolio();
         });
-
     </script>
 
 </body>
