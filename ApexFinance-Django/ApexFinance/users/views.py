@@ -5,6 +5,7 @@ from django.contrib import messages
 from .models import Profile, UserStock  # Make sure to import Profile
 from .forms import UserRegistrationForm, BuyStockForm, SellStockForm
 from decimal import Decimal
+from django.utils import timezone
 
 def register(request):
     if request.method == 'POST':
@@ -77,11 +78,12 @@ def buy_stock(request):
                 user_stock, created = UserStock.objects.get_or_create(
                     profile=profile,
                     company_name=company_name,
-                    defaults={'stock_quantity': 0, 'stock_price': stock_price}
+                    defaults={'stock_quantity': 0, 'stock_price': stock_price, 'stock_purchase_date': timezone.now()}
                 )
                 
                 # Update stock quantity
                 user_stock.stock_quantity += stock_quantity
+                user_stock.stock_purchase_date = timezone.now()  # Update the purchase date to the current date
                 user_stock.save()
 
                 messages.success(request, f"Successfully bought {stock_quantity} shares of {company_name}.")

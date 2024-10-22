@@ -59,13 +59,13 @@ class StockHistoryView(View):
             if period == '1d':
                 return '1m'  # 1 min intervals for 1 day
             elif period == '5d':
-                return '30m'  # 20 min intervals for 5 days
+                return '15m'  # 15 min intervals for 5 days
             elif period in ['1mo', '3mo']:
-                return '1d'  # Daily intervals for 1 month and 3 months
+                return '60m'  # Daily intervals for 1 month and 3 months
             elif period == '1y':
-                return '5d'  # 5 day intervals for 1 year
+                return '1d'  # 5 day intervals for 1 year
             elif period == 'ytd':
-                return '5d' # 5 day intervals for ytd
+                return '1d' # 5 day intervals for ytd
             elif period == '2y':
                 return '5d'  # 5 day intervals for 2 year
             elif period in ['5y', 'max']:

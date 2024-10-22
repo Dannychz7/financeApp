@@ -15,6 +15,6 @@ admin.site.register(Profile, ProfileAdmin)  # Register Profile with custom admin
 
 # Register the UserStock model without inlines
 class UserStockAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'company_name', 'stock_quantity', 'stock_price')  # Display fields
+    list_display = ('profile', 'company_name', 'stock_quantity', 'stock_price', 'stock_purchase_date')  # Display fields
 
 admin.site.register(UserStock, UserStockAdmin)  # Register UserStock model
