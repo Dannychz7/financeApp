@@ -1,3 +1,4 @@
+import json
 import yfinance as yf
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -15,9 +16,20 @@ def dashboard(request):
     # Get all stocks for the logged-in user
     user_stocks = UserStock.objects.filter(profile=request.user.profile)
 
+    # Prepare data for the chart (convert to list of dictionaries)
+    stock_data = [
+        {
+            'name': stock.company_name,
+            'price': float(stock.stock_price),  # Ensure stock_price is float for JSON serialization
+            'quantity': stock.stock_quantity
+        }
+        for stock in user_stocks
+    ]
+
     # Render the dashboard template with the user's stocks, available cash
     return render(request, 'dashboard/dashboard.html', {
         'user_stocks': user_stocks,
+        'stock_data': json.dumps(stock_data),
     })
 
 @login_required(login_url='/users/login_user')

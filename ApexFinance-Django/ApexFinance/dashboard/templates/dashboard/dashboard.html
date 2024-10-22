@@ -45,79 +45,78 @@
                     <p>You have no stocks owned.</p>
                 {% endif %}
             </section>
-            <section class="chart">
-                <h2>Your Stock Performance</h2>
-                <div id="chart_container"></div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Include Highcharts -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Sample data - replace with your own data
-            const stockData = [
-                { name: 'Stock A', data: [1, 2, 3, 4, 5] },
-                { name: 'Stock B', data: [2, 3, 5, 1, 4] },
-                { name: 'Stock C', data: [5, 3, 4, 2, 1] },
-            ];
-
-            // Create the chart
-            Highcharts.chart('chart_container', {
-                chart: {
-                    type: 'line',
-                    backgroundColor: 'red', // Set background color to red
-                    borderColor: 'white', // Border color
-                    borderWidth: 2,
-                },
-                title: {
-                    text: 'Stock Price Over Time',
-                    style: {
-                        color: 'white', // Title color
-                    }
-                },
-                xAxis: {
-                    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-                    labels: {
-                        style: {
-                            color: 'white', // X-axis labels color
-                        }
+        <section class="chart">
+            <h2>Your Stock Performance</h2>
+            <div id="chart_container"></div>
+        </section>
+        
+        <!-- Include Highcharts -->
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Parse stock data passed from the Django view
+                const stockData = JSON.parse('{{ stock_data|escapejs }}');
+        
+                // Prepare series data for Highcharts (price per stock)
+                const seriesData = stockData.map(stock => ({
+                    name: stock.name,
+                    data: Array(stock.quantity).fill(stock.price)  // Example: use quantity to repeat the price
+                }));
+        
+                // Create the chart
+                Highcharts.chart('chart_container', {
+                    chart: {
+                        type: 'line',
+                        backgroundColor: 'red', // Set background color to red
+                        borderColor: 'white', // Border color
+                        borderWidth: 2,
                     },
-                    gridLineColor: 'white', // Grid lines color
-                },
-                yAxis: {
                     title: {
-                        text: 'Stock Price',
+                        text: 'Stock Price Over Time',
                         style: {
-                            color: 'white', // Y-axis title color
+                            color: 'white', // Title color
                         }
                     },
-                    labels: {
-                        style: {
-                            color: 'white', // Y-axis labels color
-                        }
-                    },
-                    gridLineColor: 'white', // Grid lines color
-                },
-                series: stockData.map(stock => ({
-                    ...stock,
-                    color: 'white', // Set series line color to white
-                })),
-                plotOptions: {
-                    series: {
-                        marker: {
-                            enabled: true,
-                            radius: 4,
-                            fillColor: 'white' // Marker color
+                    xAxis: {
+                        categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+                        labels: {
+                            style: {
+                                color: 'white', // X-axis labels color
+                            }
                         },
+                        gridLineColor: 'white', // Grid lines color
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Stock Price',
+                            style: {
+                                color: 'white', // Y-axis title color
+                            }
+                        },
+                        labels: {
+                            style: {
+                                color: 'white', // Y-axis labels color
+                            }
+                        },
+                        gridLineColor: 'white', // Grid lines color
+                    },
+                    series: seriesData,
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 4,
+                                fillColor: 'white' // Marker color
+                            },
+                        }
                     }
-                }
-            });
+                });
+
+                
 
             // Function to check if the stock market is open (9:30 AM to 4:00 PM)
             function isMarketOpen() {
