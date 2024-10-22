@@ -1,5 +1,5 @@
-TO DO LIST:
-1. Buy and Sell Stocks
+Current Bugs that need fixing:
+1. Keep all toe
 2. 
 
 How to access admin panel that shows "everything" in the database:
