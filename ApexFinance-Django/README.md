@@ -1,6 +1,8 @@
 Current Bugs that need fixing:
-1. Keep all toe
-2. 
+[x] Keep all stock tickers in CAPS
+[] Update ETF or MUTALFUNDS with current price, not closing price
+[] Update ETF, so when you buy it buys current price
+[] Add "End of day total portifo sum"
 
 How to access admin panel that shows "everything" in the database:
     - run the server
