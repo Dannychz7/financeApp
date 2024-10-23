@@ -22,7 +22,7 @@ from home import views
 from dashboard import views
 from settings import views
 from search import views
-from history import views
+from transactionHistory import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,7 +31,7 @@ urlpatterns = [
     path('', include("dashboard.urls")),
     path('', include("settings.urls")),
     path('', include("search.urls")),
-    path('', include("history.urls")),
+    path('', include("transactionHistory.urls")),
     path('users/', include('django.contrib.auth.urls')),
     path('users/', include('users.urls')),
 ]

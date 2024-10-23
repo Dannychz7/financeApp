@@ -7,7 +7,7 @@ from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/users/login_user')
-def history(request):
+def transactionHistory(request):
     # Get all stocks for the logged-in user
     user_stocks = UserStock.objects.filter(profile=request.user.profile)
     # Fetch transactions related to the logged-in user's profile
@@ -25,7 +25,7 @@ def history(request):
         for transaction in user_transactions
     ]
 
-    return render(request, 'dashboard/dashboard.html', {
+    return render(request, 'transactionHistory/transactionHistory.html', {
         'user_transactions': user_transactions,
         'user_history': json.dumps(user_history) 
     })

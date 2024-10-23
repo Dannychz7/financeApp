@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'transactionHistory/transactionHistory.css' %}">  <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Transaction History</h1>
+    <canvas id="transactionChart" width="400" height="200"></canvas>
+
+    <script>
+        // Sample data fetched from your Django view
+        const transactionData = {
+            "transaction_history": {
+                "NVDA": {"quantity": 10, "price": 143.7, "type": "buy", "date": 1729626505667.1792},
+                "META": {"quantity": 3, "price": 573.37, "type": "buy", "date": 1729698503790.804},
+                "SOUN": {"quantity": 1000, "price": 5.32, "type": "buy", "date": 1729626575278.138},
+                "QQQ": {"quantity": 70, "price": 495.42, "type": "buy", "date": 1729626538244.68}
+            }
+        };
+
+        // Prepare labels and data for the chart
+        const labels = Object.keys(transactionData.transaction_history);
+        const quantities = labels.map(stock => transactionData.transaction_history[stock].quantity);
+        const prices = labels.map(stock => transactionData.transaction_history[stock].price);
+
+        // Create the chart
+        const ctx = document.getElementById('transactionChart').getContext('2d');
+        const transactionChart = new Chart(ctx, {
+            type: 'bar',  // Change to 'line' if you prefer a line chart
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Quantity',
+                        data: quantities,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Price',
+                        data: prices,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
