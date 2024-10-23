@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 # Require users to be logged into an account to see their dashboard
 @login_required(login_url='/users/login_user')
 def dashboard(request):
+    profile = request.user.profile
+    available_cash = profile.available_cash  # Get available cash
     # Get all stocks for the logged-in user
     user_stocks = UserStock.objects.filter(profile=request.user.profile)
 
@@ -27,6 +29,7 @@ def dashboard(request):
 
     # Render the dashboard template with the user's stocks, available cash
     return render(request, 'dashboard/dashboard.html', {
+        'available_cash': available_cash,
         'user_stocks': user_stocks,
         'stock_data': json.dumps(stock_data),
     })
@@ -42,6 +45,7 @@ def live_update(request):
     available_cash = profile.available_cash  # Get available cash
 
     total_stock_value = Decimal(0)  # To accumulate the total value of all stocks
+    stock_data_dict = {} # To store the price and quantity of each stock owned
 
     # Loop through each stock to update its value based on the current market price
     for stock in user_stocks:
@@ -58,8 +62,13 @@ def live_update(request):
         stock_value = stock.stock_quantity * current_price
         total_stock_value += stock_value  # Add the stock value to the total
 
+        stock_data_dict[stock.company_name] = { # Store the current price and quantity into the dict to call in the html
+            'price': float(current_price),
+            'quantity': stock.stock_quantity
+        }
+
+    print(stock_data_dict)
     # Update the total portfolio value in the user's profile
-    
     profile.total_stock_value = total_stock_value
     profile.total_value = available_cash + total_stock_value  # Total value = cash + stock value
     profile.save()  # Save the updated profile
@@ -69,4 +78,5 @@ def live_update(request):
         'available_cash': float(available_cash),
         'total_value': float(profile.total_value),
         'total_stock_value': float(total_stock_value), #Grabbing this one
+        'stock_data_dict': stock_data_dict
     })

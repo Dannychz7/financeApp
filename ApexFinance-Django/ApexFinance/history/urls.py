@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('history', views.transaction_history, name='transaction_history'),
+    path('history', views.history, name='history'),
+    path("transactions", views.TransactionHistory, name="TransactionHistory"),
 ]

@@ -1,4 +1,5 @@
 {% load static %}
+{% load customTags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,7 @@
                         <button type="submit">Search</button>
                     </form>
                 </li>
-                <li><a href="{% url 'transaction_history' %}">Transaction History</a></li> 
+                <li><a href="{% url 'history' %}">Transaction History</a></li> 
                 <li><a href="{% url 'settings' %}">Settings</a></li>
                 <li><a href="{% url 'home' %}">Intro</a></li>         
                 </ul>
@@ -47,14 +48,15 @@
                         $<span id="totalPortfolioValue">{{ total_value }}</span>
                     </p>
     
-                    {% if user_stocks %}
+                        {% if user_stocks %}
                         <ul class="stock-list">
                             {% for stock in user_stocks %}
-                                <li class="stock-item">
-                                    <strong>{{ stock.company_name }}</strong>:
-                                    {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
-                                </li>
-                            {% endfor %}
+                            <li class="stock-item">
+                                <strong>{{ stock.company_name }}</strong>:
+                                {{ stock.stock_quantity }} shares totalling $ 
+                                <!-- TODO: Access the stock_data_dict at stock.company_name -->
+                            </li>
+                        {% endfor %}
                         </ul>
                     {% else %}
                         <p class="no-stocks">You have no stocks owned.</p>
@@ -81,10 +83,15 @@
             const stockData = JSON.parse('{{ stock_data|escapejs }}');
             
             // Prepare series data for Highcharts (use name and quantity for pie chart)
+            available_cash = {{ available_cash|default:0|floatformat:2 }};  // Pass available_cash to JavaScript
+
             const seriesData = stockData.map(stock => ({
                 name: stock.name,
-                y: stock.quantity * stock.price  // Example: Total value of the stock (quantity * price)
-            }));
+                y: stock.quantity * stock.price
+            })).concat([{
+                name: 'Cash',
+                y: available_cash
+            }]);
 
             // Create the pie chart
             Highcharts.chart('chart_container', {
