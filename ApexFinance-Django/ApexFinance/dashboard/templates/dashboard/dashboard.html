@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Trading Dashboard</title>
-    <link rel="stylesheet" href="{% static 'dashboard/settings.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
- 
+
 </head>
 <body>
     <header>
@@ -21,37 +21,49 @@
                         <button type="submit">Search</button>
                     </form>
                 </li>
+                <li><a href="{% url 'transaction_history' %}">Transaction History</a></li> 
                 <li><a href="{% url 'settings' %}">Settings</a></li>
-                <li><a href="{% url 'home' %}">Intro</a></li>
-            </ul>
+                <li><a href="{% url 'home' %}">Intro</a></li>         
+                </ul>
         </nav>
     </header>
 
     <div class="container">
-        <main role="main">
+        <main class="dashboard" aria-labelledby="dashboard-heading">
+            <h1 id="dashboard-heading" class="visually-hidden">Dashboard</h1>
+    
+            <!-- Stock and Chart Section Wrapper -->
             <div class="dashboard-content">
+                
                 <!-- Stock Info Section -->
-                <section class="stock-info">
-                    <h2>Your Stocks</h2>
-                    <p><strong>Available Cash:</strong> $<span id="availableCash">{{ available_cash }}</span></p>
-                    <p><strong>Total Portfolio Value:</strong> $<span id="totalPortfolioValue">{{ total_value }}</span></p>
+                <section class="stock-info" aria-labelledby="stocks-heading">
+                    <h2 id="stocks-heading">Your Stocks</h2>
+                    <p>
+                        <strong>Available Cash:</strong>
+                        $<span id="availableCash">{{ available_cash }}</span>
+                    </p>
+                    <p>
+                        <strong>Total Portfolio Value:</strong>
+                        $<span id="totalPortfolioValue">{{ total_value }}</span>
+                    </p>
+    
                     {% if user_stocks %}
-                        <ul>
+                        <ul class="stock-list">
                             {% for stock in user_stocks %}
-                                <li>
-                                    <strong>{{ stock.company_name }}</strong>: {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
+                                <li class="stock-item">
+                                    <strong>{{ stock.company_name }}</strong>:
+                                    {{ stock.stock_quantity }} shares at ${{ stock.stock_price }} each
                                 </li>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>You have no stocks owned.</p>
+                        <p class="no-stocks">You have no stocks owned.</p>
                     {% endif %}
                 </section>
-
+    
                 <!-- Chart Section -->
-                <section class="chart">
-                    <h2>Your Stock Performance</h2>
-                    <div id="chart_container"></div>
+                <section class="chart" aria-labelledby="chart-heading">
+                    <div id="chart_container" role="img" aria-label="Pie chart displaying your stock allocation"></div>
                 </section>
             </div>
         </main>
@@ -99,7 +111,7 @@
                                 color: 'white'
                             }
                         },
-                        showInLegend: true
+                        showInLegend: false
                     }
                 },
                 series: [{
@@ -150,6 +162,5 @@
             updatePortfolio();
         });
     </script>
-
 </body>
 </html>

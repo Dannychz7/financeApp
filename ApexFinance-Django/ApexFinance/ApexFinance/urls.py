@@ -22,14 +22,16 @@ from home import views
 from dashboard import views
 from settings import views
 from search import views
+from history import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/home', permanent=False)), # Adds default page so the '/' redirects to the home page 
-    path ('', include("home.urls")),
+    path('', include("home.urls")),
     path('', include("dashboard.urls")),
     path('', include("settings.urls")),
     path('', include("search.urls")),
+    path('', include("history.urls")),
     path('users/', include('django.contrib.auth.urls')),
     path('users/', include('users.urls')),
 ]

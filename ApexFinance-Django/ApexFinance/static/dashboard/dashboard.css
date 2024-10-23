@@ -129,7 +129,8 @@ nav ul li a:hover {
 
 /* Styling for stock info section */
 .stock-info {
-    margin-top: 20px;
+    flex: 1; /* Allow this section to grow and take up available space */
+    padding: 20px;
 }
 
 .stock-info h2 {
@@ -144,12 +145,26 @@ nav ul li a:hover {
 
 /* Chart section styling */
 .chart {
-    margin-top: 20px;
+    flex: 1; /* Allow this section to grow and take up available space */
+    padding: 20px;
+}
+
+#chart_container {
+    width: 100%; /* Ensures the chart fills its container */
+    height: 400px; /* Set a fixed height for the chart */
 }
 
 canvas {
     width: 100%;
     height: auto;
+}
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap; /* Prevents the elements from wrapping into a new line */
+    gap: 20px; /* Adds space between sections */
 }
 
 /* Settings and general form styling */

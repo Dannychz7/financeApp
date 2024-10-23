@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'settings',
     'search',
     'users',
+    'history',
     
 ]
 

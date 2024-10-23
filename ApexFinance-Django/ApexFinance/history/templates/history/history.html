@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="stylesheet" href="{% static 'history.css' %}">  
+    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}"> <!-- TODO Include your CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Transaction History</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Company Name</th>
+                <th>Stock Quantity</th>
+                <th>Stock Price</th>
+                <th>Transaction Type</th>
+                <th>Transaction Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.profile.user.username }}</td>  <!-- Display the username -->
+                <td>{{ transaction.company_name }}</td>            <!-- Company name from the transaction -->
+                <td>{{ transaction.stock_quantity }}</td>           <!-- Quantity of stocks -->
+                <td>${{ transaction.stock_price }}</td>             <!-- Price of stock -->
+                <td>{{ transaction.transaction_type|capfirst }}</td> <!-- Transaction type (buy/sell) -->
+                <td>{{ transaction.transaction_date|date:"F j, Y, g:i a" }}</td> <!-- Format date -->
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No transactions found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

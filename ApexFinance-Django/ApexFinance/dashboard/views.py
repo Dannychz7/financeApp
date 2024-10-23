@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 # Require users to be logged into an account to see their dashboard
 @login_required(login_url='/users/login_user')
 def dashboard(request):
-    profile = request.user.profile  # Access the profile of the logged-in user
     # Get all stocks for the logged-in user
     user_stocks = UserStock.objects.filter(profile=request.user.profile)
 
