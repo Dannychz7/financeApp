@@ -1,0 +1,85 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Transaction History - APEX Finance</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'transactionHistory/transactionHistory.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <header>
+      <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+      <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+      <nav>
+        <ul>
+          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'home' %}">Intro</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1>Transaction History</h1>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Stock</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>NVDA</td>
+            <td>10</td>
+            <td>$143.7</td>
+            <td>Buy</td>
+            <td>2024-10-23</td>
+          </tr>
+          <tr>
+            <td>META</td>
+            <td>3</td>
+            <td>$573.37</td>
+            <td>Buy</td>
+            <td>2024-10-23</td>
+          </tr>
+          <tr>
+            <td>SOUN</td>
+            <td>1000</td>
+            <td>$5.32</td>
+            <td>Buy</td>
+            <td>2024-10-23</td>
+          </tr>
+          <tr>
+            <td>QQQ</td>
+            <td>70</td>
+            <td>$495.42</td>
+            <td>Buy</td>
+            <td>2024-10-23</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      <p> Contact us: (480) - 709 - 5202</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  </body>
+</html>
