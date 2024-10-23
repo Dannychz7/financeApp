@@ -40,34 +40,15 @@
           </tr>
         </thead>
         <tbody>
+          {% for transaction in user_transactions %}
           <tr>
-            <td>NVDA</td>
-            <td>10</td>
-            <td>$143.7</td>
-            <td>Buy</td>
-            <td>2024-10-23</td>
+            <td>{{ transaction.company_name }}</td>
+            <td>{{ transaction.stock_quantity }}</td>
+            <td>${{ transaction.stock_price }}</td>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.transaction_date|date:"Y-m-d" }}</td>
           </tr>
-          <tr>
-            <td>META</td>
-            <td>3</td>
-            <td>$573.37</td>
-            <td>Buy</td>
-            <td>2024-10-23</td>
-          </tr>
-          <tr>
-            <td>SOUN</td>
-            <td>1000</td>
-            <td>$5.32</td>
-            <td>Buy</td>
-            <td>2024-10-23</td>
-          </tr>
-          <tr>
-            <td>QQQ</td>
-            <td>70</td>
-            <td>$495.42</td>
-            <td>Buy</td>
-            <td>2024-10-23</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
