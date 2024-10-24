@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Apex Finance</title>
+    <link rel="stylesheet" href="{% static 'settings/settings.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <nav>
+            <ul>
+                <!-- Search form updated to redirect to search.html -->
+                <li>
+                    <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                        <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
+                        <button type="submit">Search</button>
+                    </form>
+                </li>
+
+                <!-- Dropdown menu for Account -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                        <li><a href="{% url 'settings' %}">Settings</a></li>
+                        <li><a href="{% url 'dashboard' %}"> Dashboard </a><li>
+                    </ul>
+                </li>  
+            </ul>
+        </nav>
+    </header>
+    
+<div class="container">
+    <h1>Settings</h1>
+
+    <!-- Account Info and Password Change -->
+    <div class="settings-section">
+        <h2>Account Info</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>  <!-- Display username dynamically -->
+        <p><strong>Email:</strong> {{ user.email }}</p> <!-- Display email dynamically -->
+
+        <h2>Change Password</h2>
+        <!-- Link to change password (Django built-in view) -->
+        <p><a href="{% url 'password_change' %}">Change Password</a></p>
+    </div>
+
+    <!-- General Settings -->
+    <div class="settings-section">
+        <h2>General Settings</h2>
+        <form method="post" action="{% url 'settings' %}">
+            {% csrf_token %}
+            <div class="setting-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" readonly> <!-- Display username -->
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" readonly> <!-- Display email -->
+            </div>
+
+            <div class="setting-group">
+                <h2>Notifications</h2>
+                <label for="email-notifications">Email Notifications:</label>
+                <input type="checkbox" id="email-notifications" name="email-notifications">
+
+                <label for="push-notifications">Push Notifications:</label>
+                <input type="checkbox" id="push-notifications" name="push-notifications">
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    
+    <!-- Logout Button -->
+    <div class="settings-section">
+        <h2>Logout</h2>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+    </div>
+</div>
+
+<script src="/static/js/script.js"></script>
+</body>
+</html>
