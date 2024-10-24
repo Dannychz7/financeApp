@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Trading Dashboard</title>
     <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
 </head>
@@ -22,10 +23,19 @@
                         <button type="submit">Search</button>
                     </form>
                 </li>
-                <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li> 
+                        <!-- Dropdown menu for Account -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                        <li><a href="{% url 'settings' %}">Settings</a></li>
+                        <li><a href="{% url 'home' %}">Intro</a></li>
+                    </ul>
+                </li>     
+                {% comment %} <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li> 
                 <li><a href="{% url 'settings' %}">Settings</a></li>
-                <li><a href="{% url 'home' %}">Intro</a></li>         
-                </ul>
+                <li><a href="{% url 'home' %}">Intro</a></li>          {% endcomment %}
+            </ul>
         </nav>
     </header>
 
