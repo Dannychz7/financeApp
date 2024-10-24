@@ -210,6 +210,50 @@ button:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
 
+/* Dropdown styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown .dropbtn {
+  background-color: transparent; /* Make the button background transparent */
+  color: #f0f0f0; /* Whitish text */
+  text-decoration: none; /* No underline */
+  padding: 10px 16px; /* Adjust padding as needed */
+  font-size: 1.1em; /* Match font size with other nav items */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.dropdown .dropbtn:hover, .dropdown .dropbtn:focus {
+  color: #D43F33; /* Red hover effect */
+}
+
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute; /* Position the dropdown */
+  background-color: #333; /* Match header background */
+  min-width: 160px; /* Minimum width of dropdown */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Box shadow */
+  z-index: 1; /* Ensure dropdown appears above other elements */
+}
+
+.dropdown-content a {
+  color: #f0f0f0; /* Whitish text for links */
+  padding: 12px 16px; /* Padding for dropdown items */
+  text-decoration: none; /* No underline */
+  display: block; /* Make links block level */
+}
+
+.dropdown-content a:hover {
+  background-color: #D43F33; /* Red background on hover */
+  background-color: transparent; /* Keep background transparent */
+}
+
+.dropdown:hover .dropdown-content {
+  display: block; /* Show dropdown on hover */
+}
 
 /* Footer */
 footer {
