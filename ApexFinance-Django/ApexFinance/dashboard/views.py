@@ -2,8 +2,11 @@ import json
 import yfinance as yf
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from users.models import UserStock  # Import the UserStock model
+from .models import ETFHolding  # Import the ETFHolding model
+from django.contrib.auth.decorators import login_required # User authorization
+from django.utils import timezone
 from decimal import Decimal
 from django.contrib import messages
 
@@ -12,9 +15,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-
-# User authorization
-from django.contrib.auth.decorators import login_required
 
 # Require users to be logged into an account to see their dashboard
 @login_required(login_url='/users/login_user')
@@ -136,7 +136,7 @@ def assetCalc(request):
         #print("Here I am")
         etf_symbol = request.POST.get('etf').upper()  # Get the ETF symbol from the form
         stocks_owned = request.POST.get('stocksOwned').split(',')  # Get stocks owned
-
+        
         # Fetch ETF data using yfinance
         etf_data = yf.Ticker(etf_symbol)
         etf_info = etf_data.info  # Get ETF information
@@ -145,13 +145,68 @@ def assetCalc(request):
         if 'symbol' not in etf_info or 'delisted' in etf_info.get('status', '').lower():
             messages.error(request, f"Invalid or delisted ETF symbol: {etf_symbol}. Please enter a valid ETF symbol.")
             return redirect('assetCalc')  # Redirect to the assetCalc view or your desired page
+        
+        # Check for existing ETF holdings in the database
+        existing_holdings = ETFHolding.objects.filter(etf_ticker=etf_symbol)
+        
+        if existing_holdings.exists():
+            # Check if the existing holdings were updated in the last week
+            # Calculate the cutoff for one week ago with timezone awareness
+            week_ago = timezone.now() - timedelta(weeks=1)
+        
+            if all(holding.last_updated > week_ago for holding in existing_holdings):
+                # If holdings exist, retrieve them and return to the template
+                etf_price = Decimal(yf.Ticker(etf_symbol).history(period='1d')['Close'].iloc[0])  # Get the ETF price
+                calculated_holdings = []
+                for holding in existing_holdings:
+                    holding_value_in_etf = (Decimal(holding.holding_percentage) / Decimal(100) * 
+                                            Decimal(yf.Ticker(etf_symbol).history(period='1d')['Close'].iloc[0]) * 
+                                            Decimal(Decimal(stocks_owned[0])))  # Calculate holding value
+                    stock_price = Decimal(yf.Ticker(holding.stock_symbol).history(period='1d')['Close'].iloc[0])  # Get stock price
+                    stock_owned = holding_value_in_etf / stock_price  # Calculate amount owned
+
+                    calculated_holdings.append({
+                        'stock_symbol': holding.stock_symbol,
+                        'holding_percentage': holding.holding_percentage,
+                        'holding_value_in_etf': holding_value_in_etf,
+                        'stock_price': stock_price,
+                        'stock_owned': stock_owned
+                    })
+                return render(request, 'dashboard/assetCalc.html', {
+                    'etf_symbol': etf_symbol,
+                    'calculated_holdings': calculated_holdings,
+                    'etf_price': etf_price  # Pass ETF price to template
+                })
+            # Holdings are stale
+            else:
+                # Filter for stale holdings only (older than a week)
+                stale_holdings = existing_holdings.filter(etf_ticker=etf_symbol, last_updated__lt=week_ago)
+                # If holdings are stale, delete existing data and proceed to update
+                stale_holdings.delete()
+
 
         # Fetch ETF holdings using the defined function
         etf_holdings = fetch_etf_holdings(etf_symbol)
-        # print(etf_holdings)
 
         # Initialize the list to hold stock data
         calculated_holdings = []
+        
+        # Save ETF holdings to the database
+        for holding in etf_holdings:
+            stock_symbol = holding['name']
+            holding_percentage = holding['percent'] * 100  # Convert to percentage
+            
+            # Create or update ETFHolding instance
+            ETFHolding.objects.update_or_create(
+                etf_ticker=etf_symbol,  # Assuming you have this field in your model
+                stock_symbol=holding['symbol'],  # Assuming you have this field in your model
+                defaults={
+                    'holding_percentage': holding_percentage,
+                    'stock_symbol': stock_symbol,  # Store the name as well, if needed
+                    'last_updated': datetime.now(),  # Assuming you have a timestamp field
+                    'etf_price': etf_data.history(period='1d')['Close'].iloc[0],  # Save the ETF price
+                }
+            )
         
         for holding in etf_holdings:
             stock_symbol = holding['name']
@@ -161,7 +216,7 @@ def assetCalc(request):
             etf_data = yf.Ticker(etf_symbol)
             etf_price = etf_data.history(period='1d')['Close'].iloc[0]  # Get current ETF price
             # print(f"Here is holding percentage: {holding_percentage}, here is ETF price: {etf_price}, here is stocks owned: {stocks_owned}")
-            holding_value_in_etf = (holding_percentage / 100) * etf_price * int(stocks_owned[0])  # Calculate value
+            holding_value_in_etf = (holding_percentage / 100) * etf_price * float(stocks_owned[0])  # Calculate value
 
             # Get stock price of the holding
             # print("Here is the stock symbol: ", str(stock_symbol))
@@ -176,28 +231,13 @@ def assetCalc(request):
                 'holding_percentage': holding_percentage,
                 'holding_value_in_etf': holding_value_in_etf,
                 'stock_price': stock_price,
-                'stock_owned': stock_owned
+                'stock_owned': stock_owned,
             })
 
         return render(request, 'dashboard/assetCalc.html', {
             'etf_symbol': etf_symbol,
-            'calculated_holdings': calculated_holdings
+            'calculated_holdings': calculated_holdings,
+            'etf_price': etf_price  # Pass ETF price to template
         })
 
     return render(request, 'dashboard/assetCalc.html', {})
-
-# # View for asset allocation
-# @login_required(login_url='/users/login_user')
-# def assetCalc(request):
-#     etf_symbol = request.POST.get('etf', '').upper()  # Get the ETF symbol from the form
-#     stock_owned = request.POST.get('stockOwned', '')
-
-#     holdings = []
-#     if request.method == "POST" and etf_symbol:
-#         holdings = fetch_etf_holdings(etf_symbol)  # Fetch the ETF holdings if form is submitted
-
-#     # Render the template and pass the ETF holdings to the frontend
-#     return render(request, 'dashboard/assetCalc.html', {
-#         'etf_symbol': etf_symbol,
-#         'holdings': holdings,
-#     })

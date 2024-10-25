@@ -41,7 +41,7 @@
     <div class="container">
         <h1>Asset Allocation Calculator</h1>
         <p class="note" style="font-size: 0.8em; color: gray;">
-            Note: Calculations are based on the top 10 stocks only. </p>
+            Note: Calculations are based on the top 10 holdings only. </p>
 
         <!-- Form for ETF symbol input -->
         <form id="assetCalculatorForm" method="POST" action="{% url 'assetCalc' %}">
@@ -49,8 +49,9 @@
             <label for="etf">Enter Your ETF:</label>
             <input type="text" id="etf" name="etf" placeholder="(e.g., SPY, VTI, IVV)" oninput="this.value = this.value.toUpperCase();" required>
             
-            <label for="stocksOwned">Enter Stock Quantity:</label>
-            <input type="number" id="stocksOwned" name="stocksOwned" placeholder="(e.g., 1, 2, 3, 4)" required>
+            <label for="stocksOwned">Enter Stock Quantity:</label>    
+            <input type="number" id="stocksOwned" name="stocksOwned" placeholder="(e.g., 1.5, 2.75)" step="0.01" required>
+
             
             <button type="submit">Calculate Allocation</button>
         </form>
@@ -81,6 +82,9 @@
         <!-- Display the ETF holdings if available -->
         {% if calculated_holdings %}
         <h2>Calculated Holdings for {{ etf_symbol }}</h2>
+
+        <h2>ETF Price: ${{ etf_price|floatformat:2 }}</h2>  <!-- Display ETF price -->
+
         <table class="holding-table">
             <thead>
                 <tr>
