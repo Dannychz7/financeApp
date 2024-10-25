@@ -81,7 +81,7 @@
         
         <!-- Display the ETF holdings if available -->
         {% if calculated_holdings %}
-        <h2>Calculated Holdings for {{ etf_symbol }}</h2>
+        <h2>Calculated Holdings for {{ etf_symbol }} at {{ stocks_owned }} Shares</h2>
 
         <h2>ETF Price: ${{ etf_price|floatformat:2 }}</h2>  <!-- Display ETF price -->
 

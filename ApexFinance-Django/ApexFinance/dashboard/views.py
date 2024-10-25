@@ -175,7 +175,8 @@ def assetCalc(request):
                 return render(request, 'dashboard/assetCalc.html', {
                     'etf_symbol': etf_symbol,
                     'calculated_holdings': calculated_holdings,
-                    'etf_price': etf_price  # Pass ETF price to template
+                    'etf_price': etf_price,  # Pass ETF price to template
+                    'stocks_owned': float(stocks_owned[0]),
                 })
             # Holdings are stale
             else:
@@ -237,7 +238,8 @@ def assetCalc(request):
         return render(request, 'dashboard/assetCalc.html', {
             'etf_symbol': etf_symbol,
             'calculated_holdings': calculated_holdings,
-            'etf_price': etf_price  # Pass ETF price to template
+            'etf_price': etf_price,  # Pass ETF price to template
+            'stocks_owned': float(stocks_owned[0])
         })
 
     return render(request, 'dashboard/assetCalc.html', {})

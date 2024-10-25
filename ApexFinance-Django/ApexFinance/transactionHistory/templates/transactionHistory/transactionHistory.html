@@ -21,7 +21,7 @@
       <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
       <nav>
         <ul>
-          
+
           <!-- Search form updated to redirect to search.html -->
           <li>
               <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
@@ -37,6 +37,7 @@
                   <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
                   <li><a href="{% url 'settings' %}">Settings</a></li>
                   <li><a href="{% url 'dashboard' %}"> Dashboard </a><li>
+                  <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
               </ul>
           </li>  
         </ul>
