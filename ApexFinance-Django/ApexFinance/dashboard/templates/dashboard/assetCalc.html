@@ -54,6 +54,29 @@
             
             <button type="submit">Calculate Allocation</button>
         </form>
+
+        <!-- Progress Bar -->
+        <div id="progressBar" style="display: none;">
+            <div id="progress" style="width: 0%; background-color: #D43F33; height: 20px;"></div>
+        </div>
+
+        <!-- Optional: Add some styling for the progress bar -->
+        <style>
+            #progressBar {
+                width: 100%;
+                background-color: #f3f3f3;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-top: 10px;
+                display: none; /* Hidden by default */
+            }
+            #progress {
+                height: 20px;
+                background-color: #D43F33;
+                width: 0%; /* Will be updated */
+                transition: width 0.2s; /* Smooth transition */
+            }
+        </style>
         
         <!-- Display the ETF holdings if available -->
         {% if calculated_holdings %}
@@ -86,16 +109,27 @@
 
     <script>
         document.getElementById('assetCalculatorForm').addEventListener('submit', function(e) {
-        e.preventDefault();  // Prevent default submission
+            e.preventDefault();  // Prevent default submission
 
-        const etf = document.getElementById('etf').value;
-        const stocksOwned = document.getElementById('stocksOwned').value;
+            // Show the progress bar
+            document.getElementById('progressBar').style.display = 'block';
+            // Simulate progress (optional)
+            let width = 0;
+            const progress = document.getElementById('progress');
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval); // Stop simulation when it reaches 100%
+                } else {
+                    width++;
+                    progress.style.width = width + '%'; // Update the progress bar width
+                }
+            }, 50); // Update every 50ms
 
-        console.log('ETF:', etf);
-        console.log('Stocks owned:', stocksOwned);
-        this.submit();
+            // Proceed with the form submission
+            this.submit();
         });
     </script>
+
     <!-- SweetAlert message handler -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -111,5 +145,6 @@
             {% endif %}
         });
     </script>
+
 </body>
 </html>
