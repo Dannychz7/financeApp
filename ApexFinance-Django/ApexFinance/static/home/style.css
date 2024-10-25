@@ -75,6 +75,7 @@ header {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: none; /* Remove underline */
 }
 
 .login-button:hover, .signup-button:hover {
