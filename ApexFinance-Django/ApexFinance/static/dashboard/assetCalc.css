@@ -1,0 +1,252 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Black background */
+    color: #f0f0f0; /* Whitish text */
+}
+
+/* Container to center and format content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styling */
+header {
+    background-color: #333; /* Dark background for header */
+    padding: 20px 30px; /* Adjust padding as needed */
+    border-bottom: 1px solid #444; /* Slightly lighter border */
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    position: relative; /* Allows absolute positioning for logo */
+}
+
+/* Logo styling */
+.logo {
+    width: 80px; /* Set the width of the logo */
+    height: 80px; /* Set the height of the logo to match the width for a circular shape */
+    border-radius: 50%; /* Makes the logo circular */
+    position: absolute;
+    left: 30px; /* Position logo in the top left corner */
+    top: 50%; /* Center logo vertically */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+}
+
+/* Header title styling */
+.title {
+    flex: 1; /* Allows the title to take up available space */
+    text-align: center; /* Center-align text */
+    font-family: 'Bebas Neue', sans-serif; /* Apply Bebas Neue font */
+    font-size: 5em; /* Adjust size as needed */
+    color: #D43F33; /* Default red font color */
+    margin: 0; /* Remove default margin */
+}
+
+.title a {
+    color: #D43F33; /* Red color */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Navigation menu */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0; /* Whitish text */
+    font-size: 1.1em;
+}
+
+nav ul li a:hover {
+    color: #D43F33; /* Red hover */
+}
+
+/* Search form styling */
+#searchForm {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 3px;
+    font-size: 1em;
+    background-color: #222; /* Darker background for input */
+    color: #f0f0f0; /* Whitish text */
+    margin-right: 10px;
+}
+
+#searchForm button {
+    padding: 10px 20px;
+    background-color: #D43F33; /* Red button */
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#searchForm button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Styling for stock info section */
+.stock-info {
+    flex: 1; /* Allow this section to grow and take up available space */
+    padding: 20px;
+}
+
+.stock-info h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #D43F33; /* Red headers */
+}
+
+.stock-info p {
+    margin: 5px 0;
+}
+
+/* Chart section styling */
+.chart {
+    flex: 1; /* Allow this section to grow and take up available space */
+    padding: 20px;
+}
+
+#chart_container {
+    width: 100%; /* Ensures the chart fills its container */
+    height: 400px; /* Set a fixed height for the chart */
+}
+
+canvas {
+    width: 100%;
+    height: auto;
+}
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap; /* Prevents the elements from wrapping into a new line */
+    gap: 20px; /* Adds space between sections */
+}
+
+/* Settings and general form styling */
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.setting-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #f0f0f0; /* Whitish text */
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 3px;
+    background-color: #222; /* Dark background for input fields */
+    color: #f0f0f0; /* Whitish text */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #D43F33; /* Red button */
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+  
+.dropdown .dropbtn {
+    background-color: transparent; /* Make the button background transparent */
+    color: #f0f0f0; /* Whitish text */
+    text-decoration: none; /* No underline */
+    padding: 10px 16px; /* Adjust padding as needed */
+    font-size: 1.1em; /* Match font size with other nav items */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+  
+.dropdown .dropbtn:hover, .dropdown .dropbtn:focus {
+    color: #D43F33; /* Red hover effect */
+}
+  
+.dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute; /* Position the dropdown */
+    background-color: #333; /* Match header background */
+    min-width: 160px; /* Minimum width of dropdown */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Box shadow */
+    z-index: 1; /* Ensure dropdown appears above other elements */
+}
+  
+.dropdown-content a {
+    color: #f0f0f0; /* Whitish text for links */
+    padding: 12px 16px; /* Padding for dropdown items */
+    text-decoration: none; /* No underline */
+    display: block; /* Make links block level */
+}
+  
+.dropdown-content a:hover {
+    background-color: #D43F33; /* Red background on hover */
+    background-color: transparent; /* Keep background transparent */
+}
+  
+.dropdown:hover .dropdown-content {
+    display: block; /* Show dropdown on hover */
+}
+
+.holding-table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Merge borders */
+    margin: 20px 0; /* Add space above and below the table */
+}
+
+.holding-table th, .holding-table td {
+    border: 1px solid #dddddd; /* Light border for separation */
+    text-align: left; /* Align text to the left */
+    padding: 12px; /* Add padding around text */
+    font-size: 16px; /* Adjust font size for better readability */
+}
+
+.holding-table th {
+    background-color: #D43F33; /* Light gray background for header */
+    font-weight: bold; /* Bold font for headers */
+}
+
+.holding-cell {
+    line-height: 1.5; /* Increase line height for better readability */
+}

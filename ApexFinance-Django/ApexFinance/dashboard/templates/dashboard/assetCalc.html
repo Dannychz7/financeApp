@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Allocation Calculator</title>
+    <link rel="stylesheet" href="{% static 'dashboard/assetCalc.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <nav>
+            <ul>
+                <li>
+                    <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                        <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
+                        <button type="submit">Search</button>
+                    </form>
+                </li>
+                
+                <!-- Dropdown menu for Account -->
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                        <li><a href="{% url 'settings' %}">Settings</a></li>
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    </ul>
+                </li>     
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Asset Allocation Calculator</h1>
+        <p class="note" style="font-size: 0.8em; color: gray;">
+            Note: Calculations are based on the top 10 stocks only. </p>
+
+        <!-- Form for ETF symbol input -->
+        <form id="assetCalculatorForm" method="POST" action="{% url 'assetCalc' %}">
+            {% csrf_token %}
+            <label for="etf">Enter Your ETF:</label>
+            <input type="text" id="etf" name="etf" placeholder="(e.g., SPY, VTI, IVV)" oninput="this.value = this.value.toUpperCase();" required>
+            
+            <label for="stocksOwned">Enter Stock Quantity:</label>
+            <input type="number" id="stocksOwned" name="stocksOwned" placeholder="(e.g., 1, 2, 3, 4)" required>
+            
+            <button type="submit">Calculate Allocation</button>
+        </form>
+        
+        <!-- Display the ETF holdings if available -->
+        {% if calculated_holdings %}
+        <h2>Calculated Holdings for {{ etf_symbol }}</h2>
+        <table class="holding-table">
+            <thead>
+                <tr>
+                    <th>Stock Symbol</th>
+                    <th>Holding Percentage</th>
+                    <th>Value in ETF</th>
+                    <th>Stock Price</th>
+                    <th>Amount Owned</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for holding in calculated_holdings %}
+                <tr>
+                    <td class="holding-cell">{{ holding.stock_symbol }}</td>
+                    <td class="holding-cell">{{ holding.holding_percentage|floatformat:2 }}%</td>
+                    <td class="holding-cell">{{ holding.holding_value_in_etf|floatformat:2 }}</td>
+                    <td class="holding-cell">{{ holding.stock_price|floatformat:2 }}</td>
+                    <td class="holding-cell">{{ holding.stock_owned|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+    </div>
+
+    <script>
+        document.getElementById('assetCalculatorForm').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent default submission
+
+        const etf = document.getElementById('etf').value;
+        const stocksOwned = document.getElementById('stocksOwned').value;
+
+        console.log('ETF:', etf);
+        console.log('Stocks owned:', stocksOwned);
+        this.submit();
+        });
+    </script>
+    <!-- SweetAlert message handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                    title: "{{ message }}",
+                    timer: 3000,  // 3-second auto-close timer
+                    showConfirmButton: false
+                });
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+</body>
+</html>

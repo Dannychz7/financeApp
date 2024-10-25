@@ -60,6 +60,11 @@ def buy_stock(request):
             # Fetch real stock price using yfinance
             stock_data = yf.Ticker(company_name)
             data = stock_data.info # Get the stock information
+                
+            # Check if stock data is valid
+            if not data or 'symbol' not in data or data.get('regularMarketPrice') is None:
+                messages.error(request, "Invalid stock symbol or stock has been delisted.")
+                return redirect('search')
             
             # Determine the price based on quote type
             if data.get('quoteType') in ['MUTUALFUND', 'ETF']:
@@ -116,11 +121,17 @@ def sell_stock(request):
             
             profile = request.user.profile  # Get the user's profile
             user_stock = UserStock.objects.filter(profile=profile, company_name=company_name).first()
+            
+            # Fetch real stock price using yfinance
+            stock_data = yf.Ticker(company_name)
+            data = stock_data.info # Get the stock information
+                
+            # Check if stock data is valid
+            if 'symbol' not in data or 'delisted' in data.get('status', '').lower():
+                messages.error(request, "Invalid stock symbol or stock has been delisted.")
+                return redirect('search')
 
             if user_stock and user_stock.stock_quantity >= stock_quantity:
-                # Fetch real stock price using yfinance
-                stock_data = yf.Ticker(company_name)
-                data = stock_data.info # Get the stock information
                 
                 # Determine the price based on quote type
                 if data.get('quoteType') in ['MUTUALFUND', 'ETF']:

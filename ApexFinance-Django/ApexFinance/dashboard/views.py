@@ -1,10 +1,17 @@
 import json
 import yfinance as yf
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 from users.models import UserStock  # Import the UserStock model
 from decimal import Decimal
+from django.contrib import messages
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 
 # User authorization
 from django.contrib.auth.decorators import login_required
@@ -67,7 +74,7 @@ def live_update(request):
             'quantity': stock.stock_quantity
         }
 
-    print(stock_data_dict)
+    # print(stock_data_dict)
     # Update the total portfolio value in the user's profile
     profile.total_stock_value = total_stock_value
     profile.total_value = available_cash + total_stock_value  # Total value = cash + stock value
@@ -80,3 +87,117 @@ def live_update(request):
         'total_stock_value': float(total_stock_value), #Grabbing this one
         'stock_data_dict': stock_data_dict
     })
+
+# Function to scrape ETF holdings
+def fetch_etf_holdings(etf_symbol):
+    # print("Fetching ETF holdings for:", etf_symbol)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Run in headless mode
+
+    # Automatically manage ChromeDriver with webdriver_manager
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        # Open Yahoo Finance ETF holdings page
+        driver.get(f"https://finance.yahoo.com/quote/{etf_symbol}/holdings")
+        driver.implicitly_wait(5)
+
+        try:
+            # Find top holdings section
+            holdings_section = driver.find_element(By.XPATH, '//*[@data-testid="top-holdings"]')
+            percents = holdings_section.find_elements(By.CSS_SELECTOR, 'span.data.yf-1ix710n')
+            holdings = holdings_section.find_elements(By.CSS_SELECTOR, 'a')
+
+            # Store the top 10 holdings and percentages
+            etf_holdings = []
+            for holding, percent in zip(holdings, percents):
+                holding_name = holding.text.strip()
+                holding_percent = float(percent.text.strip().replace('%', '')) / 100  # Convert to decimal
+                holding_symbol = holding.get_attribute("href").split("/")[-1]  # Get the stock symbol from URL
+
+                etf_holdings.append({
+                    'name': holding_name,
+                    'percent': holding_percent,
+                    'symbol': holding_symbol
+                })
+
+            return etf_holdings[:10]  # Return top 10 holdings
+
+        except Exception as e:
+            print("Error locating holdings section:", e)
+            return []
+    finally:
+        driver.quit()
+
+@login_required(login_url='/users/login_user')
+def assetCalc(request):
+    if request.method == 'POST':
+        #print("Here I am")
+        etf_symbol = request.POST.get('etf').upper()  # Get the ETF symbol from the form
+        stocks_owned = request.POST.get('stocksOwned').split(',')  # Get stocks owned
+
+        # Fetch ETF data using yfinance
+        etf_data = yf.Ticker(etf_symbol)
+        etf_info = etf_data.info  # Get ETF information
+
+        # Check if the ETF symbol is valid and not delisted
+        if 'symbol' not in etf_info or 'delisted' in etf_info.get('status', '').lower():
+            messages.error(request, f"Invalid or delisted ETF symbol: {etf_symbol}. Please enter a valid ETF symbol.")
+            return redirect('assetCalc')  # Redirect to the assetCalc view or your desired page
+
+        # Fetch ETF holdings using the defined function
+        etf_holdings = fetch_etf_holdings(etf_symbol)
+        # print(etf_holdings)
+
+        # Initialize the list to hold stock data
+        calculated_holdings = []
+        
+        for holding in etf_holdings:
+            stock_symbol = holding['name']
+            holding_percentage = holding['percent'] * 100  # Convert to percentage
+
+            # Calculate the value of the stock based on the ETF shares
+            etf_data = yf.Ticker(etf_symbol)
+            etf_price = etf_data.history(period='1d')['Close'].iloc[0]  # Get current ETF price
+            # print(f"Here is holding percentage: {holding_percentage}, here is ETF price: {etf_price}, here is stocks owned: {stocks_owned}")
+            holding_value_in_etf = (holding_percentage / 100) * etf_price * int(stocks_owned[0])  # Calculate value
+
+            # Get stock price of the holding
+            # print("Here is the stock symbol: ", str(stock_symbol))
+            stock_data = yf.Ticker(stock_symbol)
+            stock_price = stock_data.history(period='1d')['Close'].iloc[0]
+
+            # Calculate the amount of stock owned
+            stock_owned = holding_value_in_etf / stock_price
+
+            calculated_holdings.append({
+                'stock_symbol': stock_symbol,
+                'holding_percentage': holding_percentage,
+                'holding_value_in_etf': holding_value_in_etf,
+                'stock_price': stock_price,
+                'stock_owned': stock_owned
+            })
+
+        return render(request, 'dashboard/assetCalc.html', {
+            'etf_symbol': etf_symbol,
+            'calculated_holdings': calculated_holdings
+        })
+
+    return render(request, 'dashboard/assetCalc.html', {})
+
+# # View for asset allocation
+# @login_required(login_url='/users/login_user')
+# def assetCalc(request):
+#     etf_symbol = request.POST.get('etf', '').upper()  # Get the ETF symbol from the form
+#     stock_owned = request.POST.get('stockOwned', '')
+
+#     holdings = []
+#     if request.method == "POST" and etf_symbol:
+#         holdings = fetch_etf_holdings(etf_symbol)  # Fetch the ETF holdings if form is submitted
+
+#     # Render the template and pass the ETF holdings to the frontend
+#     return render(request, 'dashboard/assetCalc.html', {
+#         'etf_symbol': etf_symbol,
+#         'holdings': holdings,
+#     })
