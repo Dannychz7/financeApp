@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="{% static 'dashboard/buySell.css' %}"> <!-- Assuming you have this in your static files -->
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    </head>
+
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <div class="right-items">
+                <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                    <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
+                    <button type="submit">Search</button>
+                </form>
+                
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                        <li><a href="{% url 'settings' %}">Settings</a></li>
+                        <li><a href="{% url 'home' %}">Intro</a></li>
+                        <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    </ul>
+            </div>
+    </header>
+
+    <!-- Main content wrapped in a container to push the footer down -->
+    <div class="container">
+        <h1>Asset Allocation Calculator</h1>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

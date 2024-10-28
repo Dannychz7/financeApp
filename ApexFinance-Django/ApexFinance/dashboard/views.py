@@ -2,19 +2,23 @@ import json
 import yfinance as yf
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from users.models import UserStock  # Import the UserStock model
 from .models import ETFHolding  # Import the ETFHolding model
 from django.contrib.auth.decorators import login_required # User authorization
 from django.utils import timezone
 from decimal import Decimal
 from django.contrib import messages
-
+from prophet import Prophet
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+
+# Constants for date range
+START = "2015-01-01"
+TODAY = date.today().strftime("%Y-%m-%d")
 
 # Require users to be logged into an account to see their dashboard
 @login_required(login_url='/users/login_user')
@@ -199,8 +203,8 @@ def assetCalc(request):
             
             # Create or update ETFHolding instance
             ETFHolding.objects.update_or_create(
-                etf_ticker=etf_symbol,  # Assuming you have this field in your model
-                stock_symbol=holding['symbol'],  # Assuming you have this field in your model
+                etf_ticker=etf_symbol,  
+                stock_symbol=holding['symbol'],
                 defaults={
                     'holding_percentage': holding_percentage,
                     'stock_symbol': stock_symbol,  # Store the name as well, if needed
@@ -243,3 +247,6 @@ def assetCalc(request):
         })
 
     return render(request, 'dashboard/assetCalc.html', {})
+
+def buySell(request):
+    return render(request, 'dashboard/buySell.html', {})

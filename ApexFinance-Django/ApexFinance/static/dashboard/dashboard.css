@@ -1,27 +1,36 @@
 /* General body styling */
-body {
+html, body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #000; /* Black background */
     color: #f0f0f0; /* Whitish text */
+    height: 100%;
+    display: flex;          /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh;     /* Make body at least full viewport height */
 }
 
 /* Container to center and format content */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
+    flex: 1; /* Allow container to grow and fill available space */
+    width: 100%; /* Ensures the container takes the full width available */
+
 }
+
+/* BELOW HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER HEADER */
+/* <-- BELOW HERE IS THE CODE FOR THE HEADER AND LOGO --> */
 
 /* Header styling */
 header {
     background-color: #333; /* Dark background for header */
-    padding: 20px 30px; /* Adjust padding as needed */
+    padding: 30px 30px 40px; /* Adjust padding as needed */
     border-bottom: 1px solid #444; /* Slightly lighter border */
     display: flex;
     align-items: center; /* Center items vertically */
-    justify-content: center; /* Center items horizontally */
     position: relative; /* Allows absolute positioning for logo */
 }
 
@@ -38,12 +47,15 @@ header {
 
 /* Header title styling */
 .title {
-    flex: 1; /* Allows the title to take up available space */
-    text-align: center; /* Center-align text */
-    font-family: 'Bebas Neue', sans-serif; /* Apply Bebas Neue font */
-    font-size: 5em; /* Adjust size as needed */
-    color: #D43F33; /* Default red font color */
-    margin: 0; /* Remove default margin */
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    top: 50%; /* Center vertically */
+    transform: translate(-50%, -50%); /* Center the element itself */
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5em;
+    color: #D43F33;
+    margin: 0;
+    text-align: center;
 }
 
 .title a {
@@ -51,27 +63,111 @@ header {
     text-decoration: none; /* Remove underline */
 }
 
-/* Navigation menu */
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
+/* <-- BELOW HERE IS THE CODE FOR THE DROPDOWN MENU --> */
+
+/* Dropdown styling */
+.right-items .dropdown {
+    position: relative;
+    display: inline-block;
 }
 
-nav ul li {
+/* Styling for the dropdown button */
+.right-items .dropdown .dropbtn {
+    background-color: transparent;
+    color: #f0f0f0;
+    text-decoration: none;
+    padding: 10px 16px;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+}
+
+.right-items .dropdown .dropbtn:hover,
+.right-items .dropdown .dropbtn:focus {
+    color: #D43F33; /* Red hover effect */
+}
+
+/* Dropdown content styling */
+.right-items .dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background-color: #333; /* Dropdown background */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    left: 0; /* Aligns dropdown to the right of the button */
+    margin-top: 5px;
+    padding: 0; /* Remove padding from dropdown */
+    list-style-type: none; /* Remove bullets */
+}
+
+/* Remove bullets and default padding from list items */
+.right-items .dropdown-content li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Dropdown items */
+.right-items .dropdown-content a {
+    color: #f0f0f0; /* Whitish text */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.right-items .dropdown-content a:hover {
+    background-color: #D43F33; /* Red background on hover */
+}
+
+/* Show dropdown content on hover */
+.right-items .dropdown:hover .dropdown-content {
+    display: block; /* Shows dropdown on hover */
+}
+
+/* <-- BELOW HERE IS THE CODE FOR THE SEARCH FORM --> */
+
+/* Search form styling */
+#searchForm {
+    display: flex;
+    align-items: center;
     margin-right: 20px;
 }
 
-nav ul li a {
-    text-decoration: none;
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 3px;
+    font-size: 1em;
+    background-color: #222; /* Darker background for input */
     color: #f0f0f0; /* Whitish text */
-    font-size: 1.1em;
+    margin-right: 10px;
+    width: 200px; /* Fixed width for the input field */
+    margin-bottom: 0;
 }
 
-nav ul li a:hover {
-    color: #D43F33; /* Red hover */
+#searchForm button {
+    padding: 10px 20px;
+    background-color: #D43F33;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 0;
 }
+
+#searchForm button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Right items styling */
+.right-items {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the container to the right */
+}
+/* ABOVE HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER THIS LINE */
 
 /* Positioning the login-signup buttons */
 .login-signup {
@@ -96,36 +192,6 @@ nav ul li a:hover {
     background-color: #B03028; /* Darker red on hover */
 }
 
-/* Search form styling */
-#searchForm {
-    display: flex;
-    align-items: center;
-    margin: 0;
-}
-
-#searchForm input[type="text"] {
-    padding: 10px;
-    border: 1px solid #555; /* Darker border */
-    border-radius: 3px;
-    font-size: 1em;
-    background-color: #222; /* Darker background for input */
-    color: #f0f0f0; /* Whitish text */
-    margin-right: 10px;
-}
-
-#searchForm button {
-    padding: 10px 20px;
-    background-color: #D43F33; /* Red button */
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-#searchForm button:hover {
-    background-color: #cc0000; /* Darker red on hover */
-}
 
 /* Styling for stock info section */
 .stock-info {
@@ -208,47 +274,12 @@ button:hover {
     background-color: #cc0000; /* Darker red on hover */
 }
 
-/* Dropdown styling */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-  
-.dropdown .dropbtn {
-    background-color: transparent; /* Make the button background transparent */
-    color: #f0f0f0; /* Whitish text */
-    text-decoration: none; /* No underline */
-    padding: 10px 16px; /* Adjust padding as needed */
-    font-size: 1.1em; /* Match font size with other nav items */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor on hover */
-}
-  
-.dropdown .dropbtn:hover, .dropdown .dropbtn:focus {
-    color: #D43F33; /* Red hover effect */
-}
-  
-.dropdown-content {
-    display: none; /* Hidden by default */
-    position: absolute; /* Position the dropdown */
-    background-color: #333; /* Match header background */
-    min-width: 160px; /* Minimum width of dropdown */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Box shadow */
-    z-index: 1; /* Ensure dropdown appears above other elements */
-}
-  
-.dropdown-content a {
-    color: #f0f0f0; /* Whitish text for links */
-    padding: 12px 16px; /* Padding for dropdown items */
-    text-decoration: none; /* No underline */
-    display: block; /* Make links block level */
-}
-  
-.dropdown-content a:hover {
-    background-color: #D43F33; /* Red background on hover */
-    background-color: transparent; /* Keep background transparent */
-}
-  
-.dropdown:hover .dropdown-content {
-    display: block; /* Show dropdown on hover */
+/* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #f0f0f0;
+    margin-top: 0;
 }

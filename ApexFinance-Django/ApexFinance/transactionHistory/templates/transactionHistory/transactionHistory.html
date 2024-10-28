@@ -19,30 +19,23 @@
     <header>
       <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
       <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
-      <nav>
-        <ul>
-
-          <!-- Search form updated to redirect to search.html -->
-          <li>
+          <div class="right-items">
               <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
                   <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
                   <button type="submit">Search</button>
               </form>
-          </li>
-
-          <!-- Dropdown menu for Account -->
-          <li class="dropdown">
-              <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
-              <ul class="dropdown-content">
-                  <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
-                  <li><a href="{% url 'settings' %}">Settings</a></li>
-                  <li><a href="{% url 'dashboard' %}"> Dashboard </a><li>
-                  <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
-              </ul>
-          </li>  
-        </ul>
-      </nav>
-    </header>
+              
+              <div class="dropdown">
+                  <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                  <ul class="dropdown-content">
+                      <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                      <li><a href="{% url 'settings' %}">Settings</a></li>
+                      <li><a href="{% url 'home' %}">Intro</a></li>
+                      <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
+                      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                  </ul>
+          </div>
+  </header>
 
     <div class="container">
       <h1>Transaction History</h1>
@@ -71,14 +64,14 @@
       </table>
     </div>
 
-    <footer>
-      <p> Contact us: (480) - 709 - 5202</p>
-    </footer>
-
     <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <footer>
+      <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>
+    </footer>
 
   </body>
 </html>

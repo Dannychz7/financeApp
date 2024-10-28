@@ -22,22 +22,23 @@
     <header>
       <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
       <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
-      <nav>
-        <ul>
-
-          <!-- Dropdown menu for Account -->
-          <li class="dropdown">
-            <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
-            <ul class="dropdown-content">
-                <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
-                <li><a href="{% url 'settings' %}">Settings</a></li>
-                <li><a href="{% url 'home' %}">Intro</a></li>
-                <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
-            </ul>
-          </li>   
-        </ul>
-      </nav>
-    </header>
+          <div class="right-items">
+              <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                  <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
+                  <button type="submit">Search</button>
+              </form>
+              
+              <div class="dropdown">
+                  <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                  <ul class="dropdown-content">
+                      <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                      <li><a href="{% url 'settings' %}">Settings</a></li>
+                      <li><a href="{% url 'home' %}">Intro</a></li>
+                      <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
+                      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                  </ul>
+          </div>
+  </header>
 
     <div class="container">
       <div id="widgetContent" class="intro">
@@ -111,10 +112,6 @@
           </main>
       </div>
 
-      <footer>
-        <p> Contact us: (480) - 709 - 5202</p>
-      </footer>
-
     </div>
     
     <!-- Bootstrap core JavaScript
@@ -151,7 +148,10 @@
         {% endif %}
       });
     </script>
-  
+    
+    <footer>
+      <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>
+    </footer>
 
   </body>
 </html>
