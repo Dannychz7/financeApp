@@ -1,16 +1,21 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register</title>
-        <link rel="stylesheet" href="{% static 'dashboard/buySell.css' %}"> <!-- Assuming you have this in your static files -->
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Financial Widget - APEX Finance</title>
+    
+        <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    </head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+        <!-- Custom styles for this template -->
+        <link href="{% static 'dashboard/buySell.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <!-- SweetAlert2 CSS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      </head>
 
 <body>
     <header>
@@ -34,10 +39,161 @@
             </div>
     </header>
 
-    <!-- Main content wrapped in a container to push the footer down -->
-    <div class="container">
-        <h1>Asset Allocation Calculator</h1>
+    <div class="container" style="display: flex; flex-direction: row;">
+        <main>
+            <div class="stock-info">
+                <h1 class="cover-heading">Buy and Sell Stocks</h1>
+                <p class="lead">Manage your investments: check your portfolio, review available cash, and execute trades below.</p>
+                
+                <!-- Portfolio Summary Section -->
+                <section class="portfolio-summary" aria-labelledby="portfolio-heading">
+                    <p>
+                        <strong>Available Cash:</strong> 
+                        $<span id="availableCash">{{ available_cash }}</span>
+                    </p>
+                    <p>
+                        <strong>Total Portfolio Value:</strong> 
+                        $<span id="totalPortfolioValue">${{ total_value }}</span>
+                    </p>
+                </section>
+    
+                <div class="input-group mb-3">
+                    <input id="symbol" type="text" class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2" oninput="this.value = this.value.toUpperCase();">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="site.SubmitForm();">Search</button>
+                    </div>
+                </div>
+                  
+                <div class="form-group">
+                    <label for="period">Select Time Period:</label>
+                    <select class="form-control" id="period">
+                      <option value="1d">1 Day</option>
+                      <option value="5d">5 Days</option>
+                      <option value="1mo">1 Month</option>
+                      <option value="3mo">3 Months</option>
+                      <option value="1y">1 Year</option>
+                      <option value="2y">2 Years</option>
+                      <option value="5y">5 Years</option>
+                      <option value="10y">10 Years</option>
+                      <option value="ytd">Year to Date</option>
+                      <option value="max">Max</option>
+                    </select>
+                </div>
+                
+                <div id="chart_container"></div>
+        </main>
+        
+        <div class="buy-sell-forms" style="margin-left: auto; width: 300px;">
+            <div class="buy-sell-container">
+                <form action="{% url 'buy_stock' %}" method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <h4>Buy Stock</h4>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="buy_company_name">Company Name</label>
+                            <input type="text" name="company_name" id="buy_company_name" class="form-control" oninput="this.value = this.value.toUpperCase();" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="buy_stock_quantity">Quantity</label>
+                            <input type="number" name="stock_quantity" id="buy_stock_quantity" class="form-control" min="1" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Buy</button>
+                </form>
+
+                <form action="{% url 'sell_stock' %}" method="POST">
+                    {% csrf_token %}
+                    <h4>Sell Stock</h4>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="sell_company_name">Company Name</label>
+                            <input type="text" name="company_name" id="sell_company_name" class="form-control" oninput="this.value = this.value.toUpperCase();" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sell_stock_quantity">Quantity</label>
+                            <input type="number" name="stock_quantity" id="sell_stock_quantity" class="form-control" min="1" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Sell</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+    <script src="{% static 'search/search.js' %}"></script>
+
+    <!-- SweetAlert message handler -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        {% if messages %}
+          {% for message in messages %}
+            Swal.fire({
+              icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+              title: "{{ message }}",
+              timer: 3000,  // 3-second auto-close timer
+              showConfirmButton: false
+            });
+          {% endfor %}
+        {% endif %}
+
+        // Function to check if the stock market is open (9:30 AM to 4:00 PM)
+        function isMarketOpen() {
+            const now = new Date();
+            const currentTime = now.getHours() * 100 + now.getMinutes();
+            const marketOpenTime = 930;  // 9:30 AM
+            const marketCloseTime = 1600; // 4:00 PM
+
+            // Monday (1) to Friday (5) and within market hours
+            return now.getDay() >= 1 && now.getDay() <= 5 && currentTime >= marketOpenTime && currentTime <= marketCloseTime;
+        }
+
+        // Function to fetch updated cash and portfolio data from the server
+        function updatePortfolio() {
+            if (isMarketOpen()) {
+                fetch("{% url 'live_update' %}")  // URL for live_update
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                        document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                    })
+                    .catch(error => console.error('Error fetching portfolio update:', error));
+            } else {
+                console.log('Market is closed. Stopping updates.');
+                clearInterval(updateInterval);  // Stop updating if the market is closed
+                
+                fetch("{% url 'live_update' %}")  // URL for live_update
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                    document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                })
+                .catch(error => console.error('Error fetching portfolio update:', error));
+            }
+        }
+
+        // Set an interval to update the portfolio every 10 seconds
+        const updateInterval = setInterval(updatePortfolio, 10000);  // 10,000 ms = 10 seconds
+        // Initial call to update portfolio immediately when the page loads
+        updatePortfolio();
+      });
+    </script>
 
     <footer>
         <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>

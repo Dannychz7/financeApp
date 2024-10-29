@@ -248,5 +248,16 @@ def assetCalc(request):
 
     return render(request, 'dashboard/assetCalc.html', {})
 
+
+@login_required(login_url='/users/login_user')
 def buySell(request):
-    return render(request, 'dashboard/buySell.html', {})
+    profile = request.user.profile
+    available_cash = profile.available_cash  # Get available cash
+    # Get all stocks for the logged-in user
+    user_stocks = UserStock.objects.filter(profile=request.user.profile)
+
+    # Render the dashboard template with the user's stocks, available cash
+    return render(request, 'dashboard/buySell.html', {
+        'available_cash': available_cash,
+        'user_stocks': user_stocks,
+    })
