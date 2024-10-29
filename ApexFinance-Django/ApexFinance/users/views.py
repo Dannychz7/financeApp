@@ -54,18 +54,27 @@ def buy_stock(request):
             company_name = form.cleaned_data['company_name']
             stock_quantity = form.cleaned_data['stock_quantity']
             
+            print(company_name)
+            print(stock_quantity)
+            
             profile = request.user.profile  # Get the user's profile
             available_cash = profile.available_cash
-            
+            print("SPLIT HERE ")
             # Fetch real stock price using yfinance
             stock_data = yf.Ticker(company_name)
             data = stock_data.info # Get the stock information
+            print(stock_data)
+            print(data)
                 
             # Check if stock data is valid
-            if not data or 'symbol' not in data or data.get('regularMarketPrice') is None:
+            if data.get('quoteType') in ['MUTUALFUND', 'ETF']:
+                if not data or 'symbol' not in data or data.get('previousClose') is None:
+                    messages.error(request, "Invalid stock symbol or stock has been delisted.")
+                    return redirect('buySell')
+            elif not data or 'symbol' not in data or data.get('currentPrice') is None:
                 messages.error(request, "Invalid stock symbol or stock has been delisted.")
-                return redirect('search')
-            
+                return redirect('buySell')
+                
             # Determine the price based on quote type
             if data.get('quoteType') in ['MUTUALFUND', 'ETF']:
                 stock_price = Decimal(data.get('previousClose', 0))  # Use previous close for ETFs and mutual funds
@@ -101,10 +110,10 @@ def buy_stock(request):
                 )
 
                 messages.success(request, f"Successfully bought {stock_quantity} shares of {company_name}.")
-                return redirect('search')
+                return redirect('buySell')
             else:
                 messages.error(request, "Not enough cash to buy this stock.")
-                return redirect('search')
+                return redirect('buySell')
             
             # return redirect('dashboard')
     else:
@@ -127,9 +136,13 @@ def sell_stock(request):
             data = stock_data.info # Get the stock information
                 
             # Check if stock data is valid
-            if 'symbol' not in data or 'delisted' in data.get('status', '').lower():
+            if data.get('quoteType') in ['MUTUALFUND', 'ETF']:
+                if not data or 'symbol' not in data or data.get('previousClose') is None:
+                    messages.error(request, "Invalid stock symbol or stock has been delisted.")
+                    return redirect('buySell')
+            elif not data or 'symbol' not in data or data.get('currentPrice') is None:
                 messages.error(request, "Invalid stock symbol or stock has been delisted.")
-                return redirect('search')
+                return redirect('buySell')
 
             if user_stock and user_stock.stock_quantity >= stock_quantity:
                 
@@ -161,12 +174,11 @@ def sell_stock(request):
                 )
 
                 messages.success(request, f"Successfully sold {stock_quantity} shares of {company_name}.")
-                return redirect('search')
+                return redirect('buySell')
             else:
                 messages.error(request, "You do not have enough shares to sell.")
-                return redirect('search')
-            
-            # return redirect('dashboard')
+                return redirect('buySell')
+    
     else:
         form = SellStockForm()
     

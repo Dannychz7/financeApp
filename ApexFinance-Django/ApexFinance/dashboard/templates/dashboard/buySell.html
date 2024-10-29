@@ -21,12 +21,7 @@
     <header>
         <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
         <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
-            <div class="right-items">
-                <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
-                    <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
-                    <button type="submit">Search</button>
-                </form>
-                
+            <div class="right-items">                
                 <div class="dropdown">
                     <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
                     <ul class="dropdown-content">
@@ -137,7 +132,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
-    <script src="{% static 'search/search.js' %}"></script>
+    <script src="{% static 'dashboard/buySell.js' %}"></script>
 
     <!-- SweetAlert message handler -->
     <script>
