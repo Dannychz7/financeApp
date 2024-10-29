@@ -7,5 +7,7 @@ urlpatterns = [
     path('assetCalc', views.assetCalc, name='assetCalc'),
     path('fetch_etf_holdings', views.fetch_etf_holdings, name='fetch_etf_holdings'),
     path('buySell', views.buySell, name='buySell'),
+    path('execute_trade/', views.execute_trade, name='execute_trade'),
+    # path('sell-stock/', views.sell_stock, name='sell_stock'),
     
 ]

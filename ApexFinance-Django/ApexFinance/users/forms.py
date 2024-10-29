@@ -16,11 +16,3 @@ class UserRegistrationForm(forms.ModelForm):
 
         if password != password_confirm:
             raise forms.ValidationError("Passwords do not match.")
-        
-class BuyStockForm(forms.Form):
-    company_name = forms.CharField(max_length=255, label='Company Name')
-    stock_quantity = forms.IntegerField(min_value=1, label='Quantity')
-
-class SellStockForm(forms.Form):
-    company_name = forms.CharField(max_length=255, label='Company Name')
-    stock_quantity = forms.IntegerField(min_value=1, label='Quantity')

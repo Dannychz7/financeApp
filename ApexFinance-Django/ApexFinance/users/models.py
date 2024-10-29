@@ -14,7 +14,7 @@ class Profile(models.Model):
 class UserStock(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='stocks') # Link to User (many stocks per user)
     company_name = models.CharField(max_length=255) # Stores the stock token
-    stock_quantity = models.PositiveIntegerField(default=0)  # Store how many shares they own
+    stock_quantity = models.DecimalField(max_digits=10, decimal_places=4)  # Change to DecimalField
     stock_price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the stock at the time of purchase
     stock_purchase_date = models.DateField(default=timezone.now) # Automatically set the date when the stock is purchased
 
@@ -29,7 +29,7 @@ class StockTransaction(models.Model):
     
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='transactions')
     company_name = models.CharField(max_length=255)
-    stock_quantity = models.PositiveIntegerField()
+    stock_quantity = models.DecimalField(max_digits=10, decimal_places=2)  # Change to DecimalField
     stock_price = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_type = models.CharField(max_length=4, choices=TRANSACTION_TYPE_CHOICES)
     transaction_date = models.DateTimeField(default=timezone.now)

@@ -18,7 +18,7 @@ def transactionHistory(request):
         {
             'name': transaction.company_name,
             'price': float(transaction.stock_price),  # Ensure stock_price is float for JSON serialization
-            'quantity': transaction.stock_quantity,
+            'quantity': float(transaction.stock_quantity),
             'type': transaction.transaction_type,
             'date': transaction.transaction_date.timestamp() * 1000
         }
@@ -42,7 +42,7 @@ def TransactionHistory(request):
 
     for transaction in user_transactions:
         transactions_dict[transaction.company_name] = { # Store all of the user_transactions data into the dict
-            'quantity': transaction.stock_quantity,
+            'quantity': float(transaction.stock_quantity),
             'price': float(transaction.stock_price),
             'type': transaction.transaction_type,
             'date': transaction.transaction_date.timestamp() * 1000 

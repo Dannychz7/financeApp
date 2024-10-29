@@ -15,6 +15,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from .forms import TradeStockForm
+from users.models import Profile, UserStock, StockTransaction  # Make sure to import Profile
 
 # Constants for date range
 START = "2015-01-01"
@@ -33,7 +35,7 @@ def dashboard(request):
         {
             'name': stock.company_name,
             'price': float(stock.stock_price),  # Ensure stock_price is float for JSON serialization
-            'quantity': stock.stock_quantity
+            'quantity': float(stock.stock_quantity)
         }
         for stock in user_stocks
     ]
@@ -75,10 +77,9 @@ def live_update(request):
 
         stock_data_dict[stock.company_name] = { # Store the current price and quantity into the dict to call in the html
             'price': float(current_price),
-            'quantity': stock.stock_quantity
+            'quantity': float(stock.stock_quantity),
         }
 
-    # print(stock_data_dict)
     # Update the total portfolio value in the user's profile
     profile.total_stock_value = total_stock_value
     profile.total_value = available_cash + total_stock_value  # Total value = cash + stock value
@@ -224,7 +225,6 @@ def assetCalc(request):
             holding_value_in_etf = (holding_percentage / 100) * etf_price * float(stocks_owned[0])  # Calculate value
 
             # Get stock price of the holding
-            # print("Here is the stock symbol: ", str(stock_symbol))
             stock_data = yf.Ticker(stock_symbol)
             stock_price = stock_data.history(period='1d')['Close'].iloc[0]
 
@@ -252,12 +252,135 @@ def assetCalc(request):
 @login_required(login_url='/users/login_user')
 def buySell(request):
     profile = request.user.profile
-    available_cash = profile.available_cash  # Get available cash
-    # Get all stocks for the logged-in user
-    user_stocks = UserStock.objects.filter(profile=request.user.profile)
+    available_cash = profile.available_cash
+    user_stocks = UserStock.objects.filter(profile=profile)
+    query = request.session.get('query', None)
 
-    # Render the dashboard template with the user's stocks, available cash
     return render(request, 'dashboard/buySell.html', {
         'available_cash': available_cash,
         'user_stocks': user_stocks,
+        'company_name': query,
+    })
+    
+
+@login_required(login_url='/users/login_user')
+def execute_trade(request):
+    profile = request.user.profile
+    available_cash = profile.available_cash
+    query = request.session.get('query', None)  # Retrieve 'query' from session
+    
+    form = TradeStockForm(request.POST)
+    
+    if request.method == 'POST':
+        if form.is_valid():
+            trade_type = form.cleaned_data.get('trade_type')  # Safely access cleaned_data
+            company_name = query
+            stock_quantity = form.cleaned_data.get('stock_quantity')
+            order_type = form.cleaned_data.get('order_type')
+
+            # Validate stock_quantity
+            if stock_quantity <= 0:
+                messages.error(request, "Quantity must be a positive number.")
+                return redirect('buySell')
+                        
+            # Fetch stock data from yfinance
+            stock_data = yf.Ticker(company_name)
+            data = stock_data.info
+
+            # Validate stock data
+            if not data:
+                messages.error(request, "Failed to retrieve stock data. Please check the stock symbol.")
+                return redirect('buySell')
+
+            # Get stock price
+            if data.get('quoteType') in ['MUTUALFUND', 'ETF']:
+                stock_price = Decimal(data.get('previousClose', 0))  # For ETFs and mutual funds
+            else:
+                stock_price = Decimal(data.get('currentPrice', data.get('ask', data.get('regularMarketPrice', 0))))
+
+            if stock_price <= 0:
+                messages.error(request, "Invalid stock symbol or stock has been delisted.")
+                return redirect('buySell')
+
+            # Calculate total value based on order type
+            if order_type == 'shares':
+                total_value = stock_quantity * stock_price
+            else:  # order_type == 'cash'
+                total_value = stock_quantity  # Here, stock_quantity is the cash amount for the order
+
+            is_buy = trade_type == 'buy'
+
+            if is_buy:
+                if available_cash >= total_value:
+                    # Buy Logic
+                    profile.available_cash -= total_value
+                    profile.save()
+
+                    user_stock, created = UserStock.objects.get_or_create(
+                        profile=profile, company_name=company_name,
+                        defaults={'stock_quantity': 0, 'stock_price': stock_price, 'stock_purchase_date': timezone.now()}
+                    )
+                    # user_stock.stock_quantity += stock_quantity if order_type == 'shares' else total_value / stock_price
+                    
+                    if order_type == 'shares':
+                        user_stock.stock_quantity += stock_quantity
+                    else:
+                        user_stock.stock_quantity += total_value / stock_price
+                            
+                    user_stock.save()
+                    
+                    if order_type == 'shares':
+                        StockTransaction.objects.create(
+                            profile=profile,
+                            company_name=company_name,
+                            stock_quantity=stock_quantity,
+                            stock_price=stock_price, transaction_type='buy'
+                        )
+                    else:
+                        StockTransaction.objects.create(
+                            profile=profile,
+                            company_name=company_name,
+                            stock_quantity=stock_quantity / stock_price,
+                            stock_price=stock_price, transaction_type='buy'
+                        )
+                        
+                    if order_type == 'shares':
+                        messages.success(request, f"Successfully bought {stock_quantity:.2f} shares of {company_name}.")
+                    else:
+                        messages.success(request, f"Successfully bought {stock_quantity / stock_price:.2f} shares of {company_name}.")
+                else:
+                    messages.error(request, "Not enough cash to buy this stock.")
+            else:
+                # Sell Logic
+                user_stock = UserStock.objects.filter(profile=profile, company_name=company_name).first()
+                stock_quantity = stock_quantity / stock_price if order_type == 'cash' else stock_quantity
+                
+                if user_stock and user_stock.stock_quantity >= stock_quantity:
+                    # Calculate total value for selling
+                    total_value = stock_quantity * stock_price  # Assuming quantity is the number of shares sold
+                    profile.available_cash += total_value
+                    profile.save()
+
+                    user_stock.stock_quantity -= stock_quantity
+                    if user_stock.stock_quantity == 0:
+                        user_stock.delete()
+                    else:
+                        user_stock.save()
+
+                    StockTransaction.objects.create(
+                        profile=profile,
+                        company_name=company_name,
+                        stock_quantity=stock_quantity,
+                        stock_price=stock_price, transaction_type='sell'
+                    )
+                    messages.success(request, f"Sold {stock_quantity:.2f} shares of {company_name}.")
+                else:
+                    messages.error(request, "You do not have enough shares to sell.")
+        else:
+            messages.error(request, "There was an error in your form submission or you entered a value less than 0.02. Please check your inputs.")
+    
+    return render(request, 'dashboard/buySell.html', {
+        'form': form,
+        'available_cash': available_cash,
+        'user_stocks': UserStock.objects.filter(profile=profile)
     })

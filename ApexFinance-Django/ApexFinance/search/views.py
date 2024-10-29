@@ -14,11 +14,17 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def search(request):
         query = request.GET.get('q', default="AAPL")  # Get search query from the form, default to AAPL if none
-
+        
         if query:
             # Fetch stock data using yfinance
             quote = yf.Ticker(query)
             stock_info = quote.info
+            
+            # # Store stock_info and query in session
+            # request.session['stock_info'] = stock_info
+            # request.session['query'] = query
+    
+            
             return render(request, 'search/search.html', {'stock_info': stock_info, 'query': query})
         else:
             return render(request, 'search/search.html', {'error': 'No stock symbol provided.'})
@@ -27,7 +33,11 @@ class StockQuoteView(View):
     def get(self, request):
         # get a stock ticker symbol from the query string, default to AAPL
         symbol = request.GET.get('symbol', default="AAPL")
+        # print("Here is the stock ", symbol)
         
+        request.session['query'] = symbol
+        
+        #print(symbol)
         # pull the stock quote
         quote = yf.Ticker(symbol)
         
