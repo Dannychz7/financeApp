@@ -58,10 +58,10 @@
                             {% for stock in user_stocks %}
                             <li class="stock-item">
                                 <strong>{{ stock.company_name }}</strong>:
-                                {{ stock.stock_quantity }} shares totalling $ 
-                                <!-- TODO: Access the stock_data_dict at stock.company_name -->
+                                {{ stock.stock_quantity|floatformat:2 }} shares at ${{ stock.stock_price|floatformat:2 }} per share,
+                                totaling ${{ stock.stock_quantity|multiply:stock.stock_price|floatformat:2 }}
                             </li>
-                        {% endfor %}
+                            {% endfor %}
                         </ul>
                     {% else %}
                         <p class="no-stocks">You have no stocks owned.</p>
@@ -83,14 +83,15 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+       document.addEventListener('DOMContentLoaded', function () {
             // Parse stock data passed from the Django view
             const stockData = JSON.parse('{{ stock_data|escapejs }}');
-            
-            // Prepare series data for Highcharts (use name and quantity for pie chart)
-            available_cash = {{ available_cash|default:0|floatformat:2 }};  // Pass available_cash to JavaScript
 
-            const seriesData = stockData.map(stock => ({
+            // Prepare series data for Highcharts (use name and quantity for pie chart)
+            let available_cash = {{ available_cash|default:0|floatformat:2 }};  // Pass available_cash to JavaScript
+
+            // Create the initial series data for the chart
+            let seriesData = stockData.map(stock => ({
                 name: stock.name,
                 y: stock.quantity * stock.price
             })).concat([{
@@ -98,18 +99,17 @@
                 y: available_cash
             }]);
 
-            // Create the pie chart
             Highcharts.chart('chart_container', {
                 chart: {
                     type: 'pie',
-                    backgroundColor: 'transparent', // Set background color to red
-                    borderColor: 'transparent', // Border color
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
                     borderWidth: 2,
                 },
                 title: {
                     text: 'Stock Allocation',
                     style: {
-                        color: 'white', // Title color
+                        color: 'white',
                     }
                 },
                 plotOptions: {
@@ -118,13 +118,16 @@
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: $ {point.percentage:.1f} %',
+                            format: '<b>{point.name}</b>: $ {point.y:.2f}', // Display values with two decimal points
                             style: {
                                 color: 'white'
                             }
                         },
                         showInLegend: false
                     }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>${point.y:.2f}</b>' // Format tooltip values to two decimal points
                 },
                 series: [{
                     name: 'Cash Value',
@@ -137,8 +140,8 @@
             function isMarketOpen() {
                 const now = new Date();
                 const currentTime = now.getHours() * 100 + now.getMinutes();
-                const marketOpenTime = 930;  // 9:30 AM
-                const marketCloseTime = 1600; // 4:00 PM
+                const marketOpenTime = 930;  // Market Open
+                const marketCloseTime = 1600; // Market Close
 
                 // Monday (1) to Friday (5) and within market hours
                 return now.getDay() >= 1 && now.getDay() <= 5 && currentTime >= marketOpenTime && currentTime <= marketCloseTime;
@@ -146,27 +149,54 @@
 
             // Function to fetch updated cash and portfolio data from the server
             function updatePortfolio() {
-                if (isMarketOpen()) {
-                    fetch("{% url 'live_update' %}")  // URL for live_update
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
-                            document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
-                        })
-                        .catch(error => console.error('Error fetching portfolio update:', error));
-                } else {
-                    console.log('Market is closed. Stopping updates.');
-                    clearInterval(updateInterval);  // Stop updating if the market is closed
-                    
-                    fetch("{% url 'live_update' %}")  // URL for live_update
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
-                        document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
-                    })
-                    .catch(error => console.error('Error fetching portfolio update:', error));
+                    if (isMarketOpen()) {
+                        fetch("{% url 'live_update' %}")  // URL for live_update functionality
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                                document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+
+                                // Update the stock values in the UI
+                                let stockList = document.querySelector('.stock-list');
+                                stockList.innerHTML = ''; // Clear existing stock list
+
+                                for (const [company_name, stock_info] of Object.entries(data.stock_data)) {
+                                    const stockItem = document.createElement('li');
+                                    stockItem.className = 'stock-item';
+                                    stockItem.innerHTML = `<strong>${company_name}</strong>: ${stock_info.quantity} shares at $${stock_info.price.toFixed(2)} per share, totaling $${stock_info.total_value.toFixed(2)}`;
+                                    stockList.appendChild(stockItem);
+                                }
+
+                                // Update the chart data
+                                const updatedSeriesData = Object.entries(data.stock_data).map(([name, stock]) => ({
+                                    name: name,
+                                    y: stock.total_value
+                                })).concat([{
+                                    name: 'Cash',
+                                    y: data.available_cash
+                                }]);
+
+                                // Update the chart
+                                Highcharts.chart('chart_container', {
+                                    series: [{
+                                        data: updatedSeriesData
+                                    }]
+                                });
+                            })
+                            .catch(error => console.error('Error fetching portfolio update:', error));
+                    } else {
+                        fetch("{% url 'live_update' %}")  // URL for live_update
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('availableCash').textContent = data.available_cash.toFixed(2);
+                                document.getElementById('totalPortfolioValue').textContent = data.total_value.toFixed(2);
+                            })
+                            .catch(error => console.error('Error fetching portfolio update:', error));
+                        console.log('Market is closed. Stopping updates.');
+                        clearInterval(updateInterval);  // Stop updating if the market is closed
+                    }
                 }
-            }
+
 
             // Set an interval to update the portfolio every 10 seconds
             const updateInterval = setInterval(updatePortfolio, 10000);  // 10,000 ms = 10 seconds

@@ -30,21 +30,33 @@ def dashboard(request):
     # Get all stocks for the logged-in user
     user_stocks = UserStock.objects.filter(profile=request.user.profile)
 
-    # Prepare data for the chart (convert to list of dictionaries)
+
+ # Prepare data for the chart (convert to list of dictionaries)
     stock_data = [
         {
             'name': stock.company_name,
-            'price': float(stock.stock_price),  # Ensure stock_price is float for JSON serialization
-            'quantity': float(stock.stock_quantity)
+            'price': float(stock.stock_price),
+            'quantity': float(stock.stock_quantity),
+            'total_value': float(stock.stock_quantity * stock.stock_price),
         }
         for stock in user_stocks
     ]
 
-    # Render the dashboard template with the user's stocks, available cash
+    # Prepare stock_data_dict for each stock to access current price and quantity
+    stock_data_dict = {
+        stock.company_name: {
+            'price': float(stock.stock_price),
+            'quantity': float(stock.stock_quantity),
+            'total_value': float(stock.stock_quantity * stock.stock_price),
+        }
+        for stock in user_stocks
+    }
+
     return render(request, 'dashboard/dashboard.html', {
         'available_cash': available_cash,
         'user_stocks': user_stocks,
         'stock_data': json.dumps(stock_data),
+        'stock_data_dict': stock_data_dict,  # Add stock_data_dict to context
     })
 
 @login_required(login_url='/users/login_user')
@@ -74,11 +86,13 @@ def live_update(request):
         # Calculate total value of this stock (quantity * current price)
         stock_value = stock.stock_quantity * current_price
         total_stock_value += stock_value  # Add the stock value to the total
-
-        stock_data_dict[stock.company_name] = { # Store the current price and quantity into the dict to call in the html
+        # Add current stock information to the dictionary
+        stock_data_dict[stock.company_name] = {
             'price': float(current_price),
             'quantity': float(stock.stock_quantity),
+            'total_value': float(stock_value),
         }
+
 
     # Update the total portfolio value in the user's profile
     profile.total_stock_value = total_stock_value
@@ -90,7 +104,7 @@ def live_update(request):
         'available_cash': float(available_cash),
         'total_value': float(profile.total_value),
         'total_stock_value': float(total_stock_value), #Grabbing this one
-        'stock_data_dict': stock_data_dict
+        'stock_data': stock_data_dict,
     })
 
 # Function to scrape ETF holdings
