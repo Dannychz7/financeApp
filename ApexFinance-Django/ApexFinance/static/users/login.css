@@ -82,9 +82,21 @@ button:hover {
 }
 
 .messages p {
-    background-color: #B03028;
+    background-color: #B03028; /* Darker background for error messages */
     color: #fff;
     padding: 10px;
     border-radius: 5px;
     font-size: 1em;
+}
+
+.signup-link {
+    margin-top: 10px; /* Add some spacing */
+    text-align: center; /* Center the signup link */
+    color: #D43F33; /* Red color for the signup link */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Add this rule to remove underline from all links globally */
+a {
+    text-decoration: none; /* Remove underline from all links */
 }

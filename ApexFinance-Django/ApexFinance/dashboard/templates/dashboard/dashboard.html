@@ -84,6 +84,15 @@
 
     <script>
        document.addEventListener('DOMContentLoaded', function () {
+
+        const stockList = document.querySelector('.stock-list');
+        const stockItems = stockList.querySelectorAll('.stock-item');
+
+        // Check if there are more than 15 stocks
+        if (stockItems.length > 15) {
+            stockList.classList.add('scrollable');
+        }
+
             // Parse stock data passed from the Django view
             const stockData = JSON.parse('{{ stock_data|escapejs }}');
 

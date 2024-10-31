@@ -37,5 +37,3 @@ class StockTransaction(models.Model):
     def __str__(self):
         return f"{self.transaction_type.capitalize()} {self.stock_quantity} shares of {self.company_name} on {self.transaction_date.strftime('%Y-%m-%d %H:%M:%S')}"
     
-    
-    

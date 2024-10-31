@@ -233,6 +233,44 @@ canvas {
     gap: 20px; /* Adds space between sections */
 }
 
+.stock-list {
+    direction: rtl; /* Move scroll bar to left side */
+    max-height: 260px; /* Set a fixed height (adjust as needed) */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding-left: 10px; /* Add padding for scrollbar spacing */
+    width: 100%; /* Ensure the width is 100% of the container */
+    box-sizing: border-box; /* Include padding in width */
+    list-style-type: none; /* Removes bullet points */
+}
+
+/* Stock Item */
+.stock-item {
+    margin-bottom: 10px; /* Add spacing between items */
+    text-align: left; /* Ensures text aligns to the left */
+    direction: ltr; 
+}
+
+/* Custom scrollbar styling */
+.stock-list::-webkit-scrollbar {
+    width: 8px; /* Adjust width for thinner scrollbar */
+}
+
+/* Track */
+.stock-list::-webkit-scrollbar-track {
+    background: #474646c9; /* Darker background for scrollbar track */
+}
+
+/* Handle */
+.stock-list::-webkit-scrollbar-thumb {
+    background: #8d8d8d9d; /* Color for scrollbar thumb */
+}
+
+/* Handle on hover */
+.stock-list::-webkit-scrollbar-thumb:hover {
+    background: #8d8d8dd4; /* Darker shade on hover */
+}
+
 /* Settings and general form styling */
 .settings-container {
     max-width: 800px;
