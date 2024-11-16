@@ -50,8 +50,12 @@
                     </p>
                     <p>
                         <strong>Total Portfolio Value:</strong>
-                        $<span id="totalPortfolioValue">{{ total_value }}</span>
+                        $<span id="totalPortfolioValue"> {{ total_value }}</span>
                     </p>
+                    {% comment %} <p>
+                        <strong>Available Cash:</strong>
+                        $<span id="totalStockVal"> {{ available_cash }}</span>
+                    </p> {% endcomment %}
     
                         {% if user_stocks %}
                         <ul class="stock-list">
