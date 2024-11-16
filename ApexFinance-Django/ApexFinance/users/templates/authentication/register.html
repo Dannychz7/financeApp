@@ -81,6 +81,7 @@
             background-color: #222; /* Dark background for inputs */
             color: #f0f0f0; /* Light text for inputs */
             width: 100%; /* Ensure all inputs are the same width */
+            box-sizing: border-box; /* Include padding and border in width calculation */
         }
         
         .form-container form input:focus {
@@ -98,6 +99,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 5px;
+            width: 100%; /* Match width of inputs */
         }
 
         .form-container button:hover {

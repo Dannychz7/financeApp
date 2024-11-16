@@ -58,6 +58,11 @@
             text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9); /* Slightly deeper shadow */
         }
     
+        .form-group {
+            width: 100%; /* Ensuring form group takes full width */
+            margin-bottom: 15px; /* Space between input fields */
+        }
+
         .form-group input {
             background-color: #222;
             color: #f0f0f0;
@@ -65,6 +70,7 @@
             border-radius: 5px;
             padding: 12px;
             width: 100%;
+            box-sizing: border-box; /* Ensures padding is included in width calculation */
         }
     
         .form-group input:focus {
@@ -82,7 +88,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
             margin-top: 20px;
-            width: 100%;
+            width: 100%; /* Ensure full width */
+            box-sizing: border-box; /* Include padding and border in width calculation */
         }
     
         .login-button:hover {
