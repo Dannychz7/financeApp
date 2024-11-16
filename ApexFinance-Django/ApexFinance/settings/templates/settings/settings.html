@@ -75,7 +75,7 @@
     <!-- Logout Button -->
     <div class="settings-section">
         <h2>Logout</h2>
-            <form method="post" action="{% url 'logout' %}">
+            <form method="post" action="{% url 'logoutPage' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Logout</button>
             </form>

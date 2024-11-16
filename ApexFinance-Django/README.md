@@ -3,6 +3,8 @@ Current Bugs that need fixing:
 [] Update ETF or MUTALFUNDS with current price, not closing price
 [] Update ETF, so when you buy it buys current price
 [] Add "End of day total portifo sum"
+[] Fix UI for Sign up and Sign in Pages
+[] Fix logout screen for settings page
 
 How to access admin panel that shows "everything" in the database:
     - run the server

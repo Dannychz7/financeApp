@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - Apex Finance</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling */
+        html, body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Black background */
+            color: #f0f0f0; /* Whitish text */
+            height: 100%;
+            display: flex;          /* Make body a flex container */
+            flex-direction: column; /* Stack children vertically */
+            min-height: 100vh;      /* Make body at least full viewport height */
+        }
+
+        /* Header styling */
+        header {
+            background-color: #333; /* Dark background for header */
+            padding: 20px 30px;     /* Adjust padding as needed */
+            border-bottom: 1px solid #444; /* Slightly lighter border */
+            display: flex;
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space out items (logo, title, buttons) */
+            position: relative;
+        }
+
+        /* Logo styling */
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        /* Header title styling */
+        .title {
+            position: absolute;
+            left: 50%; /* Center horizontally */
+            top: 50%; /* Center vertically */
+            transform: translate(-50%, -50%); /* Center the element itself */
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5em;
+            color: #D43F33;
+            margin: 0;
+            text-align: center;
+        }
+
+        .title a {
+            color: inherit;
+            text-decoration: none; /* Remove underline */
+        }
+
+        /* CTA buttons styling */
+        .right-items {
+            margin-left: auto; /* Push the buttons to the far right */
+            display: flex;
+            gap: 10px; /* Space between buttons */
+        }
+
+        .cta-buttons a {
+            padding: 10px 20px;
+            background-color: #D43F33; /* Red buttons */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline */
+            font-size: 1em;
+        }
+
+        .cta-buttons a:hover {
+            background-color: #B03028; /* Darker red on hover */
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1; /* Allow container to grow and fill available space */
+            text-align: center;
+        }
+
+        .container h1, .container h2 {
+            margin-bottom: 20px;
+        }
+
+        .container a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #D43F33;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Remove underline */
+            cursor: pointer;
+        }
+
+        .container a:hover {
+            background-color: #B03028; /* Darker red on hover */
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #f0f0f0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <div class="right-items">
+                <div class="cta-buttons">
+                    <a class="login-button" href="{% url 'login' %}">Sign In</a>
+                    <a class="signup-button" href="{% url 'register' %}">Sign Up</a>
+                </div>
+            </div>
+    </header>
+
+    <div class="container">
+        <h1>Logout Successful</h1>
+        <p>Thank you for using APEX Finance. We look forward to serving you again soon.</p>
+        <a href="{% url 'home' %}" class="home-button">Return to Homepage</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Apex Finance. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
