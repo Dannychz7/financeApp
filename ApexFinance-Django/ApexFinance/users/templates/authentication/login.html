@@ -1,25 +1,134 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{% static 'users/login.css' %}"> <!-- Link to your custom CSS -->
+    <title>Login - APEX Finance</title>
+    <link rel="stylesheet" href="{% static 'users/login.css' %}">
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
+            color: #f0f0f0; /* Whitish text */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            flex-direction: column;
+        }
+    
+        /* APEX Logo in top-left corner */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        /* Updated styles for matching elements */
+        .matching-style {
+            background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
+            border: none; /* Remove borders */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
+            border-radius: 10px;
+        }
+    
+        /* Form container */
+        .container {
+            padding: 40px 50px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    
+        h2.title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #D43F33; /* Red accent color */
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9); /* Slightly deeper shadow */
+        }
+    
+        .form-group input {
+            background-color: #222;
+            color: #f0f0f0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 12px;
+            width: 100%;
+        }
+    
+        .form-group input:focus {
+            border-color: #D43F33;
+            box-shadow: 0 0 8px rgba(212, 63, 51, 0.8); /* Add a glowing red outline */
+        }
+    
+        .login-button {
+            background-color: #D43F33;
+            padding: 12px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+    
+        .login-button:hover {
+            background-color: #B03028;
+            transform: translateY(-2px); /* Slight upward movement */
+        }
+    
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+            color: #f0f0f0; /* Text color */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border: none; /* Remove any border */
+        }
+
+        footer a {
+            color: #f0f0f0; /* Match red accents */
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            color: #D43F33; /* Highlight color: Red */
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <!-- APEX Finance Logo -->
+    <img src="{% static 'images/apexLogo.png' %}" alt="APEX Finance Logo" class="logo">
+
+    <div class="container matching-style">
         <h2 class="title">Login</h2>
         <!-- Form submits to the login_user view -->
         <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
             </div>
             <button type="submit" class="login-button">Login</button>
         </form>
@@ -35,5 +144,10 @@
         </div>
         {% endif %}
     </div>
+
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
+    </footer>
 </body>
 </html>

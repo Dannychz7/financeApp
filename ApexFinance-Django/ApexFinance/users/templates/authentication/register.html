@@ -2,19 +2,166 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register</title>
-        <link rel="stylesheet" href="{% static 'users/login.css' %}"> <!-- Assuming you have this in your static files -->
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - APEX Finance</title>
+    <link rel="stylesheet" href="{% static 'users/login.css' %}">
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
+            color: #f0f0f0; /* Whitish text */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure content takes at least full height */
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 1; /* Allow this section to grow and take available space */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* APEX Logo in top-left corner */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    
+        /* Updated styles for matching elements */
+        .matching-style {
+            background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
+            border: none; /* Remove borders */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
+            border-radius: 10px;
+        }
+    
+        /* Form container */
+        .form-container {
+            padding: 40px 50px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #D43F33; /* Red accent color */
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9); /* Slightly deeper shadow */
+        }
+    
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .form-container form input {
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #444; /* Slightly lighter border */
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #222; /* Dark background for inputs */
+            color: #f0f0f0; /* Light text for inputs */
+            width: 100%; /* Ensure all inputs are the same width */
+        }
+        
+        .form-container form input:focus {
+            border-color: #D43F33; /* Red border on focus */
+            box-shadow: 0 0 8px rgba(212, 63, 51, 0.8); /* Glowing red outline */
+        }
+
+        .form-container button {
+            background-color: #D43F33; /* Red button */
+            color: white;
+            padding: 12px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .form-container button:hover {
+            background-color: #B03028; /* Darker red on hover */
+        }
+
+        .form-container a {
+            text-align: center;
+            margin-top: 20px;
+            color: #f0f0f0;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .form-container a:hover {
+            color: #D43F33; /* Red color on hover */
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+            color: #f0f0f0; /* Whitish text */
+            width: 100%;
+            border: none; /* Remove any border */
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: #f0f0f0; /* Match red accents */
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            color: #D43F33; /* Red hover color */
+        }
+    </style>
+</head>
 <body>
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    <a href="{% url 'login' %}">Already have an account? Log in</a>
+    <!-- APEX Logo -->
+    <img src="{% static 'images/apexLogo.png' %}" alt="APEX Finance Logo" class="logo">
+
+    <div class="main-content">
+        <div class="form-container matching-style">
+            <h2>Create Your Account</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <button type="submit">Register</button>
+            </form>
+            <a href="{% url 'login' %}">Already have an account? Log in</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
+    </footer>
 </body>
 </html>
