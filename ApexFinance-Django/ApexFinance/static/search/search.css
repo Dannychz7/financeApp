@@ -3,7 +3,7 @@ html, body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #000; /* Black background */
+  background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
   color: #f0f0f0; /* Whitish text */
   height: 100%;
   display: flex;          /* Make body a flex container */
@@ -26,7 +26,7 @@ html, body {
 
 /* Header styling */
 header {
-  background-color: #333; /* Dark background for header */
+  background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
   padding: 30px 30px 40px; /* Adjust padding as needed */
   border-bottom: 1px solid #444; /* Slightly lighter border */
   display: flex;
@@ -69,6 +69,7 @@ header {
 .right-items .dropdown {
   position: relative;
   display: inline-block;
+  z-index: 20; /* Ensure dropdown is above other elements */
 }
 
 /* Styling for the dropdown button */
@@ -94,12 +95,13 @@ header {
   background-color: #333; /* Dropdown background */
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 30; /* Higher z-index to ensure it overlays */
   left: 0; /* Aligns dropdown to the right of the button */
   margin-top: 5px;
   padding: 0; /* Remove padding from dropdown */
   list-style-type: none; /* Remove bullets */
 }
+
 
 /* Remove bullets and default padding from list items */
 .right-items .dropdown-content li {
@@ -132,6 +134,8 @@ header {
   display: flex;
   align-items: center;
   margin-right: 20px;
+  position: relative; /* Make sure search form doesn't block dropdown */
+  z-index: 5; /* Ensure it's below the dropdown */
 }
 
 #searchForm input[type="text"] {
@@ -278,10 +282,30 @@ button:hover {
 
 /* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
 /* Footer */
+.matching-style {
+  background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
+  border: none; /* Remove borders */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
+  border-radius: 10px;
+}
+      
 footer {
   text-align: center;
   padding: 20px;
-  background-color: #333;
-  color: #f0f0f0;
+  background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+  color: #f0f0f0; /* Whitish text */
+  width: 100%;
+  border: none; /* Remove any border */
   margin-top: 0;
+}
+      
+footer a {
+  color: #f0f0f0; /* Match red accents */
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 15px;
+}
+      
+footer a:hover {
+  color: #D43F33; /* Red hover color */
 }

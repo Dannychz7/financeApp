@@ -26,7 +26,6 @@
                     <ul class="dropdown-content">
                         <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
                         <li><a href="{% url 'settings' %}">Settings</a></li>
-                        <li><a href="{% url 'home' %}">Intro</a></li>
                         <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
                         <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                         <li><a href="{% url 'buySell' %}">Buy and Sell Stocks</a></li>
@@ -218,8 +217,9 @@
         });
     </script>
 
-    <footer>
-        <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
     </footer>
 
 </body>

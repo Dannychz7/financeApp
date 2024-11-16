@@ -1,10 +1,15 @@
 /* General body styling */
-body {
+html, body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #000; /* Black background */
+    background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
     color: #f0f0f0; /* Whitish text */
+    height: 100%;
+    display: flex;          /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh;      /* Make body at least full viewport height */
+    position: relative;     /* To position the animated graph */
 }
 
 /* Container to center and format content */
@@ -12,17 +17,19 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    flex: 1; /* Allow container to grow and fill available space */
+    text-align: center;
 }
 
 /* Header styling */
 header {
-    background-color: #333; /* Dark background for header */
-    padding: 20px 30px; /* Adjust padding as needed */
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for header */
+    padding: 20px 30px;
     border-bottom: 1px solid #444; /* Slightly lighter border */
     display: flex;
     align-items: center; /* Center items vertically */
-    justify-content: center; /* Center items horizontally */
-    position: relative; /* Allows absolute positioning for logo */
+    justify-content: space-between; /* Space out items (logo, title, buttons) */
+    position: relative;
 }
 
 /* Logo styling */
@@ -30,29 +37,19 @@ header {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Styling for the Apex Finance transparent image */
-.intro .chart img {
-    width: 200px; /* Shrink the image size */
-    float: right; /* Push the image to the right */
-    margin-left: 20px; /* Add some spacing between the image and text */
-    margin-bottom: 20px; /* Add spacing below the image */
 }
 
 /* Header title styling */
 .title {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    top: 50%; /* Center vertically */
+    transform: translate(-50%, -50%); /* Center the element itself */
     font-family: 'Bebas Neue', sans-serif;
     font-size: 5em;
-    color: #D43F33; /* Red font color */
+    color: #D43F33;
     margin: 0;
+    text-align: center;
 }
 
 .title a {
@@ -60,39 +57,34 @@ header {
     text-decoration: none;
 }
 
-
-
-
-
-
-
-/* Call to Action Buttons */
-.cta-buttons {
+/* Call to action buttons */
+.right-items {
+    margin-left: auto;
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    gap: 10px; /* Space between buttons */
 }
 
-.login-button, .signup-button {
+.cta-buttons a {
     padding: 10px 20px;
-    margin: 10px;
     background-color: #D43F33; /* Red buttons */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none; /* Remove underline */
+    font-size: 1em;
 }
 
-.login-button:hover, .signup-button:hover {
+.cta-buttons a:hover {
     background-color: #B03028; /* Darker red on hover */
 }
 
 /* Features and Intro Section */
 .features ul, .intro ul {
-    list-style-type: disc;
+    list-style-type: none; /* Remove bullet points */
     margin: 10px 0;
-    padding-left: 20px;
+    padding-left: 0; /* Remove padding */
+    text-align: left; /* Align text to the left */
 }
 
 h2, h3 {
@@ -100,18 +92,43 @@ h2, h3 {
 }
 
 /* Chart section styling */
+.chart {
+    display: flex;
+    justify-content: space-between; /* Space between text and image */
+    align-items: center;
+}
+
+.chart .text {
+    flex: 1; /* Allow text to take available space */
+    text-align: left; /* Ensure text stays on the left */
+}
+
 .chart img {
-    width: 100%;
+    width: 200px; /* Set image width */
     height: auto;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    margin-left: 20px; /* Space between text and image */
 }
 
 /* Footer */
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #333;
-    color: #f0f0f0;
-    margin-top: 20px;
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+    color: #f0f0f0; /* Whitish text */
+    width: 100%;
+    border: none; /* Remove any border */
+    margin-top: 60px; /* Add some spacing between the main content and footer */
+}
+
+footer a {
+    color: #f0f0f0; /* Match red accents */
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+footer a:hover {
+    color: #D43F33; /* Red hover color */
 }

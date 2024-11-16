@@ -15,17 +15,18 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #000; /* Black background */
+            background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
             color: #f0f0f0; /* Whitish text */
             height: 100%;
             display: flex;          /* Make body a flex container */
             flex-direction: column; /* Stack children vertically */
             min-height: 100vh;      /* Make body at least full viewport height */
+            position: relative;     /* To position the animated graph */
         }
 
         /* Header styling */
         header {
-            background-color: #333; /* Dark background for header */
+            background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
             padding: 20px 30px;     /* Adjust padding as needed */
             border-bottom: 1px solid #444; /* Slightly lighter border */
             display: flex;
@@ -111,13 +112,26 @@
             background-color: #B03028; /* Darker red on hover */
         }
 
-        /* Footer styling */
+        /* Footer */
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #333;
-            color: #f0f0f0;
-            margin-top: 20px;
+            background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+            color: #f0f0f0; /* Whitish text */
+            width: 100%;
+            border: none; /* Remove any border */
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: #f0f0f0; /* Match red accents */
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            color: #D43F33; /* Red hover color */
         }
     </style>
 </head>
@@ -137,11 +151,12 @@
     <div class="container">
         <h1>Logout Successful</h1>
         <p>Thank you for using APEX Finance. We look forward to serving you again soon.</p>
-        <a href="{% url 'home' %}" class="home-button">Return to Homepage</a>
+        <a href="{% url 'login' %}" class="home-button">Sign In Again</a>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Apex Finance. All Rights Reserved.</p>
+    <!-- Footer -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
     </footer>
 
 </body>

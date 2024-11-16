@@ -12,11 +12,13 @@
 <body>
     <header>
         <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
-        <h1 class="title"><a href="{% url 'dashboard' %}">APEX FINANCE</a></h1>
-        <div class="login-signup">
-            <a class="login-button" href="{% url 'login' %}">Login</a>
-            <a class="signup-button" href="{% url 'register' %}">Signup</a>
-        </div>
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <div class="right-items">
+                <div class="cta-buttons">
+                    <a class="login-button" href="{% url 'login' %}">Sign In</a>
+                    <a class="signup-button" href="{% url 'register' %}">Sign Up</a>
+                </div>
+            </div>
     </header>
 
     <div class="container">
@@ -65,8 +67,9 @@
         </main>
     </div>
 
-    <footer>
-        <p>&copy; 2023 APEX FINANCE. All rights reserved.</p>
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
     </footer>
     
 </body>
