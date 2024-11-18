@@ -14,7 +14,7 @@ def register(request):
             user = form.save(commit=False)  # Create the user but don't save it yet
             user.set_password(form.cleaned_data['password'])  # Set the password properly
             user.save()  # Now save the user
-            Profile.objects.create(user=user)  # Create a profile for the user ***SET profile = Profile.objects.create(user=user) FOR DEBUGGING BELOW***
+            Profile.objects.create(user=user)  # Create a profile for the user
             
             # Create a default stock entry for NVDA ***USE FOR DEBUGGING***
             # UserStock.objects.create(
@@ -26,9 +26,14 @@ def register(request):
             
             messages.success(request, "Registration successful! You can now log in.")  # Optional success message
             return redirect('login')  # Redirect to the login page
+        else:
+            print(form.errors)
+            # If form is invalid, render the form with error messages
+            return render(request, 'authentication/register.html', {'form': form})
     else:
         form = UserRegistrationForm()
     return render(request, 'authentication/register.html', {'form': form})
+
 
 def login_user(request):
     # Check if the form was submitted

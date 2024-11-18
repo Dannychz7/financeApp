@@ -6,5 +6,5 @@ from . import views
 urlpatterns = [
     path('settings', views.settings, name= "settings"),
     path('logout/', views.logoutPage, name='logoutPage'),
-
+    path('changePswd/', views.changePswd, name='changePswd'),
 ]

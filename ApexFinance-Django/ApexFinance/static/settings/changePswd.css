@@ -1,30 +1,16 @@
-/* General body styling */
 html, body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
+    background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */    
     color: #f0f0f0; /* Whitish text */
     height: 100%;
     display: flex;          /* Make body a flex container */
     flex-direction: column; /* Stack children vertically */
-    min-height: 100vh;     /* Make body at least full viewport height */
+    min-height: 100vh;      /* Ensure full height */
     overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
-
 }
 
-/* Container to center and format content */
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    flex: 1; /* Allow container to grow and fill available space */
-    width: 100%; /* Ensures the container takes the full width available */
-
-}
-
-/* BELOW HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER HEADER */
-/* <-- BELOW HERE IS THE CODE FOR THE HEADER AND LOGO --> */
 
 /* Header styling */
 header {
@@ -95,12 +81,19 @@ header {
     position: absolute;
     background-color: #333; /* Dropdown background */
     min-width: 160px;
+    max-width: 100vw; /* Prevent overflow by limiting width to viewport */
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     left: 0; /* Aligns dropdown to the right of the button */
     margin-top: 5px;
     padding: 0; /* Remove padding from dropdown */
     list-style-type: none; /* Remove bullets */
+    width: auto; /* Allow content width to adjust dynamically */
+    right: 0; /* Align the right side of the dropdown with the right side of the header */
+    margin-top: 5px;
+    padding: 0;
+    list-style-type: none;
+    width: auto; /* Allow dropdown to resize based on content */
 }
 
 /* Remove bullets and default padding from list items */
@@ -126,8 +119,6 @@ header {
 .right-items .dropdown:hover .dropdown-content {
     display: block; /* Shows dropdown on hover */
 }
-
-/* <-- BELOW HERE IS THE CODE FOR THE SEARCH FORM --> */
 
 /* Search form styling */
 #searchForm {
@@ -168,161 +159,132 @@ header {
     display: flex;
     align-items: center;
     margin-left: auto; /* Pushes the container to the right */
-}
-/* ABOVE HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER THIS LINE */
-
-/* Positioning the login-signup buttons */
-.login-signup {
-    display: flex;
-    align-items: center;
+    position: relative; /* Ensure the dropdown is positioned relative to this container */
 }
 
-.login-signup .login-button,
-.login-signup .signup-button {
-    padding: 8px 16px;
-    margin-left: 10px;
-    background-color: #D43F33; /* Red color */
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.9em;
+/* Center the "Change Password" label or heading */
+.change-password-container h1 {
+    text-align: center; /* Center the heading text */
 }
-
-.login-signup .login-button:hover,
-.login-signup .signup-button:hover {
-    background-color: #B03028; /* Darker red on hover */
-}
-
-
-/* Styling for stock info section */
-.stock-info {
-    flex: 1; /* Allow this section to grow and take up available space */
-    padding: 20px;
-}
-
-.stock-info h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #D43F33; /* Red headers */
-}
-
-.stock-info p {
-    margin: 5px 0;
-}
-
-/* Chart section styling */
-.chart {
-    flex: 1; /* Allow this section to grow and take up available space */
-    padding: 20px;
-}
-
-#chart_container {
-    width: 100%; /* Ensures the chart fills its container */
-    height: 400px; /* Set a fixed height for the chart */
-}
-
-canvas {
+/* Change Password Box Centering */
+.change-password-container {
     width: 100%;
-    height: auto;
-}
-
-.dashboard-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap; /* Prevents the elements from wrapping into a new line */
-    gap: 20px; /* Adds space between sections */
-}
-
-.stock-list {
-    direction: rtl; /* Move scroll bar to left side */
-    max-height: 260px; /* Set a fixed height (adjust as needed) */
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    padding-left: 10px; /* Add padding for scrollbar spacing */
-    width: 100%; /* Ensure the width is 100% of the container */
-    box-sizing: border-box; /* Include padding in width */
-    list-style-type: none; /* Removes bullet points */
-}
-
-/* Stock Item */
-.stock-item {
-    margin-bottom: 10px; /* Add spacing between items */
-    text-align: left; /* Ensures text aligns to the left */
-    direction: ltr; 
-}
-
-/* Custom scrollbar styling */
-.stock-list::-webkit-scrollbar {
-    width: 8px; /* Adjust width for thinner scrollbar */
-}
-
-/* Track */
-.stock-list::-webkit-scrollbar-track {
-    background: #474646c9; /* Darker background for scrollbar track */
-}
-
-/* Handle */
-.stock-list::-webkit-scrollbar-thumb {
-    background: #8d8d8d9d; /* Color for scrollbar thumb */
-}
-
-/* Handle on hover */
-.stock-list::-webkit-scrollbar-thumb:hover {
-    background: #8d8d8dd4; /* Darker shade on hover */
-}
-
-/* Settings and general form styling */
-.settings-container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 600px; /* Maximum width for the form */
+    margin: 100px auto; /* Center the container with top margin */
     padding: 20px;
+    background-color: rgba(20, 20, 20, 0.95); /* Background for form container */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Align text to the left inside the container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.setting-group {
+/* Center the "Change Password" label */
+.change-password-container h2 {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #f0f0f0; /* Whitish text */
+/* Form and elements */
+.change-password-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensure all elements stretch across the full width */
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555; /* Darker border */
-    border-radius: 3px;
-    background-color: #222; /* Dark background for input fields */
-    color: #f0f0f0; /* Whitish text */
+/* Form groups to ensure elements take full width */
+.change-password-container .form-group {
+    width: 100%; /* Ensure the form elements take the full width */
+    margin-bottom: 15px; /* Space between input fields */
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #D43F33; /* Red button */
-    color: #fff;
+/* Styling the label */
+.change-password-container label {
+    font-weight: bold;
+}
+
+/* Styling the input fields */
+.change-password-container input {
+    background-color: #333; /* Darker background for input */
+    color: #f0f0f0; /* Whitish text */
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 12px;
+    width: 100%; /* Full width for inputs */
+    box-sizing: border-box; /* Include padding in width calculation */
+    font-size: 1em; /* Font size */
+}
+
+/* Placeholder text styling */
+.change-password-container input::placeholder {
+    color: #888; /* Lighter color for placeholder */
+}
+
+/* Glowing effect and border color on focus */
+.change-password-container input:focus {
+    border-color: #D43F33;
+    box-shadow: 0 0 8px rgba(212, 63, 51, 0.8); /* Glowing red outline */
+    outline: none; /* Remove default focus outline */
+}
+
+/* Styling for the submit button */
+.change-password-container button {
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #d32f2f;
+    color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
+    width: 100%; /* Make the button full width */
+    margin-top: 20px; /* Add space above the button */
 }
 
-button:hover {
-    background-color: #cc0000; /* Darker red on hover */
+/* Button hover effect */
+.change-password-container button:hover {
+    background-color: #c62828;
 }
 
-/* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
+/* Link styling */
+.change-password-container a {
+    color: #f0f0f0;
+    text-decoration: none;
+}
+
+.change-password-container a:hover {
+    text-decoration: none;
+    color: #D43F33;
+}
+
+/* Message box styling for success/error messages */
+.change-password-container .messages {
+    margin-bottom: 20px;
+}
+
+/* Styling for alert messages */
+.change-password-container .alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    width: 100%; /* Ensure the alert spans full width, like the form elements */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Success message styling */
+.change-password-container .alert-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Error message styling */
+.change-password-container .alert-error {
+    background-color: #D43F33;
+    color: white;
+}
+
 /* Footer */
-.matching-style {
-    background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
-    border: none; /* Remove borders */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
-    border-radius: 10px;
-}
-        
 footer {
     text-align: center;
     padding: 20px;
@@ -330,16 +292,16 @@ footer {
     color: #f0f0f0; /* Whitish text */
     width: 100%;
     border: none; /* Remove any border */
-    margin-top: 0;
+    margin-top: auto; /* Push footer to the bottom */
 }
-        
+
 footer a {
     color: #f0f0f0; /* Match red accents */
     text-decoration: none;
     font-weight: bold;
     margin: 0 15px;
 }
-        
+
 footer a:hover {
     color: #D43F33; /* Red hover color */
 }

@@ -9,6 +9,7 @@ html, body {
     display: flex;          /* Make body a flex container */
     flex-direction: column; /* Stack children vertically */
     min-height: 100vh;     /* Make body at least full viewport height */
+    overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
 }
 
 /* Container to center and format content */

@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Apex Finance</title>
-    <link rel="stylesheet" href="{% static 'settings/settings.css' %}">
+    <title>Change Password</title>
+    <link rel="stylesheet" href="{% static 'settings/changePswd.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">    
 </head>
@@ -33,37 +33,45 @@
         </div>
     </header>
 
-    <div class="container">
-        <h1>Settings</h1>
-        <div class="settings-section">
-            <h2>Account Info</h2>
-            <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-        </div>
-        <div class="settings-section">
-            <h2>Change Password</h2>
-            <p><a href="{% url 'changePswd' %}">Change Password</a></p>
-        </div>
-        <div class="settings-section">
-            <h2>Notifications</h2>
-            <label>
-                <input type="checkbox" id="email-notifications" name="email-notifications"> Email Notifications
-            </label>
-            <label>
-                <input type="checkbox" id="push-notifications" name="push-notifications"> Push Notifications
-            </label>
-        </div>
-        <div class="settings-section">
-            <h2>Logout</h2>
-            <form method="post" action="{% url 'logoutPage' %}">
-                {% csrf_token %}
-                <button type="submit" class="logout-button">Logout</button>
-            </form>
-        </div>
+    <div class="change-password-container">
+        <h1>Change Your Password</h1>
+        <p>Make sure your password is strong and secure.</p>
+    
+        <form method="POST" action="{% url 'changePswd' %}" >
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="old_password">Old Password:</label>
+                <input type="password" id="old_password" name="old_password" placeholder="Enter old password" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="new_password1">New Password:</label>
+                <input type="password" id="new_password1" name="new_password1" placeholder="Enter new password" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="new_password2">Confirm New Password:</label>
+                <input type="password" id="new_password2" name="new_password2" placeholder="Confirm new password" required>
+            </div>
+    
+            <button type="submit">Change Password</button>
+            <p>Want to go back? <a href="{% url 'dashboard' %}">Return to homepage</a></p>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </form>
+    
     </div>
 
     <footer>
         <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
     </footer>
+
 </body>
 </html>

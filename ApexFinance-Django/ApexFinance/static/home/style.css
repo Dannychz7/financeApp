@@ -10,6 +10,7 @@ html, body {
     flex-direction: column; /* Stack children vertically */
     min-height: 100vh;      /* Make body at least full viewport height */
     position: relative;     /* To position the animated graph */
+    overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
 }
 
 /* Container to center and format content */

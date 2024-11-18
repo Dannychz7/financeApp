@@ -3,11 +3,14 @@ html, body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */    color: #f0f0f0; /* Whitish text */
+  background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */    
+  color: #f0f0f0; /* Whitish text */
   height: 100%;
   display: flex;          /* Make body a flex container */
   flex-direction: column; /* Stack children vertically */
   min-height: 100vh;     /* Make body at least full viewport height */
+  overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
+
 }
 
 /* Container to center and format content */
