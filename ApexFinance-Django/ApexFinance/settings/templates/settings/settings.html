@@ -37,21 +37,23 @@
         <h1>Settings</h1>
         <div class="settings-section">
             <h2>Account Info</h2>
-            <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Username:</strong> {{ user }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
         </div>
         <div class="settings-section">
             <h2>Change Password</h2>
             <p><a href="{% url 'changePswd' %}">Change Password</a></p>
         </div>
         <div class="settings-section">
-            <h2>Notifications</h2>
-            <label>
-                <input type="checkbox" id="email-notifications" name="email-notifications"> Email Notifications
-            </label>
-            <label>
-                <input type="checkbox" id="push-notifications" name="push-notifications"> Push Notifications
-            </label>
+            <h2>Financials</h2>
+            <p>
+                <strong>Available Cash:</strong>
+                $<span id="availableCash">{{ available_cash }}</span>
+            </p>
+            <p>
+                <strong>Available Cash:</strong>
+                $<span id="totalVal">{{ total_portfolio_value }}</span>
+            </p>
         </div>
         <div class="settings-section">
             <h2>Logout</h2>
