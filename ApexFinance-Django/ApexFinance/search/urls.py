@@ -7,4 +7,7 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('quote/', StockQuoteView.as_view(), name='stock_quote'),
     path('history/', StockHistoryView.as_view(), name='stock_history'),
+    path('extra-charts/', views.ExtraChartsView.as_view(), name='extra_charts'),
+
+
 ]

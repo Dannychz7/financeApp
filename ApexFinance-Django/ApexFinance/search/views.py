@@ -4,13 +4,11 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.views import View
 import yfinance as yf
-
 # User authorization
 from django.contrib.auth.decorators import login_required
 
 # Require users to be logged into an account to search
 @login_required(login_url='/users/login_user')
-
 # Create your views here.
 def search(request):
         query = request.GET.get('q', default="AAPL")  # Get search query from the form, default to AAPL if none
@@ -23,7 +21,6 @@ def search(request):
             # # Store stock_info and query in session
             # request.session['stock_info'] = stock_info
             # request.session['query'] = query
-    
             
             return render(request, 'search/search.html', {'stock_info': stock_info, 'query': query})
         else:
@@ -82,3 +79,48 @@ class StockHistoryView(View):
                 return '1mo' # Monthly intervals for 5 year and beyond
             else:
                 return '1mo'  # Default for any unknown period
+
+class ExtraChartsView(View):
+    def get(self, request):
+        symbol = request.GET.get('symbol', default="AAPL")
+        print(symbol)
+        quote = yf.Ticker(symbol)
+        sector = quote.info.get('sector', 'Technology')
+        print(sector)
+
+        # Fetch related stocks based on the sector
+        related_stocks = self.get_related_stocks(sector)
+
+        extra_charts_data = []
+        for stock in related_stocks:
+            related_quote = yf.Ticker(stock)
+            stock_history = related_quote.history(period="1d", interval="1m")
+            stock_history_json = stock_history.to_json()
+
+            extra_charts_data.append({
+                'symbol': stock,
+                'shortName': related_quote.info.get('shortName', stock),
+                'Price': related_quote.info.get('currentPrice', related_quote.info.get('previousClose', 0)),
+                'Close': stock_history_json
+            })
+        
+        # hist = quote.history(period=period, interval=interval) # Add an option for history? 
+        # print(hist)
+
+        # Return the data in JSON format for front-end consumption
+        return JsonResponse(extra_charts_data, safe=False)
+
+    def get_related_stocks(self, sector):
+        print("Here I am in the get sector side: ", sector)
+        """Fetch related stocks based on the sector."""
+        if sector == 'Technology':
+            return ['MSFT', 'GOOGL', 'AMZN', 'AAPL']
+        elif sector == 'Healthcare':
+            return ['JNJ', 'PFE', 'MRK', 'ABT', 'UNH']
+        elif sector == 'Financial Services':
+            return ['JPM', 'GS', 'C', 'WFC']
+        elif sector == 'Consumer Staples':
+            return ['KO', 'PG', 'PEP', 'CL']
+        else:
+            # Return popular ETFs if sector is not recognized
+            return ['SPY', 'IVV', 'QQQ', 'VTI', 'VOO']
