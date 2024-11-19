@@ -51,8 +51,8 @@
                 $<span id="availableCash">{{ available_cash }}</span>
             </p>
             <p>
-                <strong>Available Cash:</strong>
-                $<span id="totalVal">{{ total_portfolio_value }}</span>
+                <strong>Total Portfolio Value:</strong>
+                $<span id="totalVal">{{ total_portfolio_value|floatformat:2 }}</span>
             </p>
         </div>
         <div class="settings-section">

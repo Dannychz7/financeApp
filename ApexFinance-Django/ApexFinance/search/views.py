@@ -4,6 +4,7 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.views import View
 import yfinance as yf
+import random
 # User authorization
 from django.contrib.auth.decorators import login_required
 
@@ -89,7 +90,7 @@ class ExtraChartsView(View):
         print(sector)
 
         # Fetch related stocks based on the sector
-        related_stocks = self.get_related_stocks(sector)
+        related_stocks = self.get_related_stocks(sector, symbol)
 
         extra_charts_data = []
         for stock in related_stocks:
@@ -104,23 +105,57 @@ class ExtraChartsView(View):
                 'Close': stock_history_json
             })
         
-        # hist = quote.history(period=period, interval=interval) # Add an option for history? 
-        # print(hist)
-
         # Return the data in JSON format for front-end consumption
         return JsonResponse(extra_charts_data, safe=False)
 
-    def get_related_stocks(self, sector):
-        print("Here I am in the get sector side: ", sector)
-        """Fetch related stocks based on the sector."""
-        if sector == 'Technology':
-            return ['MSFT', 'GOOGL', 'AMZN', 'AAPL']
-        elif sector == 'Healthcare':
-            return ['JNJ', 'PFE', 'MRK', 'ABT', 'UNH']
-        elif sector == 'Financial Services':
-            return ['JPM', 'GS', 'C', 'WFC']
-        elif sector == 'Consumer Staples':
-            return ['KO', 'PG', 'PEP', 'CL']
+    def get_related_stocks(self, sector, symbol):
+        
+        # Top 75 most popular ETFs
+        popular_etfs = [
+            "SPY", "IVV", "VOO", "QQQ", "VTI", "IWM", "XLF", "XLY", "XLI", "XLE", "XLB", "XLV", "XLC",
+            "VUG", "VTV", "VO", "VYM", "SCHD", "SPYG", "SPYV", "IWB", "IWD", "IWF", "VGT", "VNQ", "SCHF",
+            "EFA", "EEM", "GDX", "GLD", "SLV", "LQD", "BND", "AGG", "HYG", "TIP", "TLT", "IBB", "KBE", 
+            "ARKK", "ARKG", "SPLG", "DIA", "VWO", "IEMG", "HEDJ", "PFF", "JNK", "MUB", "VDE", "VDC", "VFH",
+            "VHT", "VWO", "VXX", "BIL", "SCHX", "SCHB", "GDXJ", "SOXX", "XOP", "LIT", "XRT", "FTEC", "SPYG",
+            "SPYV", "JEM", "IJH", "IJR", "VIG", "NOBL", "PHDG", "IWS", "IWP"
+        ]
+        
+        popular_stocks = [
+            "AAPL", "MSFT", "AMZN", "NVDA", "GOOGL", "GOOG", "TSLA", "META", "BRK.B", "UNH", "JNJ", "XOM", "JPM", "V", 
+            "PG", "MA", "LLY", "HD", "CVX", "MRK", "PEP", "KO", "PFE", "ABBV", "AVGO", "TMO", "COST", "CSCO", "MCD", 
+            "ADBE", "WMT", "ACN", "NEE", "BAC", "BMY", "WFC", "DHR", "RTX", "UPS", "INTC", "CMCSA", "TXN", "LIN", "PM", 
+            "UNP", "HON", "LOW", "CRM", "SCHW", "IBM", "MS", "AMGN", "AMD", "CAT", "ORCL", "GS", "BLK", "GE", "SPGI", 
+            "CVS", "MDT", "ISRG", "PLD", "LMT", "INTU", "ADP", "T", "EL", "NFLX", "C", "SYK", "TGT", "VRTX", "DE", 
+            "QCOM", "ZTS", "BKNG", "NOW", "CI", "CB", "TMUS", "CL", "DUK", "AXP", "SO", "MMM", "MO", "BDX", "ANTM", 
+            "APD", "AMT", "ADI", "REGN", "EQIX", "PGR", "MMC", "ITW", "COP", "KHC", "EOG", "BSX", "SLB", "EW", "GM", 
+            "HUM", "NOC", "LRCX", "SHW", "TRV", "HCA", "PRU", "FISV", "NKE", "FDX", "ROST", "AON", "PSA", "ICE", "STZ", 
+            "MCO", "AEP", "MRNA", "KMB", "IDXX", "BK", "CME", "WM", "DG", "CSX", "F", "GD", "D", "MET", "ECL", "ILMN", 
+            "ETN", "VLO", "ALL", "ROP", "TT", "EMR", "FCX", "ORLY", "CMG", "TWTR", "CTAS", "PH", "OXY", "SPG", "PSX", 
+            "TFC", "ED", "ROP", "HLT", "RSG", "COF", "DLR", "HPQ", "WBA", "ALGN", "KR", "IQV", "PAYX", "EQR", "ZBH", 
+            "MTD", "NEM", "TROW", "DTE", "AIG", "VRSK", "FTV", "EXC", "PCAR", "SYY", "TTWO", "AJG", "AFL", "DFS", 
+            "CARR", "BXP", "SRE", "MSCI", "YUM", "EPAM", "CHTR", "FIS", "CLX", "PPG", "AZO", "HIG", "XYL", "HES", 
+            "FAST", "AWK", "RE", "CINF", "MTB", "WAT", "OTIS", "GLW", "GWW", "KEYS", "PEAK", "VTR", "K", "GPC", "OKE", 
+            "BLL", "LKQ", "PFG", "LEN", "NVR", "NDAQ", "DAL", "HBAN", "PPL", "STE", "AMP", "CNC", "CPB", "NTRS", 
+            "RJF", "CBOE", "RHI", "BKR", "IP", "HOLX", "TER", "WDC", "FMC", "TXT", "AAP", "NLOK", "RCL", "LYV", "WRB", 
+            "IVZ", "WAB", "AOS", "HPE", "DOV", "STT", "VAR", "CFG", "AAL", "MOS", "NOV", "SWN", "FANG", "VNO", "FOX", 
+            "TPR", "HBI", "ALLE", "DXC", "LKQ", "AIG", "PNR", "ZION", "NI", "CE", "NRG", "FRT", "UAA", "BBWI", "WU", 
+            "SEE", "GPS", "NWS", "CF", "COO", "APA", "DISCA", "DISH", "PVH", "DVA", "IRM", "DYN", "ROL", "LEG", 
+            "HAS", "BWA", "J", "KIM", "JWN", "AAP", "WHR", "UHS", "LB", "UNM", "COTY", "NWL", "LVS", "ALK", "XRX", 
+            "TAP", "HST", "WY", "IEX", "MKC", "PKI", "CHRW", "DRI", "ARE", "EXPD", "FE", "TSCO", "GILD", "PKG", 
+            "WRK", "HRL", "OKE", "CPRT", "KMX", "TRMB", "ULTA", "CDNS", "VMC", "ANSS", "FLT", "RMD", "KEY", "GL", 
+            "ZBRA", "TMO", "CTLT", "ATO", "XYL", "VFC", "AME", "NDSN", "BAX", "FOXA", "IFF", "CF", "LYB", "HRB", 
+            "BIO", "EXPE", "PXD", "FFIV", "NTAP", "EXR", "NLSN", "CDW", "JBLU", "MLM", "CMA", "PVH", "ROL", "CNP", 
+            "DRI", "SWKS", "TROW", "TPR", "IPGP", "DRE", "EXR", "ABMD", "ZBRA", "TRMB", "STLD", "EVRG", "BEN", 
+            "SWK", "TRV", "WRK", "HUN", "PPL", "LB", "HBAN", "IRM", "FBHS", "CXO", "ZTS"
+        ]
+
+        # Fetch the symbol's quoteType using yfinance
+        ticker = yf.Ticker(symbol)
+        info = ticker.info
+        quote_type = info.get('quoteType', None)
+        
+        # If the symbol is an ETF, return three random ETFs from the popular list
+        if quote_type == 'ETF':
+            return random.sample(popular_etfs, 3)
         else:
-            # Return popular ETFs if sector is not recognized
-            return ['SPY', 'IVV', 'QQQ', 'VTI', 'VOO']
+            return random.sample(popular_stocks, 3)

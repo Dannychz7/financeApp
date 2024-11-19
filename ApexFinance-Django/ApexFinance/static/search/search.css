@@ -231,6 +231,10 @@ header {
   margin: 5px 0;
 }
 
+#chart_container {
+  margin-bottom: 30px; /* Adds space between the graph and the flexbox container */
+}
+
 /* Chart section styling */
 .chart {
   margin-top: 20px;
@@ -282,19 +286,82 @@ button:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
 
-.extra-charts-container {
+/* Flex container for main content and extra charts */
+#widgetContent {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px; /* Space between the content and charts */
   margin-top: 20px;
-  justify-content: space-around;
 }
 
-.chart {
-  flex: 1;
-  min-width: 300px;
-  max-width: 600px;
-  height: 400px;
+/* Main content takes up 70% of the width */
+.content-left {
+  flex: 7;
+  max-width: 70%;
+}
+
+/* Extra charts container */
+.extra-charts {
+  flex: 3;
+  max-width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between the charts */
+}
+
+/* Individual chart styling */
+.extra-charts .chart {
+  background-color: #222; /* Dark background for charts */
+  padding: 15px;
+  border: 1px solid #444; /* Border for charts */
+  border-radius: 5px; /* Rounded corners */
+  min-height: 335px; /* Minimum height for charts */
+}
+
+/* Ensure charts adapt to smaller screens */
+@media (max-width: 768px) {
+  #widgetContent {
+    flex-direction: column; /* Stack everything vertically */
+  }
+  .content-left,
+  .extra-charts {
+    max-width: 100%;
+    flex: none; /* Reset flex sizes */
+  }
+}
+
+/* Parent container for stock info and extra info */
+#stock_info_container {
+  display: flex; /* Use flexbox to arrange child elements side by side */
+  justify-content: space-between; /* Space between the sections, if needed */
+  gap: 20px; /* Add space between the two sections */
+}
+
+/* Stock info section styling */
+#stock_info {
+  flex: 1; /* Each section takes up an equal part of the available space */
+  background-color: #222; /* Optional background color for better readability */
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #444; /* Border to separate it from other content */
+}
+
+/* Extra info section styling */
+#extra_info {
+  flex: 1; /* Each section takes up an equal part of the available space */
+  background-color: #222; /* Same background color as stock info */
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #444; /* Border for separation */
+}
+
+/* Styling for stock info header */
+#stock_info h2 {
+  font-size: 1.5em;
+  color: #D43F33; /* Red headers */
+  margin-bottom: 20px; /* Adjust space between title and first row of content */
 }
 
 /* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */

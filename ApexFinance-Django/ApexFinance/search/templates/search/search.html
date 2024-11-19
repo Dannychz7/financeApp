@@ -37,41 +37,75 @@
 
     <div class="container">
       <div id="widgetContent" class="intro">
-          <main role="main">
-              <h1 class="cover-heading">Financial Stock Dashboard</h1>
-              <p class="lead">Welcome to our financial dashboard, designed to provide you with real-time stock information</p>
-              <div class="input-group mb-3">
-                  <input id="symbol" type="text" class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2" oninput="this.value = this.value.toUpperCase();">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="site.SubmitForm();">Search</button>
-                  </div>
-              </div>
-              
-              <div class="form-group">
-                <label for="period">Select Time Period:</label>
-                <select class="form-control" id="period">
-                  <option value="1d">1 Day</option>
-                  <option value="5d">5 Days</option>
-                  <option value="1mo">1 Month</option>
-                  <option value="3mo">3 Months</option>
-                  <option value="1y">1 Year</option>
-                  <option value="2y">2 Years</option>
-                  <option value="5y">5 Years</option>
-                  <option value="10y">10 Years</option>
-                  <option value="ytd">Year to Date</option>
-                  <option value="max">Max</option>
-                </select>
-              </div>
+        <main role="main" class="content-left">
+          <h1 class="cover-heading">Financial Stock Dashboard</h1>
+          <p class="lead">Welcome to our financial dashboard, designed to provide you with real-time stock information</p>
+          <div class="input-group mb-3">
+            <input id="symbol" type="text" class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2" oninput="this.value = this.value.toUpperCase();">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" onclick="site.SubmitForm();">Search</button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="period">Select Time Period:</label>
+            <select class="form-control" id="period">
+              <option value="1d">1 Day</option>
+              <option value="5d">5 Days</option>
+              <option value="1mo">1 Month</option>
+              <option value="3mo">3 Months</option>
+              <option value="1y">1 Year</option>
+              <option value="2y">2 Years</option>
+              <option value="5y">5 Years</option>
+              <option value="10y">10 Years</option>
+              <option value="ytd">Year to Date</option>
+              <option value="max">Max</option>
+            </select>
+          </div>
 
-              <div id="chart_container"></div>
+          <div id="chart_container"></div>
 
-              <!-- Extra graphs -->
-              
-              <div id="extra_chart_container_1" class="mt-5"></div>
-              <div id="extra_chart_container_2" class="mt-5"></div>
-              <div id="extra_chart_container_3" class="mt-5"></div>
-              
-          </main>
+          <!-- Stock Information Section -->
+          <div id="stock_info_container">
+            <div id="stock_info">
+              <p><strong>Company Name:</strong> <span id="companyName">Loading...</span></p>
+              <p><strong>Symbol:</strong> <span id="symbol">Loading...</span></p>
+              <p><strong>Price:</strong> $<span id="currentPrice">Loading...</span></p>
+              <p><strong>Market Cap:</strong> $<span id="marketCap">Loading...</span></p>
+              <p><strong>Sector:</strong> <span id="sector">Loading...</span></p>
+              <p><strong>Industry:</strong> <span id="industry">Loading...</span></p>
+              <p><strong>Previous Close:</strong> $<span id="previousClose">Loading...</span></p>
+              <p><strong>Open:</strong> $<span id="openPrice">Loading...</span></p>
+              <p><strong>52 Week High:</strong> $<span id="fiftyTwoWeekHigh">Loading...</span></p>
+              <p><strong>Currency:</strong> <span id="currency">Loading...</span></p>
+              <p><strong>52 Week Change:</strong> <span id="fiftyTwoWeekChange">Loading...</span></p>
+            </div>
+
+            <!-- Right side content (charts or additional info) -->
+            <div id="extra_info">
+              <p><strong>52 Week Low:</strong> $<span id="fiftyTwoWeekLow">Loading...</span></p>
+              <p><strong>Dividend Yield:</strong> <span id="dividendYield">Loading...</span></p>
+              <p><strong>PE Ratio:</strong> <span id="peRatio">Loading...</span></p>
+              <p><strong>EPS:</strong> $<span id="eps">Loading...</span></p>
+              <p><strong>Beta:</strong> <span id="beta">Loading...</span></p>
+              <p><strong>Avg Volume:</strong> <span id="avgVolume">Loading...</span></p>
+              <p><strong>Day's Range:</strong> $<span id="dayLow">Loading...</span> - $<span id="dayHigh">Loading...</span></p>
+              <p><strong>Volume:</strong> <span id="volume">Loading...</span></p>
+              <p><strong>Float Shares:</strong> <span id="floatShares">Loading...</span></p>
+              <p><strong>Dividend Rate:</strong> $<span id="dividendRate">Loading...</span></p>
+              <p><strong>Earnings Growth:</strong> <span id="earningsGrowth">Loading...</span></p>
+            </div>
+          </div>
+
+
+        </main>
+      
+        <!-- Extra charts on the right -->
+        <aside class="extra-charts">
+          <div id="extra_chart_container_1" class="chart"></div>
+          <div id="extra_chart_container_2" class="chart"></div>
+          <div id="extra_chart_container_3" class="chart"></div>
+        </aside>
       </div>
 
     </div>
@@ -79,6 +113,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="

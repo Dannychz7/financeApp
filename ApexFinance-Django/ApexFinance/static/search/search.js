@@ -71,6 +71,9 @@ Site.prototype.GetQuote = function() {
             context.Price = data.previousClose;
         }
 
+        // Update stock info in the page
+        that.UpdateStockInfo(data);
+
         // Add extra data for related stocks/ETFs
         that.LoadRelatedAssets(context);
 
@@ -79,11 +82,88 @@ Site.prototype.GetQuote = function() {
     });
 };
 
+// Function to update stock info in the HTML section
+Site.prototype.UpdateStockInfo = function(quote) {
+    console.log(quote)
+    if(quote.quoteType == "ETF") {
+        let currPrice = quote.navPrice || quote.ask || quote.regularMarketPrice || 0;
+        console.log("Here I am now")
+
+        // ETF-specific information
+        var etfInfoHtml = `
+            <p><strong>ETF Name:</strong> ${quote.longName || 'N/A'}</p>
+            <p><strong>Symbol:</strong> ${quote.symbol || 'N/A'}</p>
+            <p><strong>Category:</strong> ${quote.category || 'N/A'}</p>
+            <p><strong>Fund Family:</strong> ${quote.fundFamily || 'N/A'}</p>
+            <p><strong>Price:</strong> $${currPrice ? currPrice.toFixed(2) : 'N/A'}</p>
+            <p><strong>Currency:</strong> ${quote.currency || 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week High:</strong> $${quote.fiftyTwoWeekHigh ? quote.fiftyTwoWeekHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week Low:</strong> $${quote.fiftyTwoWeekLow ? quote.fiftyTwoWeekLow.toFixed(2) : 'N/A'}</p>
+            <p><strong>5 Year Avg Return:</strong> ${quote.fiveYearAverageReturn ? (quote.fiveYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>3 Year Avg Return:</strong> ${quote.threeYearAverageReturn ? (quote.threeYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+        var extraEtfInfoHtml = `
+            <p><strong>Trailing PE:</strong> ${quote.trailingPE ? quote.trailingPE.toFixed(2) : 'N/A'}</p>
+            <p><strong>Trailing Annual Dividend Rate:</strong> $${quote.trailingAnnualDividendRate ? quote.trailingAnnualDividendRate.toFixed(2) : 'N/A'}</p>
+            <p><strong>Trailing Annual Dividend Yield:</strong> ${quote.trailingAnnualDividendYield ? (quote.trailingAnnualDividendYield * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>Total Assets:</strong> $${quote.totalAssets ? quote.totalAssets.toLocaleString() : 'N/A'}</p>
+            <p><strong>Volume:</strong> ${quote.volume ? quote.volume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Exchange:</strong> ${quote.exchange || 'N/A'}</p>
+            <p><strong>Fund Inception Date:</strong> ${quote.fundInceptionDate ? new Date(quote.fundInceptionDate * 1000).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Category:</strong> ${quote.category ? quote.category : 'N/A'}</p>
+            <p><strong>Beta (3-Year):</strong> ${quote.beta3Year ? quote.beta3Year.toFixed(2) : 'N/A'}</p>
+            <p><strong>Average Daily Volume (10-Day):</strong> ${quote.averageDailyVolume10Day ? quote.averageDailyVolume10Day.toLocaleString() : 'N/A'}</p>
+
+        `;
+        // Insert the HTML into the stock info section
+        $('#extra_info').html(extraEtfInfoHtml);
+        $('#stock_info').html(etfInfoHtml);
+        
+    } else {
+        currPrice = quote.currentPrice || quote.ask || quote.regularMarketPrice || 0;
+        var stockInfoHtml = `
+            <p><strong>Company Name:</strong> ${quote.shortName || 'N/A'}</p>
+            <p><strong>Symbol:</strong> ${quote.symbol || 'N/A'}</p>
+            <p><strong>Price:</strong> $${currPrice ? currPrice.toFixed(2) : 'N/A'}</p>
+            <p><strong>Market Cap:</strong> $${quote.marketCap ? quote.marketCap.toLocaleString() : 'N/A'}</p>
+            <p><strong>Sector:</strong> ${quote.sector || 'N/A'}</p>
+            <p><strong>Industry:</strong> ${quote.industry || 'N/A'}</p>
+            <p><strong>Previous Close:</strong> $${quote.previousClose ? quote.previousClose.toFixed(2) : 'N/A'}</p>
+            <p><strong>Open:</strong> $${quote.open ? quote.open.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week High:</strong> $${quote.fiftyTwoWeekHigh ? quote.fiftyTwoWeekHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Currency:</strong> ${quote.currency ? quote.currency : 'N/A'}</p>
+            <p><strong>52 Week Change:</strong> ${quote["52WeekChange"] ? (quote["52WeekChange"] * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+    
+        // Extra info HTML
+        var extraInfoHtml = `
+            <p><strong>52 Week Low:</strong> $${quote.fiftyTwoWeekLow ? quote.fiftyTwoWeekLow.toFixed(2) : 'N/A'}</p>
+            <p><strong>Dividend Yield:</strong> ${quote.dividendYield ? (quote.dividendYield * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>PE Ratio:</strong> ${quote.forwardPE ? quote.forwardPE.toFixed(2) : 'N/A'}</p>
+            <p><strong>EPS:</strong> $${quote.forwardEps ? quote.forwardEps.toFixed(2) : 'N/A'}</p>
+            <p><strong>Beta:</strong> ${quote.beta ? quote.beta.toFixed(2) : 'N/A'}</p>
+            <p><strong>Avg Volume:</strong> ${quote.averageVolume ? quote.averageVolume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Volume:</strong> ${quote.volume ? quote.volume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Float Shares:</strong> ${quote.floatShares ? quote.floatShares.toLocaleString() : 'N/A'}</p>
+            <p><strong>Dividend Rate:</strong> ${quote.dividendRate ? '$' + quote.dividendRate.toFixed(2): 'N/A'}</p>
+            <p><strong>Earnings Growth:</strong> ${quote.earningsGrowth ? (quote.earningsGrowth * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+        
+        // Insert the HTML into the stock info section
+        $('#extra_info').html(extraInfoHtml);
+        $('#stock_info').html(stockInfoHtml);
+    }
+
+};
+
 Site.prototype.LoadRelatedAssets = function(quote) {
     var that = this;
 
     // Log the symbol to verify the input to the related assets fetch
-    console.log("Fetching related assets for symbol:", quote.symbol);
+    // console.log("Fetching related assets for symbol:", quote.symbol);
 
     // Determine if the symbol is a stock or ETF and fetch related assets accordingly
     var relatedAssetsUrl = "/extra-charts?symbol=" + quote.symbol;
@@ -94,14 +174,14 @@ Site.prototype.LoadRelatedAssets = function(quote) {
         cache: false
     })
     .done(function(data) {
-        console.log("Related assets data received:", data);
-        console.log("Data type:", Array.isArray(data) ? "Array" : typeof data);
+        //console.log("Related assets data received:", data);
+        // console.log("Data type:", Array.isArray(data) ? "Array" : typeof data);
 
         // Ensure data is an array or object with expected structure
         if (Array.isArray(data)) {
-            console.log("Data is an array. Iterating over related assets...");
+            // console.log("Data is an array. Iterating over related assets...");
             data.forEach((item, index) => {
-                console.log(`Related asset ${index + 1}:`, item);
+                // console.log(`Related asset ${index + 1}:`, item);
 
                 // Dynamically load charts for each related asset if applicable
                 if (index === 0 && item) {
@@ -115,15 +195,15 @@ Site.prototype.LoadRelatedAssets = function(quote) {
         } else if (typeof data === "object" && data !== null) {
             console.log("Data is an object. Attempting to load related assets...");
             if (data.related1) {
-                console.log("Loading chart for related1:", data.related1);
+                //console.log("Loading chart for related1:", data.related1);
                 that.LoadExtraChart(1, data.related1);
             }
             if (data.related2) {
-                console.log("Loading chart for related2:", data.related2);
+                //console.log("Loading chart for related2:", data.related2);
                 that.LoadExtraChart(2, data.related2);
             }
             if (data.related3) {
-                console.log("Loading chart for related3:", data.related3);
+                //console.log("Loading chart for related3:", data.related3);
                 that.LoadExtraChart(3, data.related3);
             }
         } else {
@@ -137,47 +217,39 @@ Site.prototype.LoadRelatedAssets = function(quote) {
 
 Site.prototype.LoadExtraChart = function(containerId, relatedAsset) {
     var that = this;
-    console.log("Loading extra chart for container:", containerId, "with data:", relatedAsset);
+    // console.log("Loading extra chart for container:", containerId, "with data:", relatedAsset);
 
     // Parse the Close field, which is a stringified JSON object
     var closeData = JSON.parse(relatedAsset.Close);
     var dates = [];
     var priceData = [];
 
-    // for (var timestamp in closeData.Open) {
-    //     // Convert the timestamp to a human-readable time in "HH:mm" format
-    //     var date = new Date(parseInt(timestamp) * 1000); // Multiply by 1000 to convert UNIX timestamp to milliseconds
-    //     var formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }); // Use 24-hour format
-    //     dates.push(formattedTime); // Push the formatted time to dates array
-    //     priceData.push(closeData.Open[timestamp]); // Push the price to priceData array
-    // }
     for (var timestamp in closeData.Open) {
         // Log the raw timestamp for debugging
-        console.log("Raw timestamp:", timestamp);
+        // console.log("Raw timestamp:", timestamp);
     
         // Convert timestamp to milliseconds if necessary
         var date = new Date(parseInt(timestamp)); 
     
         // Adjust to Eastern Time (UTC-5), if required
-        // var timezoneOffset = -5 * 60; // Eastern Time offset in minutes
         var adjustedDate = new Date(date.getTime() + 1 * 60 * 1000);
     
         // Format the adjusted time
         var formattedTime = adjustedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     
         // Log the formatted time for debugging
-        console.log("Formatted time:", formattedTime);
+        // console.log("Formatted time:", formattedTime);
     
         dates.push(formattedTime); // Push formatted time to dates array
         priceData.push(closeData.Open[timestamp]); // Push price data
     }
 
-    console.log("Prepared chart data for container:", containerId, { dates: dates, priceData: priceData });
+    // console.log("Prepared chart data for container:", containerId, { dates: dates, priceData: priceData });
 
     // Ensure the data is valid before rendering the chart
     if (priceData.length > 0 && dates.length > 0) {
         Highcharts.chart('extra_chart_container_' + containerId, {
-            title: { text: relatedAsset.shortName + " (" + relatedAsset.symbol + ") - $" + relatedAsset.Price },
+            title: { text: relatedAsset.shortName + " (" + relatedAsset.symbol + ") - $" + relatedAsset.Price.toFixed(2) },
             yAxis: {
                 title: { text: '' },
                 min: Math.min(...priceData),
