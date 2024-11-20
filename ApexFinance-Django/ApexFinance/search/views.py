@@ -84,10 +84,10 @@ class StockHistoryView(View):
 class ExtraChartsView(View):
     def get(self, request):
         symbol = request.GET.get('symbol', default="AAPL")
-        print(symbol)
+        # print(symbol)
         quote = yf.Ticker(symbol)
         sector = quote.info.get('sector', 'Technology')
-        print(sector)
+        # print(sector)
 
         # Fetch related stocks based on the sector
         related_stocks = self.get_related_stocks(sector, symbol)

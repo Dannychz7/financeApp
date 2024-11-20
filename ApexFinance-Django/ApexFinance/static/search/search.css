@@ -299,7 +299,7 @@ button:hover {
 /* Main content takes up 70% of the width */
 .content-left {
   flex: 7;
-  max-width: 70%;
+  max-width: 80%;
 }
 
 /* Extra charts container */

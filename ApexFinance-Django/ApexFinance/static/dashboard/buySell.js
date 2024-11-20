@@ -60,12 +60,94 @@ Site.prototype.GetQuote = function() {
             context.Price = data.previousClose;
         }
 
+        // Update stock info in the page
+
+        that.UpdateStockInfo(data);
+
 		//console.log(context) // USED FOR DEBUGGING
-		console.log("Load Chart GetQuote context ", context);
+		//console.log("Load Chart GetQuote context ", context);
 		console.log("Load Chart GetQuote data ", data);
         // Call the request to load the chart and pass the data context with it.
         that.LoadChart(context);
     });
+};
+
+// Function to update stock info in the HTML section
+Site.prototype.UpdateStockInfo = function(quote) {
+    
+    console.log(quote)
+    if(quote.quoteType == "ETF") {
+        let currPrice = quote.navPrice || quote.ask || quote.regularMarketPrice || 0;
+        console.log("Here I am now")
+
+        // ETF-specific information
+        var etfInfoHtml = `
+            <p><strong>ETF Name:</strong> ${quote.longName || 'N/A'}</p>
+            <p><strong>Symbol:</strong> ${quote.symbol || 'N/A'}</p>
+            <p><strong>Category:</strong> ${quote.category || 'N/A'}</p>
+            <p><strong>Fund Family:</strong> ${quote.fundFamily || 'N/A'}</p>
+            <p><strong>Price:</strong> $${currPrice ? currPrice.toFixed(2) : 'N/A'}</p>
+            <p><strong>Currency:</strong> ${quote.currency || 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week High:</strong> $${quote.fiftyTwoWeekHigh ? quote.fiftyTwoWeekHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week Low:</strong> $${quote.fiftyTwoWeekLow ? quote.fiftyTwoWeekLow.toFixed(2) : 'N/A'}</p>
+            <p><strong>5 Year Avg Return:</strong> ${quote.fiveYearAverageReturn ? (quote.fiveYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>3 Year Avg Return:</strong> ${quote.threeYearAverageReturn ? (quote.threeYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+        var extraEtfInfoHtml = `
+            <p><strong>Trailing PE:</strong> ${quote.trailingPE ? quote.trailingPE.toFixed(2) : 'N/A'}</p>
+            <p><strong>Trailing Annual Dividend Rate:</strong> $${quote.trailingAnnualDividendRate ? quote.trailingAnnualDividendRate.toFixed(2) : 'N/A'}</p>
+            <p><strong>Trailing Annual Dividend Yield:</strong> ${quote.trailingAnnualDividendYield ? (quote.trailingAnnualDividendYield * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>Total Assets:</strong> $${quote.totalAssets ? quote.totalAssets.toLocaleString() : 'N/A'}</p>
+            <p><strong>Volume:</strong> ${quote.volume ? quote.volume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Exchange:</strong> ${quote.exchange || 'N/A'}</p>
+            <p><strong>Fund Inception Date:</strong> ${quote.fundInceptionDate ? new Date(quote.fundInceptionDate * 1000).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Category:</strong> ${quote.category ? quote.category : 'N/A'}</p>
+            <p><strong>Beta (3-Year):</strong> ${quote.beta3Year ? quote.beta3Year.toFixed(2) : 'N/A'}</p>
+            <p><strong>Average Daily Volume (10-Day):</strong> ${quote.averageDailyVolume10Day ? quote.averageDailyVolume10Day.toLocaleString() : 'N/A'}</p>
+
+        `;
+        // Insert the HTML into the stock info section
+        $('#extra_info').html(extraEtfInfoHtml);
+        $('#stock_info').html(etfInfoHtml);
+        
+    } else {
+        currPrice = quote.currentPrice || quote.ask || quote.regularMarketPrice || 0;
+        var stockInfoHtml = `
+            <p><strong>Company Name:</strong> ${quote.shortName || 'N/A'}</p>
+            <p><strong>Symbol:</strong> ${quote.symbol || 'N/A'}</p>
+            <p><strong>Price:</strong> $${currPrice ? currPrice.toFixed(2) : 'N/A'}</p>
+            <p><strong>Market Cap:</strong> $${quote.marketCap ? quote.marketCap.toLocaleString() : 'N/A'}</p>
+            <p><strong>Sector:</strong> ${quote.sector || 'N/A'}</p>
+            <p><strong>Industry:</strong> ${quote.industry || 'N/A'}</p>
+            <p><strong>Previous Close:</strong> $${quote.previousClose ? quote.previousClose.toFixed(2) : 'N/A'}</p>
+            <p><strong>Open:</strong> $${quote.open ? quote.open.toFixed(2) : 'N/A'}</p>
+            <p><strong>52 Week High:</strong> $${quote.fiftyTwoWeekHigh ? quote.fiftyTwoWeekHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Currency:</strong> ${quote.currency ? quote.currency : 'N/A'}</p>
+            <p><strong>52 Week Change:</strong> ${quote["52WeekChange"] ? (quote["52WeekChange"] * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+    
+        // Extra info HTML
+        var extraInfoHtml = `
+            <p><strong>52 Week Low:</strong> $${quote.fiftyTwoWeekLow ? quote.fiftyTwoWeekLow.toFixed(2) : 'N/A'}</p>
+            <p><strong>Dividend Yield:</strong> ${quote.dividendYield ? (quote.dividendYield * 100).toFixed(2) + "%" : 'N/A'}</p>
+            <p><strong>PE Ratio:</strong> ${quote.forwardPE ? quote.forwardPE.toFixed(2) : 'N/A'}</p>
+            <p><strong>EPS:</strong> $${quote.forwardEps ? quote.forwardEps.toFixed(2) : 'N/A'}</p>
+            <p><strong>Beta:</strong> ${quote.beta ? quote.beta.toFixed(2) : 'N/A'}</p>
+            <p><strong>Avg Volume:</strong> ${quote.averageVolume ? quote.averageVolume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
+            <p><strong>Volume:</strong> ${quote.volume ? quote.volume.toLocaleString() : 'N/A'}</p>
+            <p><strong>Float Shares:</strong> ${quote.floatShares ? quote.floatShares.toLocaleString() : 'N/A'}</p>
+            <p><strong>Dividend Rate:</strong> ${quote.dividendRate ? '$' + quote.dividendRate.toFixed(2): 'N/A'}</p>
+            <p><strong>Earnings Growth:</strong> ${quote.earningsGrowth ? (quote.earningsGrowth * 100).toFixed(2) + "%" : 'N/A'}</p>
+        `;
+        
+        // Insert the HTML into the stock info section
+        $('#extra_info').html(extraInfoHtml);
+        $('#stock_info').html(stockInfoHtml);
+    }
+
 };
 
 Site.prototype.SubmitForm = function() {

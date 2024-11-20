@@ -76,9 +76,42 @@
                 </div>
                 
                 <div id="chart_container"></div>
+
+            <!-- Stock Information Section -->
+            <div id="stock_info_container">
+                <div id="stock_info">
+                    <p><strong>Company Name:</strong> <span id="companyName">Loading...</span></p>
+                    <p><strong>Symbol:</strong> <span id="symbol">Loading...</span></p>
+                    <p><strong>Price:</strong> $<span id="currentPrice">Loading...</span></p>
+                    <p><strong>Market Cap:</strong> $<span id="marketCap">Loading...</span></p>
+                    <p><strong>Sector:</strong> <span id="sector">Loading...</span></p>
+                    <p><strong>Industry:</strong> <span id="industry">Loading...</span></p>
+                    <p><strong>Previous Close:</strong> $<span id="previousClose">Loading...</span></p>
+                    <p><strong>Open:</strong> $<span id="openPrice">Loading...</span></p>
+                    <p><strong>52 Week High:</strong> $<span id="fiftyTwoWeekHigh">Loading...</span></p>
+                    <p><strong>Currency:</strong> <span id="currency">Loading...</span></p>
+                    <p><strong>52 Week Change:</strong> <span id="fiftyTwoWeekChange">Loading...</span></p>
+                    </div>
+
+                    <!-- Right side content (charts or additional info) -->
+                    <div id="extra_info">
+                    <p><strong>52 Week Low:</strong> $<span id="fiftyTwoWeekLow">Loading...</span></p>
+                    <p><strong>Dividend Yield:</strong> <span id="dividendYield">Loading...</span></p>
+                    <p><strong>PE Ratio:</strong> <span id="peRatio">Loading...</span></p>
+                    <p><strong>EPS:</strong> $<span id="eps">Loading...</span></p>
+                    <p><strong>Beta:</strong> <span id="beta">Loading...</span></p>
+                    <p><strong>Avg Volume:</strong> <span id="avgVolume">Loading...</span></p>
+                    <p><strong>Day's Range:</strong> $<span id="dayLow">Loading...</span> - $<span id="dayHigh">Loading...</span></p>
+                    <p><strong>Volume:</strong> <span id="volume">Loading...</span></p>
+                    <p><strong>Float Shares:</strong> <span id="floatShares">Loading...</span></p>
+                    <p><strong>Dividend Rate:</strong> $<span id="dividendRate">Loading...</span></p>
+                    <p><strong>Earnings Growth:</strong> <span id="earningsGrowth">Loading...</span></p>
+                </div>
+            </div>
+
         </main>
         
-        <div class="buy-sell-forms">
+        <div class="buy-sell-forms expanded">
             <div class="buy-sell-container">
                 <form action="{% url 'execute_trade' %}" method="POST" class="mb-3">
                     {% csrf_token %}
@@ -104,7 +137,7 @@
                     
                     <!-- Quantity Input -->
                     <div class="form-group" id="quantity_input">
-                        <label for="stock_quantity">Quantity</label>
+                        <label for="stock_quantity">Quantity or Cash Amount (USD)</label>
                         <input type="number" name="stock_quantity" id="stock_quantity" class="form-control" min="0.01" max="99999999.99" step="0.01" required>
                     </div>
                 
@@ -113,6 +146,8 @@
                 </form>
             </div>
         </div>
+
+
     </div>
 
     <!-- Bootstrap core JavaScript

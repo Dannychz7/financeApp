@@ -170,73 +170,172 @@ header {
 }
 /* ABOVE HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER THIS LINE */
 
-/* Dropdown menu styling */
-.form-control#period {
+/* Dark Input Field Styling */
+#symbol {
+  background-color: #222; /* Dark background */
+  color: #f0f0f0; /* Whitish text */
+  border: 1px solid #555; /* Darker border */
+  border-radius: 3px; /* Rounded corners */
+}
+
+#symbol:focus {
+  border-color: #D43F33; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(212, 63, 51, 0.8); /* Subtle glow */
+}
+
+/* Search Button Styling */
+#symbol + .input-group-append .btn {
   background-color: #D43F33; /* Red background */
   color: #fff; /* White text */
-  border: 1px solid #B03028; /* Darker red border */
-}
-
-.form-control#period option {
-  background-color: #D43F33; /* Red background for options */
-  color: #fff; /* White text for options */
-}
-
-.form-control#period:hover {
-  background-color: #B03028; /* Darker red on hover */
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #f0f0f0; /* Whitish text */
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #555; /* Darker border */
-  border-radius: 3px;
-  background-color: #222; /* Dark background for input fields */
-  color: #f0f0f0; /* Whitish text */
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #D43F33; /* Red button */
-  color: #fff;
+  margin-left: 10px;
   border: none;
   border-radius: 3px;
+  padding: 10px 20px;
   cursor: pointer;
-  margin-right: 10px;
-
 }
 
-button:hover {
+#symbol + .input-group-append .btn:hover {
   background-color: #cc0000; /* Darker red on hover */
 }
 
-/* Main content area */
-main {
-  flex: 4; /* This allows main to take 3 parts of the available space */
-  justify-content: space-between; /* Space out child elements */
-  width: 100%; /* Make sure it takes the full width of the parent */
-  height: auto; /* Ensure it can grow vertically */
-  margin-right: 20px;
+/* Red Dropdown Styling */
+#period {
+  background-color: #D43F33; /* Red background */
+  color: #f0f0f0; /* Whitish text */
+  border: 1px solid #555; /* Darker border */
+  border-radius: 3px; /* Rounded corners */
 }
 
-/* Buy and Sell forms container */
-.buy-sell-forms {
-  flex: 1;
-  display: flex; /* Ensure it behaves as a flex container */
-  flex-direction: column; /* Stack forms vertically */
-  align-items: center; /* Center the forms horizontally */
-  margin-left: 0; /* Pushes the forms container to the right */
-  width: 300px; /* Set a fixed width for the Buy/Sell forms container */
-  margin-top: 10px; /* Reduced space above the buy/sell forms */
-  margin-bottom: 20px; /* Add space below the buy/sell forms to separate them from other content */
+#period:focus {
+  border-color: #D43F33; /* Highlight border when focused */
+  box-shadow: 0 0 5px rgba(212, 63, 51, 0.8); /* Subtle glow */
 }
+
+main {
+  width: 100%;  /* Adjust this value to make it wider or narrower */
+  max-width: 1075px;  /* You can set a max width if you don't want it to expand too much on large screens */
+  margin: 0 auto;  /* Centers the main content horizontally */
+  padding: 20px;  /* Adds some padding inside the main section */
+}
+
+/* Shrink Buy/Sell Form and move it to the right */
+.buy-sell-forms.expanded {
+  flex: 1; /* Make the form smaller (flex value reduced to 1) */
+  max-width: 350px; /* Adjust the width of the form */
+  padding: 20px;
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-right: 0; /* Ensure it stays on the right */
+  margin-left: auto; /* Push it to the right side */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  height: 1192px;
+
+}
+
+/* Adjust spacing for form-group elements */
+.buy-sell-forms.expanded .form-group {
+  margin-bottom: 20px; /* Increase spacing between form groups */
+}
+
+/* Form Header Styling */
+.buy-sell-forms.expanded h4 {
+  font-size: 1.8em;
+  color: #D43F33; /* Red color for the header */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Input Field Styling */
+.buy-sell-forms.expanded .form-control {
+  border: 1px solid #555; /* Subtle border for inputs */
+  background-color: #333; /* Darker background for inputs */
+  color: #f0f0f0; /* Whitish text
+}
+
+.buy-sell-forms.expanded .form-control:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #D43F33; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(212, 63, 51, 0.8); /* Subtle glow */
+}
+
+/* Dropdown Styling */
+.buy-sell-forms.expanded select.form-control {
+  appearance: none; /* Remove default dropdown styling */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 6.042C1.885 5.436 2.345 4.5 3.204 4.5h9.592c.86 0 1.32.936.753 1.542L8.753 11.14a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px 12px;
+  padding-right: 40px; /* Adjust padding for dropdown arrow */
+  opacity: 1; /* Ensure visibility if it was previously hidden */
+
+}
+
+/* Execute Trade Button Styling */
+.buy-sell-forms.expanded .btn {
+  width: 100%; /* Full-width button */
+  padding: 15px; /* Increase padding for a larger button */
+  font-size: 1.2em; /* Larger font size */
+  background-color: #D43F33; /* Red background */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  margin-top: 10px; /* Space above button */
+  transition: background-color 0.3s ease;
+}
+
+.buy-sell-forms.expanded .btn:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+#chart_container {
+  flex: 2; /* Make the chart container take more space */
+  width: 100%; /* Ensure it takes up the full width of the flex container */
+  margin-bottom: 30px; /* Adds space between the graph and the flexbox container */
+}
+
+/* Parent container for stock info and extra info */
+/* Parent container for stock info and extra info */
+#stock_info_container {
+  display: flex; /* Use flexbox to arrange child elements side by side */
+  justify-content: flex-start; /* Align the items to the left */
+  gap: 20px; /* Add space between the two sections */
+  width: 100%;
+  height: auto;
+
+}
+
+/* Stock info section styling */
+#stock_info {
+  flex: 1; /* Each section takes up an equal part of the available space */
+  background-color: #222; /* Optional background color for better readability */
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #444; /* Border to separate it from other content */
+  height: auto;
+
+}
+
+/* Extra info section styling */
+#extra_info {
+  flex: 1; /* Each section takes up an equal part of the available space */
+  background-color: #222; /* Same background color as stock info */
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #444; /* Border for separation */
+  height: auto;
+
+}
+
+/* Styling for stock info header */
+#stock_info h2 {
+  font-size: 1.5em;
+  color: #D43F33; /* Red headers */
+  margin-bottom: 20px; /* Adjust space between title and first row of content */
+}
+
 
 /* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
 /* Footer */
