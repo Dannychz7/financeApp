@@ -297,7 +297,6 @@ main {
 }
 
 /* Parent container for stock info and extra info */
-/* Parent container for stock info and extra info */
 #stock_info_container {
   display: flex; /* Use flexbox to arrange child elements side by side */
   justify-content: flex-start; /* Align the items to the left */

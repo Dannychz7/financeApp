@@ -13,16 +13,6 @@ html, body {
 
 }
 
-/* Container to center and format content */
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    flex: 1; /* Allow container to grow and fill available space */
-    width: 100%; /* Ensures the container takes the full width available */
-
-}
-
 /* BELOW HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER HEADER */
 /* <-- BELOW HERE IS THE CODE FOR THE HEADER AND LOGO --> */
 
@@ -171,117 +161,132 @@ header {
 }
 /* ABOVE HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER THIS LINE */
 
-/* Styling for stock info section */
-.stock-info {
-    flex: 1; /* Allow this section to grow and take up available space */
+/* Container to center and format content */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 20px;
+    flex: 1; /* Allow container to grow and fill available space */
+    width: 100%; /* Ensures the container takes the full width available */
 }
 
-.stock-info h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #D43F33; /* Red headers */
-}
-
-.stock-info p {
-    margin: 5px 0;
-}
-
-/* Chart section styling */
-.chart {
-    flex: 1; /* Allow this section to grow and take up available space */
-    padding: 20px;
-}
-
-#chart_container {
-    width: 100%; /* Ensures the chart fills its container */
-    height: 400px; /* Set a fixed height for the chart */
-}
-
-canvas {
-    width: 100%;
-    height: auto;
-}
-
-.dashboard-content {
+/* Specific Styling for Forecast Form (Horizontal Layout) */
+.forecast-form {
+    max-width: 500px; /* Reduced width of the form */
+    background-color: #222; /* Dark background for form */
+    padding: 15px; /* Reduced padding */
+    border: 1px solid #444;
+    border-radius: 8px; /* Slightly smaller border radius */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slightly smaller shadow */
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap; /* Prevents the elements from wrapping into a new line */
-    gap: 20px; /* Adds space between sections */
+    flex-direction: column; /* Stack items vertically for the whole form */
+    justify-content: space-between; /* Space between form elements */
+    margin-top: 20px; /* Add top margin for spacing */
 }
 
-label {
-    display: block;
+/* Adjustments for Form Fields (labels and inputs next to each other) */
+.forecast-form .form-group {
+    display: flex; /* Horizontal layout for label and input */
+    align-items: center; /* Vertically align the label and input */
+    margin-bottom: 15px; /* Add space between form groups */
+}
+
+/* Label Styling (position labels to the left of inputs) */
+.forecast-form label {
+    font-size: 1em; /* Reduced font size for labels */
     color: #f0f0f0; /* Whitish text */
+    margin-right: 10px; /* Space between label and input */
+    width: 30%; /* Limit the label width */
 }
 
-input[type="text"],
-input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555; /* Darker border */
-    border-radius: 3px;
-    background-color: #222; /* Dark background for input fields */
+/* Input Field Styling */
+.forecast-form input[type="text"], .forecast-form select, .forecast-form input[type="number"] {
+    border: 1px solid #555; /* Subtle border for inputs */
+    background-color: #333; /* Darker background for inputs */
     color: #f0f0f0; /* Whitish text */
-    margin-bottom: 15px;
+    border-radius: 5px; /* Rounded corners for inputs */
+    padding: 8px; /* Reduced padding for better compactness */
+    width: 70%; /* Adjust input width to fit next to the label */
+    font-size: 0.9em; /* Smaller font size */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #D43F33; /* Red button */
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-top: 0;
+/* Focused Input Styling */
+.forecast-form input[type="text"]:focus, .forecast-form input[type="number"]:focus, .forecast-form select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #D43F33; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(212, 63, 51, 0.8); /* Subtle glow */
 }
 
-button:hover {
+/* Button Styling */
+.forecast-form button[type="submit"] {
+    width: 100%; /* Full width button */
+    padding: 12px; /* Reduced padding for the button */
+    font-size: 1em; /* Slightly smaller font size */
+    background-color: #D43F33; /* Red background */
+    color: #fff; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+    margin-top: 10px; /* Space above the button */
+}
+
+/* Button Hover Effect */
+.forecast-form button[type="submit"]:hover {
     background-color: #cc0000; /* Darker red on hover */
 }
 
-.holding-table-container {
-    width: 100%; /* Make sure the container spans the full width of the page */
-    overflow-x: auto; /* Allow horizontal scrolling if the table overflows */
-    padding: 20px; /* Add some padding to prevent content from touching the edges */
-    box-sizing: border-box; /* Ensure padding is included in the width */
+/* Label Styling */
+.forecast-form label {
+    font-size: 1.1em; /* Slightly larger font for labels */
+    color: #f0f0f0; /* Whitish text */
+    margin-bottom: 5px; /* Space between label and input */
 }
 
-.holding-table {
-    width: 100%; /* Ensure the table stays within its container */
-    border-collapse: collapse; /* Merge borders for a cleaner look */
-    margin: 0 auto; /* Center the table horizontally */
-    table-layout: fixed; /* Prevent the table from expanding beyond its container */
-}
 
-.holding-table th, .holding-table td {
-    word-wrap: break-word; /* Allow long text to wrap within cells */
-    border: 1px solid #dddddd; /* Light border for separation */
-    text-align: left; /* Align text to the left */
-    padding: 12px; /* Add padding around text */
-    font-size: 16px; /* Adjust font size for better readability */
-}
+/* Parent container for stock info and extra info */
+#stock_info_container {
+    display: flex; /* Use flexbox to arrange child elements side by side */
+    justify-content: flex-start; /* Align the items to the left */
+    gap: 20px; /* Add space between the two sections */
+    width: 100%;
+    height: auto;
+  
+  }
+  
+  /* Stock info section styling */
+  #stock_info {
+    flex: 1; /* Each section takes up an equal part of the available space */
+    background-color: #222; /* Optional background color for better readability */
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Border to separate it from other content */
+    height: auto;
+  
+  }
+  
+  /* Extra info section styling */
+  #extra_info {
+    flex: 1; /* Each section takes up an equal part of the available space */
+    background-color: #222; /* Same background color as stock info */
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Border for separation */
+    height: auto;
+  
+  }
+  
+  /* Styling for stock info header */
+  #stock_info h2 {
+    font-size: 1.5em;
+    color: #D43F33; /* Red headers */
+    margin-bottom: 20px; /* Adjust space between title and first row of content */
+  }
 
-.holding-table th {
-    background-color: #D43F33; /* Red background for header */
-    font-weight: bold; /* Bold font for headers */
-    color: #ffffff; /* White text */
-}
-
-.holding-cell {
-    line-height: 1.5; /* Increase line height for better readability */
-}
 
 /* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
 /* Footer */
-.matching-style {
-  background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
-  border: none; /* Remove borders */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
-  border-radius: 10px;
-}
-      
 footer {
   text-align: center;
   padding: 20px;

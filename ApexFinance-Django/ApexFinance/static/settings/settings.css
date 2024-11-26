@@ -236,31 +236,27 @@
     background-color: #333;
 }
 
-        /* Footer */
-        .matching-style {
-            background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
-            border: none; /* Remove borders */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Enhance shadow for contrast */
-            border-radius: 10px;
-        }
-                
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
-            color: #f0f0f0; /* Whitish text */
-            width: 100%;
-            border: none; /* Remove any border */
-            margin-top: 0;
-        }
-                
-        footer a {
-            color: #f0f0f0; /* Match red accents */
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 15px;
-        }
-                
-        footer a:hover {
-            color: #D43F33; /* Red hover color */
-        }
+/* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
+/* Footer */
+      
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+    color: #f0f0f0; /* Whitish text */
+    width: 100%;
+    border: none; /* Remove any border */
+    margin-top: auto; /* Push footer to the bottom of the page */
+}
+
+footer a {
+    color: #f0f0f0; /* Match red accents */
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+footer a:hover {
+    color: #D43F33; /* Red hover color */
+}

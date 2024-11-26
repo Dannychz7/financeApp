@@ -101,9 +101,9 @@ Site.prototype.UpdateStockInfo = function(quote) {
             <p><strong>52 Week High:</strong> $${quote.fiftyTwoWeekHigh ? quote.fiftyTwoWeekHigh.toFixed(2) : 'N/A'}</p>
             <p><strong>52 Week Low:</strong> $${quote.fiftyTwoWeekLow ? quote.fiftyTwoWeekLow.toFixed(2) : 'N/A'}</p>
             <p><strong>5 Year Avg Return:</strong> ${quote.fiveYearAverageReturn ? (quote.fiveYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
-            <p><strong>3 Year Avg Return:</strong> ${quote.threeYearAverageReturn ? (quote.threeYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
         `;
         var extraEtfInfoHtml = `
+            <p><strong>3 Year Avg Return:</strong> ${quote.threeYearAverageReturn ? (quote.threeYearAverageReturn * 100).toFixed(2) + "%" : 'N/A'}</p>
             <p><strong>Trailing PE:</strong> ${quote.trailingPE ? quote.trailingPE.toFixed(2) : 'N/A'}</p>
             <p><strong>Trailing Annual Dividend Rate:</strong> $${quote.trailingAnnualDividendRate ? quote.trailingAnnualDividendRate.toFixed(2) : 'N/A'}</p>
             <p><strong>Trailing Annual Dividend Yield:</strong> ${quote.trailingAnnualDividendYield ? (quote.trailingAnnualDividendYield * 100).toFixed(2) + "%" : 'N/A'}</p>
@@ -111,8 +111,6 @@ Site.prototype.UpdateStockInfo = function(quote) {
             <p><strong>Volume:</strong> ${quote.volume ? quote.volume.toLocaleString() : 'N/A'}</p>
             <p><strong>Exchange:</strong> ${quote.exchange || 'N/A'}</p>
             <p><strong>Fund Inception Date:</strong> ${quote.fundInceptionDate ? new Date(quote.fundInceptionDate * 1000).toLocaleDateString() : 'N/A'}</p>
-            <p><strong>Day's Range:</strong> $${quote.dayLow ? quote.dayLow.toFixed(2) : 'N/A'} - $${quote.dayHigh ? quote.dayHigh.toFixed(2) : 'N/A'}</p>
-            <p><strong>Category:</strong> ${quote.category ? quote.category : 'N/A'}</p>
             <p><strong>Beta (3-Year):</strong> ${quote.beta3Year ? quote.beta3Year.toFixed(2) : 'N/A'}</p>
             <p><strong>Average Daily Volume (10-Day):</strong> ${quote.averageDailyVolume10Day ? quote.averageDailyVolume10Day.toLocaleString() : 'N/A'}</p>
 

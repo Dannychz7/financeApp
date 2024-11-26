@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Forecast App</title>
+    <link rel="stylesheet" href="{% static 'dashboard/stockPred.css' %}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <header>
+        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+        <div class="right-items">
+            <form id="searchForm" action="{% url 'search' %}" method="GET" onsubmit="return site.SubmitForm();">
+                <input type="text" id="symbol" name="symbol" placeholder="Enter Stock ETF or Mutual Fund Symbol" oninput="this.value = this.value.toUpperCase();" required>
+                <button type="submit">Search</button>
+            </form>
+            
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Account <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-content">
+                    <li><a href="{% url 'transactionHistory' %}">Transaction History</a></li>
+                    <li><a href="{% url 'settings' %}">Settings</a></li>
+                    <li><a href="{% url 'assetCalc' %}">Asset Calculator</a></li>
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'buySell' %}">Buy and Sell Stocks</a></li>
+                    <li><a href="{% url 'stockPred' %}">Stock Predictor</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Stock Data and Forecast for {{ selected_stock }}</h2>
+
+        <div id="right-side">
+            <form method="GET" action="{% url 'stockPred' %}" class="forecast-form">
+                <div class="form-group">
+                    <label for="stock">Select Stock:</label>
+                    <input id="stock" name="stock" placeholder="Enter Stock or Mutual Fund Symbol" type="text" value="{{ selected_stock|default:'' }}" oninput="this.value = this.value.toUpperCase();" />
+                </div>
+            
+                <div class="form-group">
+                    <label for="years">Years of Prediction:</label>
+                    <select id="years" name="years">
+                        <option value="1" {% if years == 1 %}selected{% endif %}>1</option>
+                        <option value="2" {% if years == 2 %}selected{% endif %}>2</option>
+                        <option value="3" {% if years == 3 %}selected{% endif %}>3</option>
+                        <option value="4" {% if years == 4 %}selected{% endif %}>4</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <button type="submit">Get Forecast</button>
+                </div>
+            </form>
+
+            <!-- Stock Information Section -->
+            <div id="stock_info_container">
+
+                <!-- ETF-Specific Information (only shown if it's an ETF) -->
+                {% if is_etf %}
+                    <div id="stock_info">
+                        <p><strong>ETF Name:</strong> {{ stock_info.longName|default:"N/A" }}</p>
+                        <p><strong>Symbol:</strong> <span id="symbol">{{ stock_info.symbol|default:"Loading..." }}</span></p>
+                        <p><strong>Category:</strong> {{ stock_info.category|default:"N/A" }}</p>
+                        <p><strong>Fund Family:</strong> {{ stock_info.fundFamily|default:"N/A" }}</p>
+                        <p><strong>Price:</strong> ${{ stock_info.previousClose|default:"N/A" }}</p>
+                        <p><strong>Currency:</strong> {{ stock_info.currency|default:"N/A" }}</p>
+                        <p><strong>Day's Range:</strong> ${{ stock_info.dayLow|default:"N/A" }} - ${{ stock_info.dayHigh|default:"N/A" }}</p>
+                        <p><strong>52 Week High:</strong> ${{ stock_info.fiftyTwoWeekHigh|default:"N/A" }}</p>
+                        <p><strong>52 Week Low:</strong> ${{ stock_info.fiftyTwoWeekLow|default:"N/A" }}</p>
+                        <p><strong>5 Year Avg Return:</strong> {{ stock_info.fiveYearAverageReturn|default:"N/A" }}</p>
+                    </div>
+
+                    <!-- Extra ETF Information -->
+                    <div id="extra_info">
+                        <p><strong>3 Year Avg Return:</strong> {{ stock_info.threeYearAverageReturn|default:"N/A" }}</p>
+                        <p><strong>Trailing PE:</strong> {{ stock_info.trailingPE|default:"N/A" |floatformat:2 }}</p>
+                        <p><strong>Trailing Annual Dividend Rate:</strong> ${{ stock_info.trailingAnnualDividendRate|default:"N/A" }}</p>
+                        <p><strong>Trailing Annual Dividend Yield:</strong> {{ stock_info.trailingAnnualDividendYield|default:"N/A" }}</p>
+                        <p><strong>Total Assets:</strong> ${{ stock_info.totalAssets|default:"N/A" }}</p>
+                        <p><strong>Volume:</strong> {{ stock_info.volume|default:"N/A" }}</p>
+                        <p><strong>Exchange:</strong> {{ stock_info.exchange|default:"N/A" }}</p>
+                        <p><strong>Fund Inception Date:</strong> {{ stock_info.fundInceptionDate|default:"N/A" }}</p>
+                        <p><strong>Beta (3-Year):</strong> {{ stock_info.beta3Year|default:"N/A" }}</p>
+                        <p><strong>Average Daily Volume (10-Day):</strong> {{ stock_info.averageDailyVolume10Day|default:"N/A" }}</p>
+                    </div>
+
+                {% else %}
+                    <div id="stock_info">
+                        <p><strong>Company Name:</strong> <span id="companyName">{{ stock_info.shortName|default:"Loading..." }}</span></p>
+                        <p><strong>Symbol:</strong> <span id="symbol">{{ stock_info.symbol|default:"Loading..." }}</span></p>
+                        <p><strong>Price:</strong> $<span id="currentPrice">{{ stock_info.currentPrice|default:"Loading..." }}</span></p>
+                        <p><strong>Market Cap:</strong> $<span id="marketCap">{{ stock_info.marketCap|default:"Loading..." }}</span></p>
+                        <p><strong>Sector:</strong> <span id="sector">{{ stock_info.sector|default:"Loading..." }}</span></p>
+                        <p><strong>Industry:</strong> <span id="industry">{{ stock_info.industry|default:"Loading..." }}</span></p>
+                        <p><strong>Previous Close:</strong> $<span id="previousClose">{{ stock_info.previousClose|default:"Loading..." }}</span></p>
+                        <p><strong>Open:</strong> $<span id="openPrice">{{ stock_info.open|default:"Loading..." }}</span></p>
+                        <p><strong>52 Week High:</strong> $<span id="fiftyTwoWeekHigh">{{ stock_info.fiftyTwoWeekHigh|default:"Loading..." }}</span></p>
+                        <p><strong>Currency:</strong> <span id="currency">{{ stock_info.currency|default:"Loading..." }}</span></p>
+                        <p><strong>52 Week Change:</strong> <span id="fiftyTwoWeekChange">{{ stock_info.52WeekChange|default:"Loading..." }}</span></p>
+                    </div>
+
+                    <!-- Right side content (charts or additional info) -->
+                    <div id="extra_info">
+                        <p><strong>52 Week Low:</strong> $<span id="fiftyTwoWeekLow">{{ stock_info.fiftyTwoWeekLow|default:"Loading..." }}</span></p>
+                        <p><strong>Dividend Yield:</strong> <span id="dividendYield">{{ stock_info.dividendYield|default:"Loading..." }}</span></p>
+                        <p><strong>PE Ratio:</strong> <span id="peRatio">{{ stock_info.forwardPE|default:"Loading..."|floatformat:2 }}</span></p>
+                        <p><strong>EPS:</strong> $<span id="eps">{{ stock_info.forwardEps|default:"Loading..." }}</span></p>
+                        <p><strong>Beta:</strong> <span id="beta">{{ stock_info.beta|default:"Loading..." }}</span></p>
+                        <p><strong>Avg Volume:</strong> <span id="avgVolume">{{ stock_info.averageVolume|default:"Loading..." }}</span></p>
+                        <p><strong>Day's Range:</strong> $<span id="dayLow">{{ stock_info.dayLow|default:"Loading..." }}</span> - $<span id="dayHigh">{{ stock_info.dayHigh|default:"Loading..." }}</span></p>
+                        <p><strong>Volume:</strong> <span id="volume">{{ stock_info.volume|default:"Loading..." }}</span></p>
+                        <p><strong>Float Shares:</strong> <span id="floatShares">{{ stock_info.floatShares|default:"Loading..." }}</span></p>
+                        <p><strong>Dividend Rate:</strong> $<span id="dividendRate">{{ stock_info.dividendRate|default:"Loading..." }}</span></p>
+                        <p><strong>Earnings Growth:</strong> <span id="earningsGrowth">{{ stock_info.earningsGrowth|default:"Loading..." }}</span></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="stock_chart"></div>
+    
+        <h3>Forecasted Data</h3>
+        
+        <table border="1">
+            <tr>
+                <th>Date</th>
+                <th>Predicted Price</th>
+            </tr>
+            {% for row in forecast %}
+                <tr>
+                    <td>{{ row.ds }}</td>
+                    <td>{{ row.yhat }}</td>
+                </tr>
+            {% endfor %}
+        </table>    
+
+    </div>
+
+    <script>
+        // Highcharts setup for stock data and forecast
+        Highcharts.chart('stock_chart', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Stock Data and Forecast'
+            },
+            xAxis: {
+                categories: {{ chart_data.date|safe }},
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Stock Price (USD)'
+                }
+            },
+            series: [{
+                name: 'Stock Close Price',
+                data: {{ chart_data.close|safe }}
+            }, {
+                name: 'Stock Forecast Price',
+                data: {{ chart_data.forecast_yhat|safe }},
+                dashStyle: 'ShortDash',
+                color: 'red'
+            }]
+        });
+
+        // SweetAlert for error or success messages
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: '{% if message.tags == "error" %}error{% elif message.tags == "success" %}success{% else %}info{% endif %}',
+                    title: '{% if message.tags == "error" %}Error{% elif message.tags == "success" %}Success{% else %}Notice{% endif %}',
+                    text: '{{ message }}',
+                });
+            {% endfor %}
+        {% endif %}
+    </script>
+
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'home' %}">About Us</a> | <a href="{% url 'home' %}">Help</a> | <a href="{% url 'home' %}">Contact Us</a></p>
+    </footer>
+
+</body>
+</html>
