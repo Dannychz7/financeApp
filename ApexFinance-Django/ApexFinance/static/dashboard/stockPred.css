@@ -170,9 +170,16 @@ header {
     width: 100%; /* Ensures the container takes the full width available */
 }
 
+#stock_chart {
+    width: 100%; /* Make the chart take up the full width of its container */
+    height: 700px; /* Set a specific height for the chart (you can adjust this value) */
+    max-width: 1400px; /* Optional: set a max-width to prevent the chart from becoming too large on bigger screens */
+    margin: 0 auto; /* Center the chart horizontally */
+}
+
 /* Specific Styling for Forecast Form (Horizontal Layout) */
 .forecast-form {
-    max-width: 500px; /* Reduced width of the form */
+    max-width: 1400px; /* Reduced width of the form */
     background-color: #222; /* Dark background for form */
     padding: 15px; /* Reduced padding */
     border: 1px solid #444;
@@ -182,6 +189,7 @@ header {
     flex-direction: column; /* Stack items vertically for the whole form */
     justify-content: space-between; /* Space between form elements */
     margin-top: 20px; /* Add top margin for spacing */
+    margin-bottom: 15px; /* Add space between form groups */
 }
 
 /* Adjustments for Form Fields (labels and inputs next to each other) */
@@ -284,6 +292,62 @@ header {
     margin-bottom: 20px; /* Adjust space between title and first row of content */
   }
 
+/* Styling for the table */
+.styled-table {
+    width: 25%; /* Full width of the container */
+    border-collapse: collapse; /* Ensures borders between cells do not double */
+    margin-top: 5px; /* Space between the header and the table */
+    background-color: #222; /* Background color of the table */
+    color: white; /* Text color */
+}
+
+/* Styling for table headers */
+.styled-table th {
+    background-color: #D43F33; /* Red background for the headers */
+    color: white; /* White text for headers */
+    padding: 15px; /* Add padding around the header text */
+    text-align: left; /* Align text to the left */
+}
+
+/* Styling for table rows */
+.styled-table td {
+    padding: 12px; /* Padding inside table cells */
+    text-align: left; /* Left-align the text */
+    border-bottom: 1px solid #444; /* Border between rows */
+    word-wrap: break-word; /* Ensure long words break and don't overflow */
+}
+
+/* Alternate row coloring */
+.styled-table tr:nth-child(even) {
+    background-color: #2a2a2a; /* Alternate row color */
+}
+
+/* Row hover effect */
+.styled-table tr:hover {
+    background-color: #444; /* Highlight row when hovered */
+}
+
+/* Styling for number formatting */
+.styled-table td:nth-child(2) {
+    text-align: right; /* Align the price column to the right */
+    color: #D43F33; /* Red color for predicted prices */
+}
+
+/* Styling for the disclaimer */
+.disclaimer {
+    background-color: #222; /* Dark background to match your theme */
+    color: #fff; /* White text for contrast */
+    padding: 20px; /* Padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #444; /* Border to separate from other content */
+    font-size: 14px; /* Slightly smaller font size */
+    margin-top: 20px; /* Space above the disclaimer */
+    word-wrap: break-word; /* Allow long text to wrap */
+}
+
+.disclaimer strong {
+    color: #D43F33; /* Red color for emphasis */
+}
 
 /* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
 /* Footer */

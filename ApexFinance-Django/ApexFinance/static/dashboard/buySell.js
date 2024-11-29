@@ -248,8 +248,15 @@ Site.prototype.RenderChart = function(data, quote) {
             area: {}
         },
         series: [{
-            type: 'area',
-            color: '#FF0000',
+            color: 'red', // Line color
+            type: 'area', // Highlight the area below the line
+            fillColor: {
+                linearGradient: [0, 0, 0, 300], // Vertical gradient
+                stops: [
+                    [0, 'rgba(255, 0, 0, 0.5)'], // Semi-transparent red at the top
+                    [1, 'rgba(255, 0, 0, 0)'] // Transparent at the bottom
+                ]
+            },
             name: 'Price',
             data: priceData
         }],

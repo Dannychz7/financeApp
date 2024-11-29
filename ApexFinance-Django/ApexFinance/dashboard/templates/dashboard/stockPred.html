@@ -40,7 +40,17 @@
     </header>
 
     <div class="container">
-        <h2>Stock Data and Forecast for {{ selected_stock }}</h2>
+        <h2>
+            {{ stock_info.shortName|default:'Company Name' }} 
+            ({{ stock_info.symbol|default:'N/A' }}) - 
+            {% if stock_info.currentPrice != 'N/A' %}
+                ${{ stock_info.currentPrice|default:'N/A' }} Forecast
+            {% else %}
+                ${{ stock_info.previousClose|default:'N/A' }} Forecast
+            {% endif %}
+        </h2>
+        
+        <div id="stock_chart"></div>
 
         <div id="right-side">
             <form method="GET" action="{% url 'stockPred' %}" class="forecast-form">
@@ -126,68 +136,106 @@
                         <p><strong>Earnings Growth:</strong> <span id="earningsGrowth">{{ stock_info.earningsGrowth|default:"Loading..." }}</span></p>
                     </div>
                 {% endif %}
+            
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Predicted Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in forecast %}
+                        <tr>
+                            <td>{{ row.ds }}</td>
+                            <td>${{ row.yhat|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="disclaimer">
+                <p><strong>Disclaimer:</strong> The stock price forecasts provided are based on historical data and predictive models, and should not be considered as financial advice. These predictions are not guaranteed and do not account for real-time market events or unforeseen economic factors. Past performance is not indicative of future results. Investing in stocks carries risks, and you should consult with a qualified financial advisor before making any investment decisions.</p>
             </div>
         </div>
-
-        <div id="stock_chart"></div>
-    
-        <h3>Forecasted Data</h3>
-        
-        <table border="1">
-            <tr>
-                <th>Date</th>
-                <th>Predicted Price</th>
-            </tr>
-            {% for row in forecast %}
-                <tr>
-                    <td>{{ row.ds }}</td>
-                    <td>{{ row.yhat }}</td>
-                </tr>
-            {% endfor %}
-        </table>    
-
     </div>
 
     <script>
+        // Fetch stock details dynamically from the template context
+        const stockName = "{{ stock_info.shortName|default:'Stock Name' }}";
+        const symbol = "{{ stock_info.symbol|default:'N/A' }}";
+        const price = "{{ stock_info.currentPrice }}" !== 'N/A' ? "{{ stock_info.currentPrice }}" : "{{ stock_info.previousClose|default:'N/A' }}";
+         
         // Highcharts setup for stock data and forecast
         Highcharts.chart('stock_chart', {
             chart: {
-                type: 'line'
+                type: 'line' // Keep the chart type as line
             },
             title: {
-                text: 'Stock Data and Forecast'
+                text: `${stockName} (${symbol}) - $${price}` // Dynamic title
             },
             xAxis: {
-                categories: {{ chart_data.date|safe }},
+                categories: {{ chart_data.forecast_date|safe }}, // Dates for X-axis
                 title: {
                     text: 'Date'
                 }
             },
             yAxis: {
                 title: {
-                    text: 'Stock Price (USD)'
+                    text: 'Stock Price (USD)' // Y-axis title
                 }
             },
             series: [{
                 name: 'Stock Close Price',
-                data: {{ chart_data.close|safe }}
+                data: {{ chart_data.close|safe }}, // Stock close price data
+                color: 'red', // Line color
+                type: 'area', // Highlight the area below the line
+                fillColor: {
+                    linearGradient: [0, 0, 0, 300], // Vertical gradient
+                    stops: [
+                        [0, 'rgba(255, 0, 0, 0.5)'], // Semi-transparent red at the top
+                        [1, 'rgba(255, 0, 0, 0)'] // Transparent at the bottom
+                    ]
+                }
             }, {
                 name: 'Stock Forecast Price',
-                data: {{ chart_data.forecast_yhat|safe }},
-                dashStyle: 'ShortDash',
-                color: 'red'
-            }]
+                data: {{ chart_data.forecast_yhat|safe }}, // Forecasted price data
+                dashStyle: 'ShortDash', // Dashed line
+                color: 'blue' // Line color for forecast
+            }],
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    }
+                }
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 640 // Adjust layout for smaller screens
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
         });
 
         // SweetAlert for error or success messages
         {% if messages %}
-            {% for message in messages %}
-                Swal.fire({
-                    icon: '{% if message.tags == "error" %}error{% elif message.tags == "success" %}success{% else %}info{% endif %}',
-                    title: '{% if message.tags == "error" %}Error{% elif message.tags == "success" %}Success{% else %}Notice{% endif %}',
-                    text: '{{ message }}',
-                });
-            {% endfor %}
+          {% for message in messages %}
+            Swal.fire({
+              icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+              title: "{{ message }}",
+              timer: 5000,  // 3-second auto-close timer
+              showConfirmButton: false
+            });
+          {% endfor %}
         {% endif %}
     </script>
 
