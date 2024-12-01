@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required # User authorization
 from django.utils import timezone
 from decimal import Decimal
 from django.contrib import messages
-from prophet import Prophet
 from selenium import webdriver
+from prophet import Prophet
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager

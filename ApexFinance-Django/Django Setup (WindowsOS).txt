@@ -20,6 +20,9 @@ Running Django Project:
 	- python3 manage.py runserver
 
 
+Ubuntu venv:
+ source venvlinux/bin/activate
+
 To migrate database changes: 
     - Navigate to Directory
     - Run -> python3 manage.py migrate
