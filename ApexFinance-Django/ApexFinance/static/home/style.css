@@ -25,32 +25,23 @@ html, body {
 /* Header styling */
 header {
     background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for header */
-    padding: 20px 30px;
     border-bottom: 1px solid #444; /* Slightly lighter border */
+    padding: 0 15px;
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+.header-top {
     display: flex;
-    align-items: center; /* Center items vertically */
-    justify-content: space-between; /* Space out items (logo, title, buttons) */
-    position: relative;
+    align-items: center; /* Center vertically */
+    justify-content: space-between; /* Space between title and logo */
 }
 
-/* Logo styling */
-.logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-}
-
-/* Header title styling */
 .title {
-    position: absolute;
-    left: 50%; /* Center horizontally */
-    top: 50%; /* Center vertically */
-    transform: translate(-50%, -50%); /* Center the element itself */
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 5em;
+    font-size: 4.5em;
     color: #D43F33;
     margin: 0;
-    text-align: center;
 }
 
 .title a {
@@ -58,60 +49,298 @@ header {
     text-decoration: none;
 }
 
-/* Call to action buttons */
-.right-items {
-    margin-left: auto;
-    display: flex;
-    gap: 10px; /* Space between buttons */
+.logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin-top: 10px;
 }
 
-.cta-buttons a {
-    padding: 10px 20px;
-    background-color: #D43F33; /* Red buttons */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Navigation bar styling */
+nav {
+    margin-top: 10px; /* Space between header top and navigation */
+    border-top: 1px solid #444; /* Line above navbar */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in the width */
+    display: flex; /* Make nav a flex container */
+    justify-content: center; /* Center the content */
+    align-items: center; /* Vertically center items */
+}
+
+/* Navigation list styling */
+nav ul {
+    list-style: none; /* Remove default bullet points */
+    display: flex; /* Flex layout for horizontal items */
+    justify-content: space-between; /* Spread items across the full width */
+    width: 100%; /* Full width for the list */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Navigation items */
+nav ul li {
+    flex-grow: 1; /* Ensure equal spacing between items */
+    text-align: center; /* Center text inside each item */
+}
+
+/* Navigation links */
+nav ul li a {
+    color: #f0f0f0; /* Whitish text */
     text-decoration: none; /* Remove underline */
-    font-size: 1em;
+    font-size: 1.1em; /* Adjust font size */
+    padding: 10px; /* Add padding for clickable area */
+    display: block; /* Make the entire area clickable */
+    background-color: transparent; /* No background by default */
+    border-radius: 5px; /* Slight rounding for hover effect */
 }
 
-.cta-buttons a:hover {
-    background-color: #B03028; /* Darker red on hover */
+nav ul li a:hover {
+    background-color: #D43F33; /* Highlight color on hover */
+    color: white; /* Text color on hover */
 }
 
-/* Features and Intro Section */
-.features ul, .intro ul {
-    list-style-type: none; /* Remove bullet points */
-    margin: 10px 0;
-    padding-left: 0; /* Remove padding */
+/* Adjust spacing for mobile responsiveness */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* Stack items vertically */
+        gap: 10px; /* Add spacing between stacked items */
+    }
+    nav ul li {
+        flex-grow: unset; /* Disable equal spacing for vertical layout */
+    }
+}
+
+/* Promo Box Container */
+.promo-box {
+    width: 100%; /* Box width */
+    height: 500px;
+    margin: 20px auto; /* Center horizontally */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space between text and image */
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Inner spacing */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    overflow: hidden; /* Clip overflowing content */
+    box-sizing: border-box;
+}
+
+/* Content Area */
+.promo-content {
+    max-width: 50%; /* Limit text width */
+    color: #f0f0f0; /* Light text color */
+    padding: 10px;
     text-align: left; /* Align text to the left */
 }
 
-h2, h3 {
-    color: #D43F33; /* Red headers */
+.promo-content h1 {
+    font-size: 2.5em; /* Large title font */
+    color: #D43F33; /* Bold red color */
+    margin-bottom: 10px;
+    text-align: left; /* Align title to the left */
 }
 
-/* Chart section styling */
-.chart {
-    display: flex;
+.promo-content h2 {
+    font-size: 1.2em; /* Smaller subtitle */
+    color: #ccc; /* Light gray */
+    margin-bottom: 160px;
+    text-align: left; /* Align subtitle to the left */
+}
+
+/* Buttons Container */
+.promo-buttons {
+    display: flex; /* Flex container for buttons */
+    gap: 30px; /* Space between the button containers */
+}
+
+/* Each button with text above it */
+.button-container {
+    text-align: left; /* Center text above the button */
+}
+
+.promo-buttons a {
+    padding: 10px 20px;
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.1em;
+    font-weight: none;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.register-button {
+    background-color: #D43F33; /* Red for register */
+    color: white;
+}
+
+.register-button:hover {
+    background-color: #B03028; /* Darker red on hover */
+}
+
+.login-button {
+    background-color: #444; /* Gray for login */
+    color: white;
+}
+
+.login-button:hover {
+    background-color: #333; /* Darker gray on hover */
+}
+
+/* Text Above Buttons */
+.button-container p {
+    font-size: 1em;
+    color: #f0f0f0; /* Light text for the description */
+    margin-bottom: 15px; /* Space between text and button */
+    text-align: left;
+}
+
+/* Image Styling */
+.promo-image {
+    width: 50%; /* Image takes 35% of the box width */
+    height: 450px;
+    border-radius: 15px; /* Match the container's rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+    object-fit: cover; /* Maintain image proportions */
+}
+
+h1 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* Promo Box Container */
+.promo-box2 {
+    width: 100%; /* Box width */
+    height: 280px;
+    margin: 20px auto; /* Center horizontally */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space between text and image */
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Inner spacing */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    overflow: hidden; /* Clip overflowing content */
+    box-sizing: border-box;
+}
+
+/* Content Area */
+.promo-content2 {
+    max-width: 45%; /* Limit text width */
+    color: #f0f0f0; /* Light text color */
+    padding: 10px;
+    text-align: left; /* Align text to the left */
+}
+.promo-content2 p {
+    font-size: 1em; /* Large title font */
+    color: #ccc; /* Light gray */
+    text-align: left; /* Align title to the left */
+    font-style: italic;
+}
+
+.promo-content2 h1 {
+    font-size: 2em; /* Large title font */
+    color: #D43F33; /* Bold red color */
+    margin-bottom: 10px;
+    text-align: left; /* Align title to the left */
+    margin-top: 0;
+}
+
+.promo-content2 h2 {
+    font-size: 1.1em; /* Smaller subtitle */
+    color: #ccc; /* Light gray */
+    margin-bottom: 50px;
+    text-align: left; /* Align subtitle to the left */
+}
+
+/* Image Styling */
+.promo-image2 {
+    width: 50%; /* Image takes 35% of the box width */
+    height: 245px;
+    border-radius: 15px; /* Match the container's rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+    object-fit: cover; /* Maintain image proportions */
+}
+
+/* Promo Box Container */
+.promo-box3 {
+    width: 100%;
+    height: 280px;
+    margin: 30px auto;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    background-color: rgba(20, 20, 20, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
-.chart .text {
-    flex: 1; /* Allow text to take available space */
-    text-align: left; /* Ensure text stays on the left */
+/* Content Area */
+.promo-content3 {
+    max-width: 50%;
+    color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
 }
 
-.chart img {
-    width: 200px; /* Set image width */
-    height: auto;
+.promo-content3 p {
+    font-size: 1em;
+    color: #ccc;
+    font-style: italic;
+}
+
+.promo-content3 h1 a {
+    font-size: 1em;
+    color: #f0f0f0; /* Text color */
+    margin-bottom: 10px;
+    margin-top: 0;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+}
+
+.promo-content3 h1 a:hover {
+    color: #D43F33; /* Red color on hover */
+}
+
+.promo-content3 h2 {
+    font-size: 1.1em;
+    color: #ccc;
+    margin-bottom: 50px;
+}
+
+/* New Section for Reasons */
+.promo-box-reasons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 20px;
+    height: 300px;
+}
+
+.promo-reason-box {
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+    color: #fff;
+    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-    margin-left: 20px; /* Space between text and image */
+    width: 30%; /* Ensure three boxes fit next to each other */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    text-align: center;
 }
 
+.promo-reason-box h3 {
+    font-size: 1.9em;
+    color: #D43F33;
+    margin-bottom: 10px;
+}
+
+.promo-reason-box p {
+    font-size: 1.2em;
+    color: #ccc;
+}
 /* Footer */
 footer {
     text-align: center;

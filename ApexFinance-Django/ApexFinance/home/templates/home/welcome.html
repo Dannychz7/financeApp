@@ -11,58 +11,99 @@
 
 <body>
     <header>
-        <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
-        <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
-            <div class="right-items">
-                <div class="cta-buttons">
-                    <a class="login-button" href="{% url 'login' %}">Sign In</a>
-                    <a class="signup-button" href="{% url 'register' %}">Sign Up</a>
-                </div>
-            </div>
+        <div class="header-top">
+            <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#accounts">Accounts & Trade</a></li>
+                <li><a href="#Planning">Planning & Advice</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#why">Why Apex Finance</a></li>
+                <li><a href="#skills">FAQs</a></li>
+                <li><a href="{% url 'login' %}">Sign In</a></li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="container">
         <main>
-            <section class="intro">
-                <h2>Welcome to Apex Finance</h2>
-
-                <section class="chart">
-                    <img src="{% static 'images/Apex_Finance_transparent.png' %}" alt="Stock Market Chart">
-                </section>
-
-                <p>Your trusted partner in navigating the dynamic world of finance and stocks. Our mission is to empower individuals and businesses like you to make informed financial decisions through innovative technology and expert guidance.
-                    As well, Today is {{today}}
-                </p>
-                <h3>Why Choose Apex Finance?</h3>
-                <ul>
-                    <li><strong>User-Friendly Interface:</strong> Our intuitive platform is designed to cater to users of all levels, making it easy for you to access and understand financial information.</li>
-                    <li><strong>Real-time Data:</strong> Stay updated with the latest market trends and news through our real-time data feeds, ensuring you have the information you need to make informed decisions.</li>
-                    <li><strong>Expert Analysis:</strong> Benefit from our team of seasoned financial analysts who provide insightful commentary and analysis to help you navigate the complexities of the financial markets.</li>
-                    <li><strong>Personalized Recommendations:</strong> Our advanced algorithms tailor investment recommendations to your specific financial goals and risk tolerance, ensuring a personalized experience.</li>
-                    <li><strong>Secure and Reliable:</strong> Your financial data is our top priority. We employ state-of-the-art security measures to protect your information and ensure your peace of mind.</li>
-                </ul>
-                <h3>Join the Apex Finance Community Today!</h3>
-                <p>Whether you're a seasoned investor or just starting your financial journey, Apex Finance is here to support you every step of the way. Sign up now and unlock a world of financial opportunities.</p>
-
-                <div class="cta-buttons">
-                    <a class="login-button" href="{% url 'login' %}">Login</a>
-                    <a class="signup-button" href="{% url 'register' %}">Signup</a>
+            <div class="promo-box">
+                <div class="promo-content">
+                    <h1>Dominate the Market, Conquer Your Future</h1>
+                    <h2>Rise above the rest with unmatched tools and bold financial strategies.</h2>
+                    <div class="promo-buttons">
+                        <div class="button-container">
+                            <p>Empower Your Wealth.</p>
+                            <a href="{% url 'register' %}" class="register-button">Open an Account</a>
+                        </div>
+                        
+                        <div class="button-container">
+                            <p>Continue Your Journey.</p>
+                            <a href="{% url 'login' %}" class="login-button">Sign In</a>
+                        </div>
+                    </div>
                 </div>
-            </section>
+                <img src="{% static 'images/mountain.jpg' %}" alt="Conquer the Markets" class="promo-image">
+            </div>
 
-            <section class="features">
-                <h3>Additional Features:</h3>
-                <ul>
-                    <li><strong>Educational Resources:</strong> Access a wealth of educational materials, including articles, tutorials, and webinars, to enhance your financial knowledge.</li>
-                    <li><strong>Portfolio Tracking:</strong> Monitor your investments and track your performance with our comprehensive portfolio tracking tools.</li>
-                    <li><strong>Alerts and Notifications:</strong> Stay informed with personalized alerts and notifications about market movements and important financial events.</li>
-                </ul>
-            </section>
+            <h1> You've got goals. We've got solutions. </h1>
 
-            <section class="chart">
-                <h3>Stock Market Trends</h3>
-                <img src="{% static 'images/RedStock.webp' %}" alt="Stock Market Chart">
-            </section>
+            <div class="promo-box2">
+                <div class="promo-content2">
+                    <p id="accounts"> Accounts & Trade </p>
+                    <h1> Seize Control of Your Wealth </h1>
+                    <h2> No matter your strategy, we provide the tools to crush your financial goals and leave your competition behind. </h2>
+                </div>
+                <img src="{% static 'images/controlMoney.webp' %}" alt="Red and White stock image" class="promo-image2">
+            </div>
+
+
+            <div class="promo-box2">
+                <img src="{% static 'images/Retirment.webp' %}" alt="A couple Retiring" class="promo-image2">
+                <div class="promo-content2">
+                    <p id="Planning"> Planning & Advice </p>
+                    <h1>Master Your Financial Destiny</h1>
+                    <h2>Utilize our Asset Allocation Calculator to make informed decisions to shape your wealth for the future.</h2>
+                </div>
+            </div>
+
+            <div class="promo-box2">
+                <div class="promo-content2">
+                    <p id="products"> Products </p>
+                    <h1>Stay Ahead of Market Trends</h1>
+                    <h2>Utilize our Stock Predictor to anticipate market movements and make informed decisions for the future.</h2>
+                </div>
+                <img src="{% static 'images/futureStock.jpg' %}" alt="Stock image of stocks chart" class="promo-image2">
+            </div>
+
+            <h1 id="why"> Why Apex Finance? </h1>
+            
+            <!-- New Section with Three Small Boxes -->
+            <div class="promo-box-reasons">
+                <div class="promo-reason-box">
+                    <h3>Investment Trend Analyzer</h3>
+                    <p>Utilize advanced algorithms and real-time data to predict market movements, helping you make informed decisions for your portfolio.</p>
+                </div>
+                <div class="promo-reason-box">
+                    <h3>Asset Allocation Calculator</h3>
+                    <p>Optimize your investment strategy with our comprehensive asset allocation calculator, designed to balance risk and maximize returns.</p>
+                </div>
+                <div class="promo-reason-box">
+                    <h3>Effortless Stock Management</h3>
+                    <p>Navigate and manage your stock portfolio with ease, using a streamlined interface that simplifies tracking and decision-making.</p>
+                </div>
+            </div>
+
+            <div class="promo-box3">
+                <div class="promo-content3">
+                    <h1><a href="{% url 'register' %}"> Join Apex Finance today and take control of your financial future. </a></h1>
+                </div>
+                <img src="{% static 'images/ApexLogo.png' %}" alt="Stock image of stocks chart" class="promo-image2">
+            </div>
+
 
         </main>
     </div>

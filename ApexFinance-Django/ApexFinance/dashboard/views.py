@@ -383,15 +383,14 @@ def execute_trade(request):
         'user_stocks': UserStock.objects.filter(profile=profile)
     })
     
-
-# Constants for date range
-START = "2015-01-01"
-TODAY = date.today().strftime("%Y-%m-%d")
-
 # Fetch stock data and perform forecasting using Prophet
 def fetch_and_forecast(stock, years):
+    # Constants for date range
+    START = "2010-01-01"
+    TODAY = date.today().strftime("%Y-%m-%d")
+    
     # Fetch stock data using yfinance
-    data = yf.download(stock, start="2010-01-01", end="2024-11-24")
+    data = yf.download(stock, START, TODAY)
     if data.empty:
         raise ValueError("Stock not found or data unavailable.")
 
