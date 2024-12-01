@@ -1,0 +1,176 @@
+/* General body styling */
+html, body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
+    color: #f0f0f0; /* Whitish text */
+    height: 100%;
+    display: flex;          /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh;      /* Make body at least full viewport height */
+    position: relative;     /* To position the animated graph */
+    overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
+}
+
+/* Container to center and format content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1; /* Allow container to grow and fill available space */
+    text-align: center;
+}
+
+/* Header styling */
+header {
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for header */
+    border-bottom: 1px solid #444; /* Slightly lighter border */
+    padding: 0 15px;
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+.header-top {
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: space-between; /* Space between title and logo */
+}
+
+.title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5em;
+    color: #D43F33;
+    margin: 0;
+}
+
+.title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+
+/* Navigation bar styling */
+nav {
+    margin-top: 10px; /* Space between header top and navigation */
+    border-top: 1px solid #444; /* Line above navbar */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in the width */
+    display: flex; /* Make nav a flex container */
+    justify-content: center; /* Center the content */
+    align-items: center; /* Vertically center items */
+}
+
+/* Navigation list styling */
+nav ul {
+    list-style: none; /* Remove default bullet points */
+    display: flex; /* Flex layout for horizontal items */
+    justify-content: space-between; /* Spread items across the full width */
+    width: 100%; /* Full width for the list */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Navigation items */
+nav ul li {
+    flex-grow: 1; /* Ensure equal spacing between items */
+    text-align: center; /* Center text inside each item */
+}
+
+/* Navigation links */
+nav ul li a {
+    color: #f0f0f0; /* Whitish text */
+    text-decoration: none; /* Remove underline */
+    font-size: 1.1em; /* Adjust font size */
+    padding: 10px; /* Add padding for clickable area */
+    display: block; /* Make the entire area clickable */
+    background-color: transparent; /* No background by default */
+    border-radius: 5px; /* Slight rounding for hover effect */
+}
+
+nav ul li a:hover {
+    background-color: #D43F33; /* Highlight color on hover */
+    color: white; /* Text color on hover */
+}
+
+/* Adjust spacing for mobile responsiveness */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* Stack items vertically */
+        gap: 10px; /* Add spacing between stacked items */
+    }
+    nav ul li {
+        flex-grow: unset; /* Disable equal spacing for vertical layout */
+    }
+}
+
+/* FAQ Page Styles */
+.faq-container {
+    width: 80%; /* Limit width */
+    margin: 0 auto; /* Center content */
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for header */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+.faq-title {
+    font-size: 2.5em;
+    color: #f0f0f0;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.faq-section {
+    margin-bottom: 20px; /* Space between each FAQ */
+    padding: 15px;
+    background: linear-gradient(135deg, #111, #222); /* Darker gradient background */
+    border-radius: 10px; /* Rounded corners for each FAQ */
+}
+
+.faq-question {
+    font-size: 1.5em;
+    color: #D43F33; /* Red color for questions */
+    margin-bottom: 10px;
+}
+
+.faq-answer {
+    font-size: 1.1em;
+    color: #ccc; /* Light gray for answers */
+    line-height: 1.6; /* Increase line spacing */
+}
+
+/* Hover effect for questions */
+.faq-question:hover {
+    color: #f0f0f0; /* Light up the text on hover */
+    cursor: pointer;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+    color: #f0f0f0; /* Whitish text */
+    width: 100%;
+    border: none; /* Remove any border */
+    margin-top: 60px; /* Add some spacing between the main content and footer */
+}
+
+footer a {
+    color: #f0f0f0; /* Match red accents */
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+footer a:hover {
+    color: #D43F33; /* Red hover color */
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Apex Finance</title>
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}"> {% endcomment %}
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* General body styling */
+        html, body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */
+            color: #f0f0f0; /* Whitish text */
+            height: 100%;
+            display: flex;          /* Make body a flex container */
+            flex-direction: column; /* Stack children vertically */
+            min-height: 100vh;      /* Make body at least full viewport height */
+            position: relative;     /* To position the animated graph */
+            overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
+        }
+        
+        /* Container to center and format content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1; /* Allow container to grow and fill available space */
+            text-align: center;
+        }
+        
+        /* Header styling */
+        header {
+            background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for header */
+            border-bottom: 1px solid #444; /* Slightly lighter border */
+            padding: 0 15px;
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding in the width */
+        }
+        
+        .header-top {
+            display: flex;
+            align-items: center; /* Center vertically */
+            justify-content: space-between; /* Space between title and logo */
+        }
+        
+        .title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4.5em;
+            color: #D43F33;
+            margin: 0;
+        }
+        
+        .title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+        
+        /* Navigation bar styling */
+        nav {
+            margin-top: 10px; /* Space between header top and navigation */
+            border-top: 1px solid #444; /* Line above navbar */
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding in the width */
+            display: flex; /* Make nav a flex container */
+            justify-content: center; /* Center the content */
+            align-items: center; /* Vertically center items */
+        }
+        
+        /* Navigation list styling */
+        nav ul {
+            list-style: none; /* Remove default bullet points */
+            display: flex; /* Flex layout for horizontal items */
+            justify-content: space-between; /* Spread items across the full width */
+            width: 100%; /* Full width for the list */
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Navigation items */
+        nav ul li {
+            flex-grow: 1; /* Ensure equal spacing between items */
+            text-align: center; /* Center text inside each item */
+        }
+        
+        /* Navigation links */
+        nav ul li a {
+            color: #f0f0f0; /* Whitish text */
+            text-decoration: none; /* Remove underline */
+            font-size: 1.1em; /* Adjust font size */
+            padding: 10px; /* Add padding for clickable area */
+            display: block; /* Make the entire area clickable */
+            background-color: transparent; /* No background by default */
+            border-radius: 5px; /* Slight rounding for hover effect */
+        }
+        
+        nav ul li a:hover {
+            background-color: #D43F33; /* Highlight color on hover */
+            color: white; /* Text color on hover */
+        }
+        
+        /* Adjust spacing for mobile responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column; /* Stack items vertically */
+                gap: 10px; /* Add spacing between stacked items */
+            }
+            nav ul li {
+                flex-grow: unset; /* Disable equal spacing for vertical layout */
+            }
+        }
+
+        .about-title {
+            font-size: 2.5em; /* Large, impactful font size */
+            color: #D43F33; /* Bold red color for the title */
+            text-align: center; /* Center align the title */
+            margin: 20px 0; /* Add spacing around the title */
+            text-transform: uppercase; /* Make the text uppercase */
+            transition: color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        
+        .about-title:hover {
+            color: #f0f0f0; /* Light color on hover for contrast */
+            cursor: pointer; /* Change cursor to indicate interactivity */
+        }
+        
+        /* Promo Box Container */
+        .promo-box2 {
+            width: 100%; /* Box width */
+            height: 500px;
+            margin: 20px auto; /* Center horizontally */
+            display: flex; /* Flexbox layout */
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space between text and image */
+            background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Inner spacing */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            overflow: hidden; /* Clip overflowing content */
+            box-sizing: border-box;
+        }
+        
+        /* Content Area */
+        .promo-content2 {
+            max-width: 40%; /* Limit text width */
+            color: #f0f0f0; /* Light text color */
+            padding: 10px;
+            text-align: left; /* Align text to the left */
+        }
+        .promo-content2 p {
+            font-size: 1.2em; /* Large title font */
+            color: #ccc; /* Light gray */
+            text-align: left; /* Align title to the left */
+            font-style: italic;
+        }
+        
+        .promo-content2 h1 {
+            font-size: 2em; /* Large title font */
+            color: #D43F33; /* Bold red color */
+            margin-bottom: 10px;
+            text-align: left; /* Align title to the left */
+            margin-top: 0;
+        }
+        
+        .promo-content2 h2 {
+            font-size: 1.1em; /* Smaller subtitle */
+            color: #ccc; /* Light gray */
+            margin-bottom: 50px;
+            text-align: left; /* Align subtitle to the left */
+        }
+        
+        /* Image Styling */
+        .promo-image2 {
+            width: 60%; /* Image takes 35% of the box width */
+            height: 475px;
+            border-radius: 15px; /* Match the container's rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+            object-fit: cover; /* Maintain image proportions */
+        }
+
+        /* Image Styling */
+        .promo-image3 {
+            width: 60%; /* Image takes 35% of the box width */
+            height: 475px;
+            margin-right: 50px;
+            border-radius: 15px; /* Match the container's rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+            object-fit: cover; /* Maintain image proportions */
+        }
+
+        .custom-link {
+            color: #D43F33; /* Initial color */
+            text-decoration: none; /* No underline */
+            transition: color 0.3s ease; /* Smooth color transition */
+        }
+    
+        .custom-link:hover {
+            color: #f0f0f0; /* Change to white on hover */
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(20, 20, 20, 0.95); /* Slightly transparent black for footer */
+            color: #f0f0f0; /* Whitish text */
+            width: 100%;
+            border: none; /* Remove any border */
+            margin-top: 60px; /* Add some spacing between the main content and footer */
+        }
+        
+        footer a {
+            color: #f0f0f0; /* Match red accents */
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+        
+        footer a:hover {
+            color: #D43F33; /* Red hover color */
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <div class="header-top">
+            <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        </div>
+        <nav>
+            <ul>
+               
+                <li><a href="{% url 'home' %}">Accounts & Trade</a></li>
+                <li><a href="{% url 'home' %}">Planning & Advice</a></li>
+                <li><a href="{% url 'home' %}">Products</a></li>
+                <li><a href="{% url 'home' %}">Why Apex Finance</a></li>
+                <li><a href="{% url 'FAQS' %}">FAQs</a></li>
+                <li><a href="{% url 'login' %}">Sign In</a></li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+               
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <h1 class="about-title">About The Creators of Apex Finance</h1>
+
+            <div class="promo-box2">
+                <div class="promo-content2">
+                    <p id="Planning"> Full Stack Software Engineer and Scrum Master</p>
+                    <h1>Daniel Chavez</h1>
+                    <h2>Daniel Chavez is a Computer Science student at the College of the Holy Cross with experience in 
+                        software development and cybersecurity. He has developed applications leveraging AI-powered tools, 
+                        secured systems using industry-standard InfoSec practices, and honed his skills in programming 
+                        languages such as C++ and Python. His current projects include a SIEM Lab, APEX Finance, a custom 
+                        DIY server, and the TOPS Website.
+                    </h2>
+                    <h3>
+                        <a href="https://dannychz7.github.io/" target="_blank" class="custom-link">Find out More</a>
+                    </h3>
+                </div>
+                <img src="{% static 'images/danielchavez.jpeg' %}" alt="A couple Retiring" class="promo-image2">
+            </div>
+
+            <div class="promo-box2">
+                <img src="{% static 'images/anthonyPetrosino.jpeg' %}" alt="A couple Retiring" class="promo-image3">
+
+                <div class="promo-content2">
+                    <p id="Planning"> Backend Software Engineer and Project Manager </p>
+                    <h1>Anthony Petrosino</h1>
+                    <h2>Anthony Petrosinois a Computer Science student at the College of the Holy Cross with expertise in Java, 
+                        C++, and Python. His experience spans IT, server management, backend development, and technical support 
+                        engineering. Currently focused on DevOps and software engineering, Anthony has also served as a dedicated 
+                        teaching assistant, further sharpening his technical and mentoring skills. His notable projects include 
+                        APEX Finance, a DIY server, GCE Instances, and various web-based applications, showcasing his proficiency
+                        in building scalable and efficient systems.
+                    </h2>
+                    <h3>
+                        <a href="https://www.linkedin.com/in/anthony-petrosino-869323266/" target="_blank" class="custom-link">Find out More</a>
+                    </h3>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'aboutUs' %}">About Us</a> | <a href="{% url 'FAQS' %}">Help</a> | <a href="{% url 'FAQS' %}"> Contact Us </a></p>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Apex Finance</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/FAQ.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="header-top">
+            <h1 class="title"><a href="{% url 'dashboard' %}" title="Explore APEX FINANCE">APEX FINANCE</a></h1>
+            <img src="{% static 'images/ApexLogo.png' %}" alt="Apex Finance Logo" class="logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Accounts & Trade</a></li>
+                <li><a href="{% url 'home' %}">Planning & Advice</a></li>
+                <li><a href="{% url 'home' %}">Products</a></li>
+                <li><a href="{% url 'home' %}">Why Apex Finance</a></li>
+                <li><a href="{% url 'login' %}">Sign In</a></li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <div class="faq-container">
+                <h1 class="faq-title">Frequently Asked Questions</h1>
+                <div class="faq-section">
+                    <h2 class="faq-question">How do I contact Apex Finance?</h2>
+                    <p class="faq-answer">Feel Free to email us at dchav26@g.holycross.edu or aapetr26@g.holycross.edu.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">What is Apex Finance?</h2>
+                    <p class="faq-answer">Apex Finance is an innovative platform that offers users advanced tools like a stock predictor, asset allocation calculator, and seamless stock management to empower smarter financial decisions.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">How does the stock predictor work?</h2>
+                    <p class="faq-answer">Our stock predictor uses real-time data and linear regression to forecast stock market trends, helping you make informed decisions about your investments.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">What tools are available on Apex Finance?</h2>
+                    <p class="faq-answer">Apex Finance provides a stock predictor, asset allocation calculator, and an easy-to-use platform for managing and tracking your stock investments.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">How do I register for Apex Finance?</h2>
+                    <p class="faq-answer">To join Apex Finance, simply click the "Sign Up" button and fill out your registration details to start managing your financial future.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">Is Apex Finance free to use?</h2>
+                    <p class="faq-answer">Apex Finance is completely free, providing you with the flexibility to choose the level of service that fits your needs.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">Can I track multiple stocks on Apex Finance?</h2>
+                    <p class="faq-answer">Yes, Apex Finance allows you to track multiple stocks, view their performance, and make adjustments to your portfolio with ease.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">Who created Apex Finance?</h2>
+                    <p class="faq-answer">Apex finance was created by Daniel Chavez and Anthony Petrosino in August 2024.</p>
+                </div>
+                <div class="faq-section">
+                    <h2 class="faq-question">Any More Questions?</h2>
+                    <p class="faq-answer">Email us at dchav26@g.holycross.edu or aapetr26@g.holycross.edu.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="matching-style">
+        <p>&copy; 2024 APEX Finance | <a href="{% url 'aboutUs' %}">About Us</a> | <a href="{% url 'FAQS' %}">Help</a> | <a href="{% url 'FAQS' %}"> Contact Us </a></p>
+    </footer>
+    
+</body>
+</html>
