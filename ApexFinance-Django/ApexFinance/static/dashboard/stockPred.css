@@ -1,0 +1,373 @@
+/* General body styling */
+html, body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1a1a1a, #333); /* Gradient background */   
+    color: #f0f0f0; /* Whitish text */
+    height: 100%;
+    display: flex;          /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh;     /* Make body at least full viewport height */
+    overflow-x: hidden; /* Allow horizontal scrolling if content overflows */
+
+}
+
+/* BELOW HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER HEADER */
+/* <-- BELOW HERE IS THE CODE FOR THE HEADER AND LOGO --> */
+
+/* Header styling */
+header {
+    background-color: rgba(20, 20, 20, 0.9); /* Darker semi-transparent background */
+    padding: 30px 30px 40px; /* Adjust padding as needed */
+    border-bottom: 1px solid #444; /* Slightly lighter border */
+    display: flex;
+    align-items: center; /* Center items vertically */
+    position: relative; /* Allows absolute positioning for logo */
+}
+
+/* Logo styling */
+.logo {
+    width: 80px; /* Set the width of the logo */
+    height: 80px; /* Set the height of the logo to match the width for a circular shape */
+    border-radius: 50%; /* Makes the logo circular */
+    position: absolute;
+    left: 30px; /* Position logo in the top left corner */
+    top: 50%; /* Center logo vertically */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+}
+
+/* Header title styling */
+.title {
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    top: 50%; /* Center vertically */
+    transform: translate(-50%, -50%); /* Center the element itself */
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5em;
+    color: #D43F33;
+    margin: 0;
+    text-align: center;
+}
+
+.title a {
+    color: #D43F33; /* Red color */
+    text-decoration: none; /* Remove underline */
+}
+
+/* <-- BELOW HERE IS THE CODE FOR THE DROPDOWN MENU --> */
+
+/* Dropdown styling */
+.right-items .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Styling for the dropdown button */
+.right-items .dropdown .dropbtn {
+    background-color: transparent;
+    color: #f0f0f0;
+    text-decoration: none;
+    padding: 10px 16px;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+}
+
+.right-items .dropdown .dropbtn:hover,
+.right-items .dropdown .dropbtn:focus {
+    color: #D43F33; /* Red hover effect */
+}
+
+/* Dropdown content styling */
+.right-items .dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background-color: #333; /* Dropdown background */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    left: 0; /* Aligns dropdown to the right of the button */
+    margin-top: 5px;
+    padding: 0; /* Remove padding from dropdown */
+    list-style-type: none; /* Remove bullets */
+}
+
+/* Remove bullets and default padding from list items */
+.right-items .dropdown-content li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Dropdown items */
+.right-items .dropdown-content a {
+    color: #f0f0f0; /* Whitish text */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.right-items .dropdown-content a:hover {
+    background-color: #D43F33; /* Red background on hover */
+}
+
+/* Show dropdown content on hover */
+.right-items .dropdown:hover .dropdown-content {
+    display: block; /* Shows dropdown on hover */
+}
+
+/* <-- BELOW HERE IS THE CODE FOR THE SEARCH FORM --> */
+
+/* Search form styling */
+#searchForm {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 3px;
+    font-size: 1em;
+    background-color: #222; /* Darker background for input */
+    color: #f0f0f0; /* Whitish text */
+    margin-right: 10px;
+    width: 200px; /* Fixed width for the input field */
+    margin-bottom: 0;
+}
+
+#searchForm button {
+    padding: 10px 20px;
+    background-color: #D43F33;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 0;
+}
+
+#searchForm button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Right items styling */
+.right-items {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the container to the right */
+}
+/* ABOVE HERE IS ALL THE CODE FOR THE HEADER, ADD ALL OTHER STYLING AND CODE AFTER THIS LINE */
+
+/* Container to center and format content */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1; /* Allow container to grow and fill available space */
+    width: 100%; /* Ensures the container takes the full width available */
+}
+
+#stock_chart {
+    width: 100%; /* Make the chart take up the full width of its container */
+    height: 700px; /* Set a specific height for the chart (you can adjust this value) */
+    max-width: 1400px; /* Optional: set a max-width to prevent the chart from becoming too large on bigger screens */
+    margin: 0 auto; /* Center the chart horizontally */
+}
+
+/* Specific Styling for Forecast Form (Horizontal Layout) */
+.forecast-form {
+    max-width: 1400px; /* Reduced width of the form */
+    background-color: #222; /* Dark background for form */
+    padding: 15px; /* Reduced padding */
+    border: 1px solid #444;
+    border-radius: 8px; /* Slightly smaller border radius */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slightly smaller shadow */
+    display: flex;
+    flex-direction: column; /* Stack items vertically for the whole form */
+    justify-content: space-between; /* Space between form elements */
+    margin-top: 20px; /* Add top margin for spacing */
+    margin-bottom: 15px; /* Add space between form groups */
+}
+
+/* Adjustments for Form Fields (labels and inputs next to each other) */
+.forecast-form .form-group {
+    display: flex; /* Horizontal layout for label and input */
+    align-items: center; /* Vertically align the label and input */
+    margin-bottom: 15px; /* Add space between form groups */
+}
+
+/* Label Styling (position labels to the left of inputs) */
+.forecast-form label {
+    font-size: 1em; /* Reduced font size for labels */
+    color: #f0f0f0; /* Whitish text */
+    margin-right: 10px; /* Space between label and input */
+    width: 30%; /* Limit the label width */
+}
+
+/* Input Field Styling */
+.forecast-form input[type="text"], .forecast-form select, .forecast-form input[type="number"] {
+    border: 1px solid #555; /* Subtle border for inputs */
+    background-color: #333; /* Darker background for inputs */
+    color: #f0f0f0; /* Whitish text */
+    border-radius: 5px; /* Rounded corners for inputs */
+    padding: 8px; /* Reduced padding for better compactness */
+    width: 70%; /* Adjust input width to fit next to the label */
+    font-size: 0.9em; /* Smaller font size */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Focused Input Styling */
+.forecast-form input[type="text"]:focus, .forecast-form input[type="number"]:focus, .forecast-form select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #D43F33; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(212, 63, 51, 0.8); /* Subtle glow */
+}
+
+/* Button Styling */
+.forecast-form button[type="submit"] {
+    width: 100%; /* Full width button */
+    padding: 12px; /* Reduced padding for the button */
+    font-size: 1em; /* Slightly smaller font size */
+    background-color: #D43F33; /* Red background */
+    color: #fff; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+    margin-top: 10px; /* Space above the button */
+}
+
+/* Button Hover Effect */
+.forecast-form button[type="submit"]:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Label Styling */
+.forecast-form label {
+    font-size: 1.1em; /* Slightly larger font for labels */
+    color: #f0f0f0; /* Whitish text */
+    margin-bottom: 5px; /* Space between label and input */
+}
+
+
+/* Parent container for stock info and extra info */
+#stock_info_container {
+    display: flex; /* Use flexbox to arrange child elements side by side */
+    justify-content: flex-start; /* Align the items to the left */
+    gap: 20px; /* Add space between the two sections */
+    width: 100%;
+    height: auto;
+  
+  }
+  
+  /* Stock info section styling */
+  #stock_info {
+    flex: 1; /* Each section takes up an equal part of the available space */
+    background-color: #222; /* Optional background color for better readability */
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Border to separate it from other content */
+    height: auto;
+  
+  }
+  
+  /* Extra info section styling */
+  #extra_info {
+    flex: 1; /* Each section takes up an equal part of the available space */
+    background-color: #222; /* Same background color as stock info */
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #444; /* Border for separation */
+    height: auto;
+  
+  }
+  
+  /* Styling for stock info header */
+  #stock_info h2 {
+    font-size: 1.5em;
+    color: #D43F33; /* Red headers */
+    margin-bottom: 20px; /* Adjust space between title and first row of content */
+  }
+
+/* Styling for the table */
+.styled-table {
+    width: 25%; /* Full width of the container */
+    border-collapse: collapse; /* Ensures borders between cells do not double */
+    margin-top: 5px; /* Space between the header and the table */
+    background-color: #222; /* Background color of the table */
+    color: white; /* Text color */
+}
+
+/* Styling for table headers */
+.styled-table th {
+    background-color: #D43F33; /* Red background for the headers */
+    color: white; /* White text for headers */
+    padding: 15px; /* Add padding around the header text */
+    text-align: left; /* Align text to the left */
+}
+
+/* Styling for table rows */
+.styled-table td {
+    padding: 12px; /* Padding inside table cells */
+    text-align: left; /* Left-align the text */
+    border-bottom: 1px solid #444; /* Border between rows */
+    word-wrap: break-word; /* Ensure long words break and don't overflow */
+}
+
+/* Alternate row coloring */
+.styled-table tr:nth-child(even) {
+    background-color: #2a2a2a; /* Alternate row color */
+}
+
+/* Row hover effect */
+.styled-table tr:hover {
+    background-color: #444; /* Highlight row when hovered */
+}
+
+/* Styling for number formatting */
+.styled-table td:nth-child(2) {
+    text-align: right; /* Align the price column to the right */
+    color: #D43F33; /* Red color for predicted prices */
+}
+
+/* Styling for the disclaimer */
+.disclaimer {
+    background-color: #222; /* Dark background to match your theme */
+    color: #fff; /* White text for contrast */
+    padding: 20px; /* Padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #444; /* Border to separate from other content */
+    font-size: 14px; /* Slightly smaller font size */
+    margin-top: 20px; /* Space above the disclaimer */
+    word-wrap: break-word; /* Allow long text to wrap */
+}
+
+.disclaimer strong {
+    color: #D43F33; /* Red color for emphasis */
+}
+
+/* <-- BELOW HERE IS THE CODE FOR THE FOOTER --> */
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(20, 20, 20, 0.95); /* Ensure consistency */
+  color: #f0f0f0; /* Whitish text */
+  width: 100%;
+  border: none; /* Remove any border */
+  margin-top: 0;
+}
+      
+footer a {
+  color: #f0f0f0; /* Match red accents */
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 15px;
+}
+      
+footer a:hover {
+  color: #D43F33; /* Red hover color */
+}

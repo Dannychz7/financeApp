@@ -28,7 +28,7 @@ html, body {
 
 /* Header styling */
 header {
-    background-color: rgba(20, 20, 20, 0.95); /* Darker semi-transparent background */
+    background-color: rgba(20, 20, 20, 0.9); /* Darker semi-transparent background */
     padding: 30px 30px 40px; /* Adjust padding as needed */
     border-bottom: 1px solid #444; /* Slightly lighter border */
     display: flex;
@@ -241,13 +241,22 @@ button:hover {
     background-color: #cc0000; /* Darker red on hover */
 }
 
+.holding-table-container {
+    width: 100%; /* Make sure the container spans the full width of the page */
+    overflow-x: auto; /* Allow horizontal scrolling if the table overflows */
+    padding: 20px; /* Add some padding to prevent content from touching the edges */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
 .holding-table {
-    width: 100%; /* Full width */
-    border-collapse: collapse; /* Merge borders */
-    margin: 20px 0; /* Add space above and below the table */
+    width: 100%; /* Ensure the table stays within its container */
+    border-collapse: collapse; /* Merge borders for a cleaner look */
+    margin: 0 auto; /* Center the table horizontally */
+    table-layout: fixed; /* Prevent the table from expanding beyond its container */
 }
 
 .holding-table th, .holding-table td {
+    word-wrap: break-word; /* Allow long text to wrap within cells */
     border: 1px solid #dddddd; /* Light border for separation */
     text-align: left; /* Align text to the left */
     padding: 12px; /* Add padding around text */
@@ -255,8 +264,9 @@ button:hover {
 }
 
 .holding-table th {
-    background-color: #D43F33; /* Light gray background for header */
+    background-color: #D43F33; /* Red background for header */
     font-weight: bold; /* Bold font for headers */
+    color: #ffffff; /* White text */
 }
 
 .holding-cell {

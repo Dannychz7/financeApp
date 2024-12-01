@@ -43,12 +43,17 @@
         <form id="assetCalculatorForm" method="POST" action="{% url 'assetCalc' %}">
             {% csrf_token %}
             <label for="etf">Enter Your ETF:</label>
-            <input type="text" id="etf" name="etf" placeholder="(e.g., SPY, VTI, IVV)" oninput="this.value = this.value.toUpperCase();" required>
+            <input type="text" id="etf" name="etf" placeholder="(e.g., SPY, VTI, IVV)" 
+                   oninput="this.value = this.value.toUpperCase();" required>
             
             <label for="stocksOwned">Enter Stock Quantity:</label>    
-            <input type="number" id="stocksOwned" name="stocksOwned" placeholder="(e.g., 1.5, 2.75)" step="0.01" required>
-
-            
+            <input type="number" id="stocksOwned" name="stocksOwned" 
+                   placeholder="(e.g., 1.5, 2.75)" step="0.01" required>
+        
+            <!-- Container for dynamically added inputs -->
+            <div id="inputContainer"></div>
+        
+            <button type="button" id="addMoreButton">Add More</button>
             <button type="submit">Calculate Allocation</button>
         </form>
 
@@ -75,37 +80,107 @@
             }
         </style>
         
-        <!-- Display the ETF holdings if available -->
-        {% if calculated_holdings %}
-        <h2>Calculated Holdings for {{ etf_symbol }} at {{ stocks_owned }} Shares</h2>
-
-        <h2>ETF Price: ${{ etf_price|floatformat:2 }}</h2>  <!-- Display ETF price -->
-
-        <table class="holding-table">
-            <thead>
-                <tr>
-                    <th>Stock Symbol</th>
-                    <th>Holding Percentage</th>
-                    <th>Value in ETF</th>
-                    <th>Stock Price</th>
-                    <th>Amount Owned</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for holding in calculated_holdings %}
-                <tr>
-                    <td class="holding-cell">{{ holding.stock_symbol }}</td>
-                    <td class="holding-cell">{{ holding.holding_percentage|floatformat:2 }}%</td>
-                    <td class="holding-cell">{{ holding.holding_value_in_etf|floatformat:2 }}</td>
-                    <td class="holding-cell">{{ holding.stock_price|floatformat:2 }}</td>
-                    <td class="holding-cell">{{ holding.stock_owned|floatformat:2 }}</td>
-                </tr>
+        <div class="holding-table-container">
+            <!-- Display the ETF holdings if available -->
+            {% if all_calculated_holdings %}
+                {% for etf in all_calculated_holdings %}
+                    <h2>Calculated Holdings for {{ etf.etf_symbol }} at {{ etf.stocks_owned }} Shares</h2>
+                    <h2>ETF Price: ${{ etf.etf_price|floatformat:2 }}</h2> <!-- Display ETF price -->
+            
+                    <table class="holding-table">
+                        <thead>
+                            <tr>
+                                <th>Stock Symbol</th>
+                                <th>Holding Percentage</th>
+                                <th>Value in ETF</th>
+                                <th>Stock Price</th>
+                                <th>Amount Owned</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for holding in etf.calculated_holdings %}
+                            <tr>
+                                <td class="holding-cell">{{ holding.stock_symbol }}</td>
+                                <td class="holding-cell">{{ holding.holding_percentage|floatformat:2 }}%</td>
+                                <td class="holding-cell">${{ holding.holding_value_in_etf|floatformat:2 }}</td>
+                                <td class="holding-cell">${{ holding.stock_price|floatformat:2 }}</td>
+                                <td class="holding-cell">{{ holding.stock_owned|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <hr>
                 {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
+            {% else %}
+                <p>No data available. Please submit the form to calculate your asset allocations.</p>
+            {% endif %}
 
+            {% if combined_holdings %}
+                <h2>Combined Holdings</h2>
+                <table class="holding-table">
+                    <thead>
+                        <tr>
+                            <th>Stock Symbol</th>
+                            <th>Total Holding Value</th>
+                            <th>Total Stock Owned</th>
+                            <th>Stock Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for holding in combined_holdings %}
+                        <tr>
+                            <td>{{ holding.stock_symbol }}</td>
+                            <td>${{ holding.total_holding_value|floatformat:2 }}</td>
+                            <td>{{ holding.total_stock_owned|floatformat:2 }}</td>
+                            <td>${{ holding.stock_price|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
     </div>
+
+    <script>
+        document.getElementById('addMoreButton').addEventListener('click', function () {
+            const inputContainer = document.getElementById('inputContainer'); // Ensure this is inside the form element
+        
+            // Create a new input group for additional ETF and stock quantity
+            const newInputGroup = document.createElement('div');
+            newInputGroup.classList.add('input-group');
+        
+            // ETF input
+            const etfLabel = document.createElement('label');
+            etfLabel.textContent = 'Enter Your ETF:';
+            newInputGroup.appendChild(etfLabel);
+        
+            const etfInput = document.createElement('input');
+            etfInput.type = 'text';
+            etfInput.name = 'etf'; // Name matches the backend expectation
+            etfInput.placeholder = '(e.g., SPY, VTI, IVV)';
+            etfInput.required = true;
+            etfInput.oninput = function () {
+                this.value = this.value.toUpperCase();
+            };
+            newInputGroup.appendChild(etfInput);
+        
+            // Stock quantity input
+            const stocksLabel = document.createElement('label');
+            stocksLabel.textContent = 'Enter Stock Quantity:';
+            newInputGroup.appendChild(stocksLabel);
+        
+            const stocksInput = document.createElement('input');
+            stocksInput.type = 'number';
+            stocksInput.name = 'stocksOwned'; // Name matches the backend expectation
+            stocksInput.placeholder = '(e.g., 1.5, 2.75)';
+            stocksInput.step = '0.01';
+            stocksInput.required = true;
+            newInputGroup.appendChild(stocksInput);
+        
+            // Append the new input group to the container
+            inputContainer.appendChild(newInputGroup);
+        });
+    </script>
 
     <script>
         document.getElementById('assetCalculatorForm').addEventListener('submit', function(e) {

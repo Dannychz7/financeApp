@@ -15,12 +15,10 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from datetime import date
+import pandas as pd
 from .forms import TradeStockForm
 from users.models import Profile, UserStock, StockTransaction  # Make sure to import Profile
-
-# Constants for date range
-START = "2015-01-01"
-TODAY = date.today().strftime("%Y-%m-%d")
 
 # Require users to be logged into an account to see their dashboard
 @login_required(login_url='/users/login_user')
@@ -152,115 +150,101 @@ def fetch_etf_holdings(etf_symbol):
 @login_required(login_url='/users/login_user')
 def assetCalc(request):
     if request.method == 'POST':
-        #print("Here I am")
-        etf_symbol = request.POST.get('etf').upper()  # Get the ETF symbol from the form
-        stocks_owned = request.POST.get('stocksOwned').split(',')  # Get stocks owned
+        etf_symbols = request.POST.getlist('etf')  # Get the ETF symbols from the form (allowing multiple symbols)
+        stocks_owned = request.POST.getlist('stocksOwned')  # Get corresponding stock quantities
+        # print(request.POST)  # Debugging line: check what data is being submitted
         
-        # Fetch ETF data using yfinance
-        etf_data = yf.Ticker(etf_symbol)
-        etf_info = etf_data.info  # Get ETF information
+        # Ensure both lists have the same length
+        if len(etf_symbols) != len(stocks_owned):
+            messages.error(request, "The number of ETFs and quantities must match.")
+            return redirect('assetCalc')
 
-        # Check if the ETF symbol is valid and not delisted
-        if 'symbol' not in etf_info or 'delisted' in etf_info.get('status', '').lower():
-            messages.error(request, f"Invalid or delisted ETF symbol: {etf_symbol}. Please enter a valid ETF symbol.")
-            return redirect('assetCalc')  # Redirect to the assetCalc view or your desired page
+        # Initialize the list to hold calculated holdings for all ETFs
+        all_calculated_holdings = []
+        combined_holdings = {}  # For aggregating final combined values
         
-        # Check for existing ETF holdings in the database
-        existing_holdings = ETFHolding.objects.filter(etf_ticker=etf_symbol)
-        
-        if existing_holdings.exists():
-            # Check if the existing holdings were updated in the last week
-            # Calculate the cutoff for one week ago with timezone awareness
-            week_ago = timezone.now() - timedelta(weeks=1)
-        
-            if all(holding.last_updated > week_ago for holding in existing_holdings):
-                # If holdings exist, retrieve them and return to the template
-                etf_price = Decimal(yf.Ticker(etf_symbol).history(period='1d')['Close'].iloc[0])  # Get the ETF price
-                calculated_holdings = []
-                for holding in existing_holdings:
-                    holding_value_in_etf = (Decimal(holding.holding_percentage) / Decimal(100) * 
-                                            Decimal(yf.Ticker(etf_symbol).history(period='1d')['Close'].iloc[0]) * 
-                                            Decimal(Decimal(stocks_owned[0])))  # Calculate holding value
-                    stock_price = Decimal(yf.Ticker(holding.stock_symbol).history(period='1d')['Close'].iloc[0])  # Get stock price
-                    stock_owned = holding_value_in_etf / stock_price  # Calculate amount owned
-
-                    calculated_holdings.append({
-                        'stock_symbol': holding.stock_symbol,
-                        'holding_percentage': holding.holding_percentage,
-                        'holding_value_in_etf': holding_value_in_etf,
-                        'stock_price': stock_price,
-                        'stock_owned': stock_owned
-                    })
-                return render(request, 'dashboard/assetCalc.html', {
-                    'etf_symbol': etf_symbol,
-                    'calculated_holdings': calculated_holdings,
-                    'etf_price': etf_price,  # Pass ETF price to template
-                    'stocks_owned': float(stocks_owned[0]),
-                })
-            # Holdings are stale
-            else:
-                # Filter for stale holdings only (older than a week)
-                stale_holdings = existing_holdings.filter(etf_ticker=etf_symbol, last_updated__lt=week_ago)
-                # If holdings are stale, delete existing data and proceed to update
-                stale_holdings.delete()
-
-
-        # Fetch ETF holdings using the defined function
-        etf_holdings = fetch_etf_holdings(etf_symbol)
-
-        # Initialize the list to hold stock data
-        calculated_holdings = []
-        
-        # Save ETF holdings to the database
-        for holding in etf_holdings:
-            stock_symbol = holding['name']
-            holding_percentage = holding['percent'] * 100  # Convert to percentage
+        for etf_symbol, stocks_owned_qty in zip(etf_symbols, stocks_owned):
+            etf_symbol = etf_symbol.upper()  # Ensure the ETF symbol is uppercase
+            stocks_owned_qty = float(stocks_owned_qty)  # Convert the quantity to a float
             
-            # Create or update ETFHolding instance
-            ETFHolding.objects.update_or_create(
-                etf_ticker=etf_symbol,  
-                stock_symbol=holding['symbol'],
-                defaults={
-                    'holding_percentage': holding_percentage,
-                    'stock_symbol': stock_symbol,  # Store the name as well, if needed
-                    'last_updated': datetime.now(),  # Assuming you have a timestamp field
-                    'etf_price': etf_data.history(period='1d')['Close'].iloc[0],  # Save the ETF price
-                }
-            )
-        
-        for holding in etf_holdings:
-            stock_symbol = holding['name']
-            holding_percentage = holding['percent'] * 100  # Convert to percentage
-
-            # Calculate the value of the stock based on the ETF shares
+            # Fetch ETF data using yfinance
             etf_data = yf.Ticker(etf_symbol)
-            etf_price = etf_data.history(period='1d')['Close'].iloc[0]  # Get current ETF price
-            # print(f"Here is holding percentage: {holding_percentage}, here is ETF price: {etf_price}, here is stocks owned: {stocks_owned}")
-            holding_value_in_etf = (holding_percentage / 100) * etf_price * float(stocks_owned[0])  # Calculate value
+            etf_info = etf_data.info  # Get ETF information
 
-            # Get stock price of the holding
-            stock_data = yf.Ticker(stock_symbol)
-            stock_price = stock_data.history(period='1d')['Close'].iloc[0]
+            # Check if the ETF symbol is valid and not delisted
+            if 'symbol' not in etf_info or 'delisted' in etf_info.get('status', '').lower():
+                messages.error(request, f"Invalid or delisted ETF symbol: {etf_symbol}. Please enter a valid ETF symbol.")
+                return redirect('assetCalc')  # Redirect to the assetCalc view or your desired page
+            
+            # Fetch ETF holdings using the defined function
+            etf_holdings = fetch_etf_holdings(etf_symbol)
 
-            # Calculate the amount of stock owned
-            stock_owned = holding_value_in_etf / stock_price
+            # Initialize the list to hold stock data for the current ETF
+            calculated_holdings = []
 
-            calculated_holdings.append({
-                'stock_symbol': stock_symbol,
-                'holding_percentage': holding_percentage,
-                'holding_value_in_etf': holding_value_in_etf,
-                'stock_price': stock_price,
-                'stock_owned': stock_owned,
+            # Process ETF holdings and calculate stock allocations
+            for holding in etf_holdings:
+                stock_symbol = holding['name']
+                holding_percentage = holding['percent'] * 100  # Convert to percentage
+                
+                # Calculate the value of the stock based on the ETF shares
+                etf_price = etf_data.history(period='1d')['Close'].iloc[0]  # Get current ETF price
+                holding_value_in_etf = (holding_percentage / 100) * etf_price * stocks_owned_qty  # Calculate value
+
+                # Get stock price of the holding
+                stock_data = yf.Ticker(stock_symbol)
+                stock_price = stock_data.history(period='1d')['Close'].iloc[0]
+
+                # Calculate the amount of stock owned
+                stock_owned = holding_value_in_etf / stock_price
+
+                # Append to the ETF-specific list
+                calculated_holdings.append({
+                    'stock_symbol': stock_symbol,
+                    'holding_percentage': holding_percentage,
+                    'holding_value_in_etf': holding_value_in_etf,
+                    'stock_price': stock_price,
+                    'stock_owned': stock_owned,
+                })
+
+                # Aggregate into combined holdings
+                if stock_symbol not in combined_holdings:
+                    combined_holdings[stock_symbol] = {
+                        'holding_value': holding_value_in_etf,
+                        'stock_owned': stock_owned,
+                        'stock_price': stock_price,  # Use the latest stock price encountered
+                    }
+                else:
+                    combined_holdings[stock_symbol]['holding_value'] += holding_value_in_etf
+                    combined_holdings[stock_symbol]['stock_owned'] += stock_owned
+
+            # Add the calculated holdings for this ETF to the list
+            all_calculated_holdings.append({
+                'etf_symbol': etf_symbol,
+                'calculated_holdings': calculated_holdings,
+                'etf_price': etf_price,  # Pass ETF price to template
+                'stocks_owned': stocks_owned_qty,
             })
 
+        # Format combined holdings as a list
+        combined_holdings_list = [
+            {
+                'stock_symbol': stock_symbol,
+                'total_holding_value': data['holding_value'],
+                'total_stock_owned': data['stock_owned'],
+                'stock_price': data['stock_price'],
+            }
+            for stock_symbol, data in combined_holdings.items()
+        ]
+
+        # Return the final render with all ETFs and combined allocations
         return render(request, 'dashboard/assetCalc.html', {
-            'etf_symbol': etf_symbol,
-            'calculated_holdings': calculated_holdings,
-            'etf_price': etf_price,  # Pass ETF price to template
-            'stocks_owned': float(stocks_owned[0])
+            'all_calculated_holdings': all_calculated_holdings,
+            'combined_holdings': combined_holdings_list,
         })
 
     return render(request, 'dashboard/assetCalc.html', {})
+
 
 
 @login_required(login_url='/users/login_user')
@@ -398,3 +382,154 @@ def execute_trade(request):
         'available_cash': available_cash,
         'user_stocks': UserStock.objects.filter(profile=profile)
     })
+    
+
+# Constants for date range
+START = "2015-01-01"
+TODAY = date.today().strftime("%Y-%m-%d")
+
+# Fetch stock data and perform forecasting using Prophet
+def fetch_and_forecast(stock, years):
+    # Fetch stock data using yfinance
+    data = yf.download(stock, start="2010-01-01", end="2024-11-24")
+    if data.empty:
+        raise ValueError("Stock not found or data unavailable.")
+
+    data.reset_index(inplace=True)
+
+    # Prepare the data for Prophet
+    df_train = data[['Date', 'Close']]
+    df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
+
+    # Initialize and fit the Prophet model
+    model = Prophet()
+    model.fit(df_train)
+
+    # Create future dataframe for predictions
+    future = model.make_future_dataframe(periods=years * 365)
+    forecast = model.predict(future)
+
+    return data, forecast
+
+@login_required(login_url='/users/login_user')
+def stock_forecast_view(request):
+    # Get the selected stock and years from the request (defaults are 'MSFT' and 1 year)
+    selected_stock = request.GET.get('stock', 'MSFT')
+    n_years = int(request.GET.get('years', 1))
+
+    # Fetch stock info using yfinance
+    stock_data = yf.Ticker(selected_stock)
+    stock_info = stock_data.info
+    
+     # Get the current stock price
+    if stock_info.get('quoteType') in ['MUTUALFUND', 'ETF']:
+        is_etf = True
+    else:
+        is_etf = False
+
+    # Validate the stock symbol
+    if 'symbol' not in stock_info or 'delisted' in stock_info.get('status', '').lower():
+        messages.error(request, f"Invalid or delisted stock symbol: {selected_stock}. Please enter a valid stock symbol.")
+        return redirect('stockPred')
+
+    try:
+        # Fetch stock data and forecast
+        data, forecast = fetch_and_forecast(selected_stock, n_years)
+
+        # Prepare data for Highcharts.js (raw and forecast data)
+        chart_data = {
+            'date': data['Date'].astype(str).tolist(),
+            'open': data['Open'].tolist(),
+            'close': data['Close'].tolist(),
+            'forecast_date': forecast['ds'].astype(str).tolist(),
+            'forecast_yhat': forecast['yhat'].tolist(),
+        }
+        
+        # Format stock information fields
+        formatted_stock_info = {
+            'shortName': stock_info.get('shortName', 'N/A'),
+            'symbol': stock_info.get('symbol', 'N/A'),
+            'currentPrice': stock_info.get('currentPrice', 'N/A'),
+            'open': stock_info.get('open', 'N/A'),
+            'longName': stock_info.get('longName', 'N/A'),
+            'category': stock_info.get('category', 'N/A'),
+            'fundFamily': stock_info.get('fundFamily', 'N/A'),
+            'previousClose': stock_info.get('previousClose', 'N/A'),
+            'currency': stock_info.get('currency', 'N/A'),
+            'dayLow': stock_info.get('dayLow', 'N/A'),
+            'dayHigh': stock_info.get('dayHigh', 'N/A'),
+            'fiftyTwoWeekHigh': stock_info.get('fiftyTwoWeekHigh', 'N/A'),
+            'fiftyTwoWeekLow': stock_info.get('fiftyTwoWeekLow', 'N/A'),
+            'fiveYearAverageReturn': stock_info.get('fiveYearAverageReturn', 'N/A'),
+            'threeYearAverageReturn': stock_info.get('threeYearAverageReturn', 'N/A'),
+            'trailingPE': stock_info.get('trailingPE', 'N/A'),
+            'trailingAnnualDividendRate': stock_info.get('trailingAnnualDividendRate', 'N/A'),
+            'trailingAnnualDividendYield': stock_info.get('trailingAnnualDividendYield', 'N/A'),
+            'totalAssets': stock_info.get('totalAssets', 'N/A'),
+            'volume': stock_info.get('volume', 'N/A'),
+            'exchange': stock_info.get('exchange', 'N/A'),
+            'fundInceptionDate': stock_info.get('fundInceptionDate', 'N/A'),
+            'beta3Year': stock_info.get('beta3Year', 'N/A'),
+            'averageDailyVolume10Day': stock_info.get('averageDailyVolume10Day', 'N/A'),
+            'marketCap': stock_info.get('marketCap', 'N/A'),
+            'sector': stock_info.get('sector', 'N/A'),
+            'industry': stock_info.get('industry', 'N/A'),
+            '52WeekChange': stock_info.get('52WeekChange', 'N/A'),
+            'dividendYield': stock_info.get('dividendYield', 'N/A'),
+            'forwardPE': stock_info.get('forwardPE', 'N/A'), 
+            'forwardEps': stock_info.get('forwardEps', 'N/A'),
+            'beta': stock_info.get('beta', 'N/A'),
+            'averageVolume': stock_info.get('averageVolume', 'N/A'),
+            'dayLow': stock_info.get('dayLow', 'N/A'),
+            'dayHigh': stock_info.get('dayHigh', 'N/A'),
+            'floatShares': stock_info.get('floatShares', 'N/A'),
+            'dividendRate': stock_info.get('dividendRate', 'N/A'),
+            'earningsGrowth': stock_info.get('earningsGrowth', 'N/A'),
+        }
+        
+        # Ensure 'fundInceptionDate' is not 'N/A' and convert it to an integer if possible
+        timestamp = formatted_stock_info.get('fundInceptionDate', 'N/A')
+
+        # Check if the timestamp is a valid integer before processing
+        if timestamp != 'N/A':
+            try:
+                timestamp = int(timestamp)  # Ensure timestamp is an integer
+                date = datetime.fromtimestamp(timestamp)  # Convert Unix timestamp to datetime object
+                formatted_date = date.strftime('%m/%d/%Y')  # Format the date as MM/DD/YYYY
+                formatted_stock_info['fundInceptionDate'] = formatted_date  # Update the formatted date in the dictionary
+            except (ValueError, TypeError):
+                formatted_stock_info['fundInceptionDate'] = 'Invalid Date'  # Handle cases where conversion fails
+        else:
+            formatted_stock_info['fundInceptionDate'] = 'N/A'  # If no valid timestamp, keep it as N/A
+
+        # Turns it into comma string (e.g, x,xxx,xxx,xxx)
+        formatted_stock_info['marketCap'] = '{:,}'.format(formatted_stock_info['marketCap']) if isinstance(formatted_stock_info['marketCap'], int) else formatted_stock_info['marketCap']
+        formatted_stock_info['averageVolume'] = '{:,}'.format(formatted_stock_info['averageVolume']) if isinstance(formatted_stock_info['averageVolume'], int) else formatted_stock_info['averageVolume']
+        formatted_stock_info['floatShares'] = '{:,}'.format(formatted_stock_info['floatShares']) if isinstance(formatted_stock_info['floatShares'], int) else formatted_stock_info['floatShares']
+        formatted_stock_info['volume'] = '{:,}'.format(formatted_stock_info['volume']) if isinstance(formatted_stock_info['volume'], int) else formatted_stock_info['volume']
+        formatted_stock_info['totalAssets'] = '{:,}'.format(formatted_stock_info['totalAssets']) if isinstance(formatted_stock_info['totalAssets'], int) else formatted_stock_info['totalAssets']
+        formatted_stock_info['averageDailyVolume10Day'] = '{:,}'.format(formatted_stock_info['averageDailyVolume10Day']) if isinstance(formatted_stock_info['averageDailyVolume10Day'], int) else formatted_stock_info['averageDailyVolume10Day']
+    
+        # Turns it into percents %
+        formatted_stock_info['dividendYield'] = f"{(formatted_stock_info['dividendYield'] * 100):.2f}%" if isinstance(formatted_stock_info['dividendYield'], (int, float)) else formatted_stock_info['dividendYield']
+        formatted_stock_info['earningsGrowth'] = f"{(formatted_stock_info['earningsGrowth'] * 100):.2f}%" if isinstance(formatted_stock_info['earningsGrowth'], (int, float)) else formatted_stock_info['earningsGrowth']
+        formatted_stock_info['trailingAnnualDividendYield'] = f"{(formatted_stock_info['trailingAnnualDividendYield'] * 100):.2f}%" if isinstance(formatted_stock_info['trailingAnnualDividendYield'], (int, float)) else formatted_stock_info['trailingAnnualDividendYield']
+        formatted_stock_info['52WeekChange'] = f"{(formatted_stock_info['52WeekChange'] * 100):.2f}%" if isinstance(formatted_stock_info['52WeekChange'], (int, float)) else formatted_stock_info['52WeekChange']
+        formatted_stock_info['fiveYearAverageReturn'] = f"{(formatted_stock_info['fiveYearAverageReturn'] * 100):.2f}%" if isinstance(formatted_stock_info['fiveYearAverageReturn'], (int, float)) else formatted_stock_info['fiveYearAverageReturn']
+        formatted_stock_info['threeYearAverageReturn'] = f"{(formatted_stock_info['threeYearAverageReturn'] * 100):.2f}%" if isinstance(formatted_stock_info['threeYearAverageReturn'], (int, float)) else formatted_stock_info['threeYearAverageReturn']
+
+        context = {
+            'selected_stock': selected_stock,
+            'stock_info': formatted_stock_info,
+            'chart_data': chart_data,
+            'forecast': forecast[['ds', 'yhat']].tail(10).to_dict(orient='records'),
+            'is_etf': is_etf,
+        }
+
+        return render(request, 'dashboard/stockPred.html', context)
+
+    except ValueError as e:
+        # Handle errors gracefully if stock data is invalid
+        messages.error(request, f"Invalid or delisted stock symbol: {selected_stock}. Please enter a valid stock symbol.")
+        return redirect('stockPred')
+
