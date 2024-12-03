@@ -294,6 +294,7 @@ main {
   flex: 2; /* Make the chart container take more space */
   width: 100%; /* Ensure it takes up the full width of the flex container */
   margin-bottom: 30px; /* Adds space between the graph and the flexbox container */
+  height: 650px;
 }
 
 /* Parent container for stock info and extra info */

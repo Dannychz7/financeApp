@@ -233,6 +233,7 @@ header {
 
 #chart_container {
   margin-bottom: 30px; /* Adds space between the graph and the flexbox container */
+  height: 650px;
 }
 
 /* Chart section styling */
