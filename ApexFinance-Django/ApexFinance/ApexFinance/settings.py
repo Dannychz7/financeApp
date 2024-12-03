@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=ovzs+$fuu*fsh!^fu1s_o=67(i8bvp2%h3w*wbd$d-n#saeol'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['apexfinance.sytes.net']
+ALLOWED_HOSTS = ['apexfinance.sytes.net', '127.0.0.1', 'localhost']
 
 # Application definition
 
