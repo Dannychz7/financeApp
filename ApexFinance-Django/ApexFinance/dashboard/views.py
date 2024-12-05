@@ -153,6 +153,8 @@ def assetCalc(request):
         etf_symbols = request.POST.getlist('etf')  # Get the ETF symbols from the form (allowing multiple symbols)
         stocks_owned = request.POST.getlist('stocksOwned')  # Get corresponding stock quantities
         # print(request.POST)  # Debugging line: check what data is being submitted
+        print(etf_symbols)
+        print(stocks_owned)
         
         # Ensure both lists have the same length
         if len(etf_symbols) != len(stocks_owned):
@@ -170,6 +172,7 @@ def assetCalc(request):
             # Fetch ETF data using yfinance
             etf_data = yf.Ticker(etf_symbol)
             etf_info = etf_data.info  # Get ETF information
+            
 
             # Check if the ETF symbol is valid and not delisted
             if 'symbol' not in etf_info or 'delisted' in etf_info.get('status', '').lower():
@@ -187,12 +190,22 @@ def assetCalc(request):
                 stock_symbol = holding['name']
                 holding_percentage = holding['percent'] * 100  # Convert to percentage
                 
-                # Calculate the value of the stock based on the ETF shares
-                etf_price = etf_data.history(period='1d')['Close'].iloc[0]  # Get current ETF price
+                try:
+                    etf_history = etf_data.history(period='1d')
+                    if not etf_history.empty:
+                        etf_price = etf_history['Close'].iloc[0]
+                    else:
+                        etf_price = None
+                        print("No price data available for the ETF.")
+                except Exception as e:
+                    etf_price = None
+                    print(f"An error occurred while fetching ETF price: {e}")
+                    
                 holding_value_in_etf = (holding_percentage / 100) * etf_price * stocks_owned_qty  # Calculate value
 
                 # Get stock price of the holding
                 stock_data = yf.Ticker(stock_symbol)
+                print(stock_data)
                 stock_price = stock_data.history(period='1d')['Close'].iloc[0]
 
                 # Calculate the amount of stock owned

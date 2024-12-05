@@ -43,7 +43,15 @@
         </div>
         <div class="settings-section">
             <h2>Change Password</h2>
-            <p><a href="{% url 'changePswd' %}">Change Password</a></p>
+            <p>
+                <a href="{% url 'changePswd' %}" 
+                   style="text-decoration: none; color: white; font-size: 1em;"
+                   onmouseover="this.style.color='red'" 
+                   onmouseout="this.style.color='white'">
+                    Change Password
+                </a>
+            </p>
+            
         </div>
         <div class="settings-section">
             <h2>Financials</h2>
